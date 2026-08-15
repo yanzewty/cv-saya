@@ -29,7 +29,18 @@
   body{ background:var(--bg); color:var(--text); font-family:var(--font-body); width: 100%; overflow-x: hidden; position: relative; }
   ::selection{ background:var(--pink); color:#0A0A12; }
   a{ color:inherit; text-decoration:none; }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar{
+      display: none;
+    }
 
+    html
+    body{
+
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      
+    }
   /* preloader */
   .preloader{
     position:fixed; inset:0; z-index:9999; background:var(--bg);
@@ -349,7 +360,7 @@
   <section id="gallery">
     <div class="about-panel reveal">
       <div>
-        <div class="sec-tag">02 / TENTANG SAYA</div>
+        <div class="sec-tag">01 / TENTANG SAYA</div>
         <h2>Membangun Solusi Digital dengan Logika &amp; Kreativitas</h2>
       </div>
       <div>
@@ -367,7 +378,7 @@
 
   <section id="about">
     <div class="sec-head reveal">
-      <div><div class="sec-tag">01 / LATAR BELAKANG SKILL</div><div class="sec-title">Yang saya kerjakan</div></div>
+      <div><div class="sec-tag">02 / LATAR BELAKANG SKILL</div><div class="sec-title">LATAR BELAKANG SKILL</div></div>
       <div class="sec-desc">Dokumentasi kegiatan pemrograman web, desain UI/UX, dan organisasi sosial.</div>
     </div>
     <div class="cards">
@@ -476,7 +487,7 @@
 
   <section id="contact">
     <div class="sec-head reveal" style="margin-bottom:34px">
-      <div><div class="sec-tag">05 / KONTAK</div><div class="sec-title">Kirim Pesan</div></div>
+      <div><div class="sec-tag">05 / CONTACT</div><div class="sec-title">Kirim Pesan</div></div>
       <div class="sec-desc">Punya pertanyaan, tawaran proyek, atau ingin berdiskusi? Kirim lewat form ini.</div>
     </div>
 
@@ -488,11 +499,11 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
           <div class="field">
             <label>Nama Anda</label>
-            <input type="text" name="name" required placeholder="Contoh: Budi Santoso">
+            <input type="text" name="name" required placeholder="Contoh: Budi ang ang">
           </div>
           <div class="field">
             <label>Email Anda</label>
-            <input type="email" name="email" required placeholder="email@domain.com">
+            <input type="email" name="email" required placeholder="email@gmail.com">
           </div>
         </div>
         <div class="field" style="margin-bottom:24px;">
