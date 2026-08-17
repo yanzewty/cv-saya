@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Login - Portofolio</title>
+<title>Admin Register - Portofolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,9 +23,6 @@
   @keyframes float2{ 0%,100%{transform:translate(0,0);} 50%{transform:translate(30px,-25px);} }
   .noise{ position:fixed; inset:0; z-index:1; opacity:.02; pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
-  }
 
   .card{ position:relative; z-index:2; width:100%; max-width:420px; background:linear-gradient(160deg, var(--panel-2), var(--panel));
     border:1px solid var(--line); border-radius:22px; overflow:hidden; box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
@@ -37,27 +34,24 @@
   .titlebar span:last-child{ margin-left:8px; font-family:var(--font-mono); font-size:11px; color:var(--dim); }
 
   .body{ padding:36px 34px; }
-  .icon-wrap{ width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg,var(--violet),var(--pink));
+  .icon-wrap{ width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg,var(--cyan),var(--violet));
     display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:20px; color:#fff; }
   h2{ font-family:var(--font-display); font-weight:700; font-size:24px; text-align:center; }
   .sub{ font-family:var(--font-mono); font-size:11.5px; color:var(--dim); text-align:center; margin-top:8px; }
 
   .error{ margin-top:22px; padding:13px 16px; background:rgba(255,93,162,.1); border:1px solid rgba(255,93,162,.35); color:var(--pink); border-radius:12px; font-size:12.5px; display:flex; gap:10px; align-items:flex-start; }
-  
-  /* Tambahan style untuk pesan sukses */
-  .success{ margin-top:22px; padding:13px 16px; background:rgba(78,225,214,.1); border:1px solid rgba(78,225,214,.35); color:var(--cyan); border-radius:12px; font-size:12.5px; display:flex; gap:10px; align-items:flex-start; }
 
   form{ margin-top:26px; display:flex; flex-direction:column; gap:20px; }
   label{ font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); display:block; margin-bottom:8px; }
   .input-wrap{ position:relative; }
   .input-wrap i.left{ position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--dim); font-size:13px; }
   .input-wrap input{ width:100%; padding:13px 14px 13px 42px; background:var(--bg); border:1px solid var(--line); border-radius:12px; color:var(--text); font-size:14px; transition:border-color .25s; }
-  .input-wrap input:focus{ outline:none; border-color:var(--violet); }
+  .input-wrap input:focus{ outline:none; border-color:var(--cyan); }
   .eye-btn{ position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--dim); cursor:pointer; font-size:13px; }
   .eye-btn:hover{ color:var(--text); }
 
   .submit-btn{ margin-top:6px; width:100%; padding:14px; border:none; border-radius:12px; cursor:pointer;
-    background:linear-gradient(90deg,var(--violet),var(--pink)); color:#fff; font-family:var(--font-mono); font-size:13px; font-weight:600;
+    background:linear-gradient(90deg,var(--cyan),var(--violet)); color:#fff; font-family:var(--font-mono); font-size:13px; font-weight:600;
     display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .2s; }
   .submit-btn:hover{ transform:translateY(-2px); }
 
@@ -75,54 +69,50 @@
     <span class="dot" style="background:#ff5f56"></span>
     <span class="dot" style="background:#ffbd2e"></span>
     <span class="dot" style="background:#27c93f"></span>
-    <span>Login Admin</span>
+    <span>Daftar Admin Baru</span>
   </div>
 
   <div class="body">
-    <div class="icon-wrap"><i class="fas fa-lock"></i></div>
-    <h2>Admin Login</h2>
-    <p class="sub">// silakan masuk untuk mengelola portofolio</p>
+    <div class="icon-wrap"><i class="fas fa-user-plus"></i></div>
+    <h2>Registrasi</h2>
+    <p class="sub">// ajukan akun baru untuk kelola portofolio</p>
 
-    <!-- Notifikasi kalau ada error -->
     @if($errors->any())
       <div class="error"><i class="fas fa-exclamation-circle" style="margin-top:2px"></i><span>{{ $errors->first() }}</span></div>
     @endif
 
-    <!-- Notifikasi kalau berhasil bikin akun pakai OTP -->
-    @if(session('success_msg'))
-      <div class="success"><i class="fas fa-check-circle" style="margin-top:2px"></i><span>{{ session('success_msg') }}</span></div>
-    @endif
-
-    <form action="{{ route('login') }}" method="POST">
+    <form action="{{ route('register.request') }}" method="POST">
       @csrf
       <div>
-        <label>Email</label>
+        <label>Nama Lengkap</label>
         <div class="input-wrap">
-          <i class="fas fa-envelope left"></i>
-          <input type="email" name="email" value="{{ old('email', 'yanzewty@gmail.com') }}" required>
+          <i class="fas fa-user left"></i>
+          <input type="text" name="name" required placeholder="Contoh: Alfiansyah">
         </div>
       </div>
 
       <div>
-        <label>Password</label>
+        <label>Email Akses</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope left"></i>
+          <input type="email" name="email" required placeholder="email@gmail.com">
+        </div>
+      </div>
+
+      <div>
+        <label>Password Baru</label>
         <div class="input-wrap">
           <i class="fas fa-key left"></i>
           <input type="password" name="password" id="passwordField" required placeholder="••••••••" style="padding-right:42px;">
           <button type="button" class="eye-btn" onclick="togglePasswordVisibility()"><i id="eyeIcon" class="fas fa-eye"></i></button>
         </div>
-        
-        <!-- TAMBAHAN LINK LUPA PASSWORD DI SINI -->
-        <div style="text-align: right; margin-top: 8px;">
-          <a href="{{ route('password.forget') }}" style="color: var(--dim); font-size: 11px; font-family: var(--font-mono); text-decoration: none; transition: color .2s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--dim)'">Lupa Password?</a>
-        </div>
       </div>
 
-      <button type="submit" class="submit-btn"><i class="fas fa-sign-in-alt"></i> Masuk Admin</button>
+      <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Minta Kode Pendaftaran</button>
     </form>
 
-    <div class="back" style="display: flex; flex-direction: column; gap: 12px;">
-      <a href="{{ route('register') }}" style="color: var(--cyan);"><i class="fas fa-user-plus"></i> Belum punya akun? Minta akses di sini</a>
-      <a href="{{ route('portofolio.index') }}"><i class="fas fa-arrow-left"></i> Kembali ke Beranda Portofolio</a>
+    <div class="back">
+      <a href="{{ route('login') }}"><i class="fas fa-arrow-left"></i> Sudah punya akun? Login di sini</a>
     </div>
   </div>
 </div>

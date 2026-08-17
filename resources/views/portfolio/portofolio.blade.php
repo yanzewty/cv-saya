@@ -25,22 +25,42 @@
     --font-mono: 'JetBrains Mono', monospace;
   }
   *{ margin:0; padding:0; box-sizing:border-box; }
-  html{ scroll-behavior:smooth; width: 100%; overflow-x: hidden; }
-  body{ background:var(--bg); color:var(--text); font-family:var(--font-body); width: 100%; overflow-x: hidden; position: relative; }
+  
+  html { 
+    scroll-behavior: smooth; 
+  }
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font-body); 
+    position: relative; 
+    overflow-x: hidden; 
+  }
+  
   ::selection{ background:var(--pink); color:#0A0A12; }
   a{ color:inherit; text-decoration:none; }
-    html::-webkit-scrollbar,
-    body::-webkit-scrollbar{
-      display: none;
-    }
+  
+  /* Custom Scrollbar Elegan */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--pink);
+  }
+  
+  /* Dukungan untuk Firefox */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) var(--bg);
+  }
 
-    html
-    body{
-
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      
-    }
   /* preloader */
   .preloader{
     position:fixed; inset:0; z-index:9999; background:var(--bg);
