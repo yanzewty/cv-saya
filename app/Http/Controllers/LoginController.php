@@ -132,9 +132,7 @@ class LoginController extends Controller
         return redirect()->route('register.verify')->with('success_msg', 'Kode baru berhasil dikirim ulang ke admin!');
     }
 
-    // ==========================================
-    // BAGIAN 4: LUPA PASSWORD (FORGET)
-    // ==========================================
+   
     public function showForget()
     {
         return view('portfolio.forget'); 

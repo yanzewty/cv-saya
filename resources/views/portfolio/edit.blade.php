@@ -35,7 +35,7 @@
   .head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; padding-bottom:20px; border-bottom:1px solid var(--line); flex-wrap:wrap; gap:14px; }
   .head h1{ font-family:var(--font-display); font-weight:700; font-size:22px; display:flex; align-items:center; gap:10px; }
   .head p{ font-family:var(--font-mono); font-size:11.5px; color:var(--dim); margin-top:6px; }
-  .btn-back{ padding:10px 18px; background:var(--bg); border:1px solid var(--line); border-radius:10px; font-size:12px; color:var(--dim); display:inline-flex; align-items:center; gap:8px; transition:border-color .2s, color .2s; }
+  .btn-back{ padding:10px 18px; background:var(--bg); border:1px solid var(--line); border-radius:10px; font-size:12px; color:var(--dim); display:inline-flex; align-items:center; gap:8px; transition:border-color .2s, color .2s; text-decoration:none;}
   .btn-back:hover{ border-color:var(--cyan); color:var(--text); }
 
   .alert{ margin-bottom:22px; padding:14px 16px; border-radius:12px; font-size:13px; display:flex; align-items:flex-start; gap:10px; }
@@ -69,6 +69,33 @@
   .submit-btn{ padding:15px; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(90deg,var(--violet),var(--pink),var(--cyan));
     background-size:200% auto; color:#0A0A12; font-family:var(--font-mono); font-weight:700; font-size:13.5px; transition:background-position .4s; }
   .submit-btn:hover{ background-position:100% center; }
+
+  /* ========================================================
+     CSS UNTUK CUSTOM ALERT MODAL (Pengganti alert bawaan)
+     ======================================================== */
+  .custom-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 14, 23, 0.7); backdrop-filter: blur(8px);
+    z-index: 9999; display: none; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .custom-modal {
+    background: linear-gradient(160deg, var(--panel-2), var(--panel));
+    border: 1px solid rgba(255,93,162,.4); border-radius: 20px; padding: 34px;
+    width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    transform: translateY(20px) scale(0.95); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .custom-modal.show-modal { opacity: 1; transform: translateY(0) scale(1); }
+  .custom-modal-overlay.show-overlay { opacity: 1; display: flex; }
+  .custom-modal i { font-size: 46px; color: var(--pink); margin-bottom: 18px; filter: drop-shadow(0 0 10px rgba(255,93,162,0.4)); }
+  .custom-modal h3 { font-family: var(--font-display); font-size: 20px; color: var(--text); margin-bottom: 12px; }
+  .custom-modal p { font-family: var(--font-body); font-size: 13.5px; color: var(--dim); line-height: 1.6; margin-bottom: 24px; }
+  .custom-modal button {
+    padding: 12px 28px; background: rgba(255,93,162,.1); border: 1px solid rgba(255,93,162,.35);
+    color: var(--pink); border-radius: 12px; cursor: pointer; font-family: var(--font-mono);
+    font-weight: 600; font-size: 12.5px; transition: all 0.2s; width: 100%;
+  }
+  .custom-modal button:hover { background: var(--pink); color: #fff; box-shadow: 0 5px 15px rgba(255,93,162,0.3); }
 </style>
 </head>
 <body>
@@ -108,17 +135,22 @@
 
       <!-- FOTO PROFIL UTAMA -->
       <div class="panel photo-row">
-        @if(!empty($profile->photo) && file_exists(public_path('uploads/' . $profile->photo)))
-          <img src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" class="photo-preview">
-        @else
-          <div class="photo-placeholder"><i class="fas fa-user"></i></div>
-        @endif
+        <div id="photo-container">
+            @if(!empty($profile->photo) && file_exists(public_path('uploads/' . $profile->photo)))
+            <img id="preview-photo" src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" class="photo-preview">
+            @else
+            <!-- Kalau belum ada foto, tampilkan placeholder, tapi siapkan img yang di-hidden untuk diisi JS -->
+            <img id="preview-photo" src="" alt="Foto Profil" class="photo-preview" style="display:none;">
+            <div id="photo-placeholder" class="photo-placeholder"><i class="fas fa-user"></i></div>
+            @endif
+        </div>
+        
         <div>
           <label style="margin-bottom:6px;"><i class="fas fa-camera" style="color:var(--violet)"></i> Foto Profil Utama</label>
           <p style="font-size:11.5px;color:var(--dim);margin-bottom:10px;">Pilih foto terbaikmu (Format: JPG/PNG - Maks. 2MB)</p>
           <label class="upload-label">
             <i class="fas fa-upload"></i> Pilih Foto Baru
-            <input type="file" name="photo" accept="image/*" style="display:none;" onchange="document.getElementById('file-name-photo').textContent = this.files[0] ? this.files[0].name : 'Belum ada file dipilih'">
+            <input type="file" name="photo" accept="image/*" style="display:none;" onchange="updateProfilePreview(this)">
           </label>
           <span id="file-name-photo" class="file-name">Belum ada file dipilih</span>
         </div>
@@ -139,14 +171,15 @@
           <div class="gallery-thumb">
             @php $galleryField = "gallery_$i"; @endphp
             @if(!empty($profile->$galleryField) && file_exists(public_path('uploads/' . $profile->$galleryField)))
-              <img src="{{ asset('uploads/' . $profile->$galleryField) }}">
+              <img id="preview-galeri{{$i}}" src="{{ asset('uploads/' . $profile->$galleryField) }}">
             @else
-              <img src="{{ $defaultImages[$i] }}">
+              <img id="preview-galeri{{$i}}" src="{{ $defaultImages[$i] }}">
             @endif
           </div>
           <div style="flex:1;min-width:180px;">
             <label style="margin-bottom:6px;">Gambar Galeri {{ $i }}</label>
-            <input type="file" name="gallery_{{ $i }}" accept="image/*">
+            <!-- Tambahan JS Live Preview -->
+            <input type="file" name="gallery_{{ $i }}" accept="image/*" onchange="previewImage(this, 'preview-galeri{{$i}}')">
           </div>
         </div>
         @endfor
@@ -207,21 +240,88 @@
   </div>
 </div>
 
+<!-- ==============================================
+     HTML CUSTOM ALERT (Pengganti Alert Bawaan)
+     ============================================== -->
+<div id="sizeAlertModal" class="custom-modal-overlay">
+  <div class="custom-modal" id="sizeAlertBox">
+    <i class="fas fa-exclamation-triangle"></i>
+    <h3>File Terlalu Besar!</h3>
+    <p>Aduh, salah satu foto yang kamu pilih ukurannya lebih dari <strong>2MB</strong>. Server butuh file yang lebih kecil, silakan kompres fotomu dulu ya.</p>
+    <button type="button" onclick="closeAlert()">Mengerti, Ubah Foto</button>
+  </div>
+</div>
+
 <script>
+  // 1. FUNGSI UNTUK LIVE PREVIEW GAMBAR GALERI
+  function previewImage(input, imageId) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById(imageId).src = e.target.result;
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // 2. FUNGSI KHUSUS UNTUK FOTO PROFIL (Sekalian ganti teks nama file)
+  function updateProfilePreview(input) {
+    // Ubah teks 'Belum ada file dipilih' jadi nama filenya
+    document.getElementById('file-name-photo').textContent = input.files[0] ? input.files[0].name : 'Belum ada file dipilih';
+    
+    // Proses live preview
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('preview-photo').src = e.target.result;
+        document.getElementById('preview-photo').style.display = 'block';
+        
+        // Sembunyikan ikon placeholder orang kalau sebelumnya kosong
+        const placeholder = document.getElementById('photo-placeholder');
+        if (placeholder) {
+            placeholder.style.display = 'none';
+        }
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // 3. LOGIKA CUSTOM ALERT UNTUK UKURAN FILE MAX 2MB
   const form = document.querySelector('form');
   const maxSize = 2 * 1024 * 1024; // 2MB
+  const modalOverlay = document.getElementById('sizeAlertModal');
+  const modalBox = document.getElementById('sizeAlertBox');
 
   form.addEventListener('submit', function(e) {
     const fileInputs = form.querySelectorAll('input[type="file"]');
     let isLarge = false;
+    
     fileInputs.forEach(input => {
       if (input.files.length > 0 && input.files[0].size > maxSize) isLarge = true;
     });
+
     if (isLarge) {
-      e.preventDefault();
-      alert("⚠️ PERINGATAN: Salah satu file yang kamu pilih ukurannya melebihi 2MB! Silakan pilih file yang lebih kecil.");
+      e.preventDefault(); // Hentikan form supaya nggak ter-submit
+      showAlert();        // Panggil modal custom yang keren!
     }
   });
+
+  // Fungsi memunculkan modal dengan animasi
+  function showAlert() {
+    modalOverlay.classList.add('show-overlay');
+    // Sedikit delay agar animasi transisi css-nya berjalan mulus
+    setTimeout(() => {
+      modalBox.classList.add('show-modal');
+    }, 10);
+  }
+
+  // Fungsi menutup modal
+  function closeAlert() {
+    modalBox.classList.remove('show-modal');
+    setTimeout(() => {
+      modalOverlay.classList.remove('show-overlay');
+    }, 300); // 300ms sesuai durasi transisi di CSS
+  }
 </script>
 </body>
 </html>

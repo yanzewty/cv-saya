@@ -44,7 +44,7 @@
 
   .error{ margin-top:22px; padding:13px 16px; background:rgba(255,93,162,.1); border:1px solid rgba(255,93,162,.35); color:var(--pink); border-radius:12px; font-size:12.5px; display:flex; gap:10px; align-items:flex-start; }
   
-  /* Tambahan style untuk pesan sukses */
+ 
   .success{ margin-top:22px; padding:13px 16px; background:rgba(78,225,214,.1); border:1px solid rgba(78,225,214,.35); color:var(--cyan); border-radius:12px; font-size:12.5px; display:flex; gap:10px; align-items:flex-start; }
 
   form{ margin-top:26px; display:flex; flex-direction:column; gap:20px; }
@@ -81,14 +81,13 @@
   <div class="body">
     <div class="icon-wrap"><i class="fas fa-lock"></i></div>
     <h2>Admin Login</h2>
-    <p class="sub">// silakan masuk untuk mengelola portofolio</p>
+    <p class="sub">silakan masuk untuk mengelola portofolio</p>
 
-    <!-- Notifikasi kalau ada error -->
+    
     @if($errors->any())
       <div class="error"><i class="fas fa-exclamation-circle" style="margin-top:2px"></i><span>{{ $errors->first() }}</span></div>
     @endif
 
-    <!-- Notifikasi kalau berhasil bikin akun pakai OTP -->
     @if(session('success_msg'))
       <div class="success"><i class="fas fa-check-circle" style="margin-top:2px"></i><span>{{ session('success_msg') }}</span></div>
     @endif
@@ -99,7 +98,7 @@
         <label>Email</label>
         <div class="input-wrap">
           <i class="fas fa-envelope left"></i>
-          <input type="email" name="email" value="{{ old('email', 'yanzewty@gmail.com') }}" required>
+          <input type="email" name="email" value="{{ old('email') }}" required placeholder="email@gmail.com">
         </div>
       </div>
 
@@ -111,7 +110,7 @@
           <button type="button" class="eye-btn" onclick="togglePasswordVisibility()"><i id="eyeIcon" class="fas fa-eye"></i></button>
         </div>
         
-        <!-- TAMBAHAN LINK LUPA PASSWORD DI SINI -->
+        
         <div style="text-align: right; margin-top: 8px;">
           <a href="{{ route('password.forget') }}" style="color: var(--dim); font-size: 11px; font-family: var(--font-mono); text-decoration: none; transition: color .2s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--dim)'">Lupa Password?</a>
         </div>
@@ -119,11 +118,11 @@
 
       <button type="submit" class="submit-btn"><i class="fas fa-sign-in-alt"></i> Masuk Admin</button>
     </form>
-
-    <div class="back" style="display: flex; flex-direction: column; gap: 12px;">
+      {{-- ini untuk buka regist tapi keknya ga aku pakek deh  --}}
+    {{-- <div class="back" style="display: flex; flex-direction: column; gap: 12px;">
       <a href="{{ route('register') }}" style="color: var(--cyan);"><i class="fas fa-user-plus"></i> Belum punya akun? Minta akses di sini</a>
       <a href="{{ route('portofolio.index') }}"><i class="fas fa-arrow-left"></i> Kembali ke Beranda Portofolio</a>
-    </div>
+    </div> --}}
   </div>
 </div>
 

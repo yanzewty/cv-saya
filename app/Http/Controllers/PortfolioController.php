@@ -183,18 +183,18 @@ class PortfolioController extends Controller
         ]);
 
         try {
-            // Simpan pesan ke database terlebih dahulu agar pasti aman
+           
             Message::create([
                 'name'    => $request->name,
                 'email'   => $request->email,
                 'message' => $request->message,
             ]);
 
-            // Coba kirim email via SMTP secara aman (jika gagal koneksi lokal, di-bypass agar tidak error)
+            
             try {
                 Mail::to('yanzewty@gmail.com')->send(new ContactMessage($request->all()));
             } catch (\Exception $mailEx) {
-                // Abaikan error email di server lokal agar form tetap sukses
+            
             }
 
             return response()->json(['success' => 'Terima kasih! Pesan berhasil dikirim.']);
@@ -206,7 +206,7 @@ class PortfolioController extends Controller
     public function messagesAdmin()
     {
         $messages = Message::latest()->get();
-        return view('portfolio.messages', compact('messages'));
+        return view('portfolio.message', compact('messages'));
     }
 
     public function deleteMessage($id)
