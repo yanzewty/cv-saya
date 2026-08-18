@@ -70,9 +70,7 @@
     background-size:200% auto; color:#0A0A12; font-family:var(--font-mono); font-weight:700; font-size:13.5px; transition:background-position .4s; }
   .submit-btn:hover{ background-position:100% center; }
 
-  /* ========================================================
-     CSS UNTUK CUSTOM ALERT MODAL (Pengganti alert bawaan)
-     ======================================================== */
+ 
   .custom-modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 14, 23, 0.7); backdrop-filter: blur(8px);
@@ -113,7 +111,7 @@
     <div class="head">
       <div>
         <h1><i class="fas fa-user-edit" style="color:var(--violet)"></i> Edit Portofolio &amp; Pengalaman</h1>
-        <p>// ubah data profil dan gambar lewat form di bawah ini</p>
+        <p>ubah data profil dan gambar lewat form di bawah ini</p>
       </div>
       <a href="{{ route('portofolio.index') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Web</a>
     </div>
@@ -133,14 +131,13 @@
     <form action="{{ route('portofolio.update') }}" method="POST" enctype="multipart/form-data">
       @csrf
 
-      <!-- FOTO PROFIL UTAMA -->
+   
       <div class="panel photo-row">
         <div id="photo-container">
             @if(!empty($profile->photo) && file_exists(public_path('uploads/' . $profile->photo)))
             <img id="preview-photo" src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" class="photo-preview">
             @else
-            <!-- Kalau belum ada foto, tampilkan placeholder, tapi siapkan img yang di-hidden untuk diisi JS -->
-            <img id="preview-photo" src="" alt="Foto Profil" class="photo-preview" style="display:none;">
+           <img id="preview-photo" src="" alt="Foto Profil" class="photo-preview" style="display:none;">
             <div id="photo-placeholder" class="photo-placeholder"><i class="fas fa-user"></i></div>
             @endif
         </div>
@@ -156,7 +153,7 @@
         </div>
       </div>
 
-      <!-- GALERI 1-3 -->
+      
       <div class="panel" style="display:flex;flex-direction:column;gap:18px;">
         <label style="color:var(--gold);"><i class="fas fa-images"></i> Foto Galeri &amp; Proyek (Maks. 2MB per gambar)</label>
         @php
@@ -178,14 +175,14 @@
           </div>
           <div style="flex:1;min-width:180px;">
             <label style="margin-bottom:6px;">Gambar Galeri {{ $i }}</label>
-            <!-- Tambahan JS Live Preview -->
+            
             <input type="file" name="gallery_{{ $i }}" accept="image/*" onchange="previewImage(this, 'preview-galeri{{$i}}')">
           </div>
         </div>
         @endfor
       </div>
 
-      <!-- INFO UTAMA -->
+      
       <div class="grid2">
         <div>
           <label>Nama Lengkap</label>
@@ -240,9 +237,7 @@
   </div>
 </div>
 
-<!-- ==============================================
-     HTML CUSTOM ALERT (Pengganti Alert Bawaan)
-     ============================================== -->
+
 <div id="sizeAlertModal" class="custom-modal-overlay">
   <div class="custom-modal" id="sizeAlertBox">
     <i class="fas fa-exclamation-triangle"></i>
@@ -253,7 +248,7 @@
 </div>
 
 <script>
-  // 1. FUNGSI UNTUK LIVE PREVIEW GAMBAR GALERI
+  
   function previewImage(input, imageId) {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
@@ -264,19 +259,19 @@
     }
   }
 
-  // 2. FUNGSI KHUSUS UNTUK FOTO PROFIL (Sekalian ganti teks nama file)
+  
   function updateProfilePreview(input) {
-    // Ubah teks 'Belum ada file dipilih' jadi nama filenya
+    
     document.getElementById('file-name-photo').textContent = input.files[0] ? input.files[0].name : 'Belum ada file dipilih';
     
-    // Proses live preview
+    
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById('preview-photo').src = e.target.result;
         document.getElementById('preview-photo').style.display = 'block';
         
-        // Sembunyikan ikon placeholder orang kalau sebelumnya kosong
+        
         const placeholder = document.getElementById('photo-placeholder');
         if (placeholder) {
             placeholder.style.display = 'none';
@@ -286,9 +281,9 @@
     }
   }
 
-  // 3. LOGIKA CUSTOM ALERT UNTUK UKURAN FILE MAX 2MB
+  
   const form = document.querySelector('form');
-  const maxSize = 2 * 1024 * 1024; // 2MB
+  const maxSize = 2 * 1024 * 1024; 
   const modalOverlay = document.getElementById('sizeAlertModal');
   const modalBox = document.getElementById('sizeAlertBox');
 
@@ -301,26 +296,26 @@
     });
 
     if (isLarge) {
-      e.preventDefault(); // Hentikan form supaya nggak ter-submit
-      showAlert();        // Panggil modal custom yang keren!
+      e.preventDefault(); 
+      showAlert();        
     }
   });
 
-  // Fungsi memunculkan modal dengan animasi
+  
   function showAlert() {
     modalOverlay.classList.add('show-overlay');
-    // Sedikit delay agar animasi transisi css-nya berjalan mulus
+    
     setTimeout(() => {
       modalBox.classList.add('show-modal');
     }, 10);
   }
 
-  // Fungsi menutup modal
+ 
   function closeAlert() {
     modalBox.classList.remove('show-modal');
     setTimeout(() => {
       modalOverlay.classList.remove('show-overlay');
-    }, 300); // 300ms sesuai durasi transisi di CSS
+    }, 300); 
   }
 </script>
 </body>
