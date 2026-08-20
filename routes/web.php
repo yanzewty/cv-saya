@@ -58,11 +58,11 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/panels/{id}/update', [PortfolioController::class, 'panelUpdate'])->name('admin.panels.update');
     Route::delete('/panels/{id}', [PortfolioController::class, 'panelDestroy'])->name('admin.panels.delete');
     
-    // 7. KELOLA KEAHLIAN (Latar Belakang Skill)
-    Route::get('/keahlian', [PortfolioController::class, 'keahlianAdmin'])->name('admin.keahlian');
-    Route::post('/keahlian', [PortfolioController::class, 'keahlianStore'])->name('admin.keahlian.store');
-    Route::get('/keahlian/{id}/edit', [PortfolioController::class, 'keahlianEdit'])->name('admin.keahlian.edit');
-    Route::post('/keahlian/{id}/update', [PortfolioController::class, 'keahlianUpdate'])->name('admin.keahlian.update');
-    Route::delete('/keahlian/{id}', [PortfolioController::class, 'keahlianDestroy'])->name('admin.keahlian.delete');
-    Route::post('/keahlian/header', [App\Http\Controllers\PortfolioController::class, 'updateSkillHeader'])->name('admin.keahlian.header');
+    // 7. KELOLA LATAR BELAKANG SKILL (URL sudah diganti jadi /latar-belakang-skill)
+    Route::get('/latar-belakang-skill', [PortfolioController::class, 'keahlianAdmin'])->name('admin.keahlian');
+    Route::post('/latar-belakang-skill', [PortfolioController::class, 'keahlianStore'])->name('admin.keahlian.store');
+    Route::get('/latar-belakang-skill/{id}/edit', [PortfolioController::class, 'keahlianEdit'])->name('admin.keahlian.edit');
+    Route::post('/latar-belakang-skill/{id}/update', [PortfolioController::class, 'keahlianUpdate'])->name('admin.keahlian.update');
+    Route::delete('/latar-belakang-skill/{id}', [PortfolioController::class, 'keahlianDestroy'])->name('admin.keahlian.delete');
+    Route::post('/latar-belakang-skill/header', [PortfolioController::class, 'updateSkillHeader'])->name('admin.keahlian.header');
 });
