@@ -1,16 +1,15 @@
 @extends('portfolio.admin_layout')
-
-@section('title', 'Edit Profil & Portofolio')
+@section('title', 'Kelola Home')
 
 @section('content')
 <style>
-  /* Menyesuaikan dengan gaya Admin Layout */
   .wrap-form { max-width: 800px; }
   .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
   .btn-outline { padding: 10px 18px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
   .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(55,99,224,0.1); }
 
   .alert-err { background:rgba(255,95,86,0.1); border:1px solid rgba(255,95,86,0.3); color:var(--danger); padding: 14px 16px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .alert-succ { background:rgba(46,213,115,0.1); border:1px solid rgba(46,213,115,0.3); color:#2ed573; padding: 14px 16px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 
   .card-form { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 30px; margin-bottom: 24px; }
   .form-group { margin-bottom: 20px; }
@@ -20,23 +19,12 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
 
-  /* Photo & Gallery Styles */
   .photo-row { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
   .photo-preview { width: 90px; height: 90px; border-radius: 16px; object-fit: cover; border: 2px solid var(--primary); flex-shrink: 0; }
   .photo-placeholder { width: 90px; height: 90px; border-radius: 16px; background: var(--bg); border: 2px dashed var(--line); display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 30px; flex-shrink: 0; }
   .upload-label { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--primary); color: #fff; font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: 0.2s; }
   .upload-label:hover { filter: brightness(1.1); }
   .file-name { font-size: 12px; color: var(--dim); font-style: italic; margin-left: 10px; }
-
-  .gallery-row { display: flex; align-items: center; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap; margin-bottom: 18px; }
-  .gallery-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-  .gallery-thumb { width: 70px; height: 70px; border-radius: 12px; overflow: hidden; background: var(--bg); border: 1px solid var(--line); flex-shrink: 0; }
-  .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  input[type=file] { font-size: 13px; color: var(--dim); }
-  input[type=file]::file-selector-button { margin-right: 14px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font-weight: 600; cursor: pointer; transition: 0.2s; }
-  input[type=file]::file-selector-button:hover { border-color: var(--primary); color: var(--primary); }
-
-  .exp-title { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px;}
 
   .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; cursor: pointer; background: var(--primary); color: #fff; font-size: 14px; font-weight: 600; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.5px;}
   .submit-btn:hover { background: #2b4eb5; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(55,99,224,0.3); }
@@ -56,14 +44,17 @@
 <div class="wrap-form">
   <div class="header-flex">
     <div>
-      <h1 style="font-family: 'Sora', sans-serif; font-size: 28px; margin-bottom: 5px;">Edit Profil</h1>
-      <p style="color: var(--dim); font-size: 14px;">Ubah data profil dan gambar portofoliomu di sini.</p>
+      <h1 style="font-family: 'Sora', sans-serif; font-size: 28px; margin-bottom: 5px;">Kelola Home</h1>
+      <p style="color: var(--dim); font-size: 14px;">Atur foto profil dan informasi utama halaman depan portofoliomu.</p>
     </div>
-    <!-- Link untuk melihat tampilan website langsung -->
     <a href="{{ route('portofolio.index') }}" target="_blank" class="btn-outline">
       <i class='bx bx-link-external'></i> Lihat Website
     </a>
   </div>
+
+  @if (session('success_msg'))
+    <div class="alert-succ"><i class='bx bx-check-circle'></i> <span>{{ session('success_msg') }}</span></div>
+  @endif
 
   @if ($errors->any())
     <div style="margin-bottom: 24px;">
@@ -73,7 +64,7 @@
     </div>
   @endif
 
-  <form action="{{ route('portofolio.update') }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('admin.home.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <!-- FOTO PROFIL UTAMA -->
@@ -97,36 +88,6 @@
       </div>
     </div>
 
-    <!-- FOTO GALERI -->
-    <div class="card-form">
-      <label style="display:flex; align-items:center; gap:6px; margin-bottom:20px; font-size:13px; color:var(--text);"><i class='bx bx-images' style="color:var(--primary); font-size:18px;"></i> Foto Galeri & Proyek (Maks. 2MB/gambar)</label>
-      
-      @php
-        $defaultImages = [
-          1 => 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg',
-          2 => 'https://img.freepik.com/free-vector/ui-ux-designers-concept-illustration_114360-6331.jpg',
-          3 => 'https://img.freepik.com/free-vector/team-goals-concept-illustration_114360-5231.jpg'
-        ];
-      @endphp
-
-      @for($i = 1; $i <= 3; $i++)
-      <div class="gallery-row">
-        <div class="gallery-thumb">
-          @php $galleryField = "gallery_$i"; @endphp
-          @if(!empty($profile->$galleryField) && file_exists(public_path('uploads/' . $profile->$galleryField)))
-            <img id="preview-galeri{{$i}}" src="{{ asset('uploads/' . $profile->$galleryField) }}">
-          @else
-            <img id="preview-galeri{{$i}}" src="{{ $defaultImages[$i] }}">
-          @endif
-        </div>
-        <div style="flex:1;">
-          <label style="margin-bottom:6px; font-size: 11px;">Gambar Galeri {{ $i }}</label>
-          <input type="file" name="gallery_{{ $i }}" accept="image/*" onchange="previewImage(this, 'preview-galeri{{$i}}')">
-        </div>
-      </div>
-      @endfor
-    </div>
-
     <!-- INFO DATA DIRI -->
     <div class="card-form">
       <div class="grid2">
@@ -136,13 +97,13 @@
         </div>
         <div class="form-group">
           <label>Role / Posisi Utama</label>
-          <input type="text" name="role" value="{{ $profile->role ?? '' }}" required>
+          <input type="text" name="role" value="{{ $profile->role ?? '' }}" placeholder="Contoh: Web Developer" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Tentang Saya (Bio)</label>
-        <textarea name="about" rows="4" required>{{ $profile->about ?? '' }}</textarea>
+        <label>Bio Singkat (Tampil di Bawah Nama)</label>
+        <textarea name="about" rows="3" required placeholder="Ceritakan sedikit tentang dirimu...">{{ $profile->about ?? '' }}</textarea>
       </div>
 
       <div class="grid2">
@@ -151,48 +112,43 @@
           <input type="email" name="email" value="{{ $profile->email ?? '' }}" required>
         </div>
         <div class="form-group">
-          <label>Nomor Telepon</label>
+          <label>Nomor Telepon (WhatsApp)</label>
           <input type="text" name="phone" value="{{ $profile->phone ?? '' }}" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Alamat</label>
+        <label>Alamat / Lokasi</label>
         <input type="text" name="address" value="{{ $profile->address ?? '' }}" required>
       </div>
 
       <div class="form-group" style="margin-bottom:0;">
         <label>Skills (Pisahkan dengan koma)</label>
-        <input type="text" name="skills" value="{{ $profile->skills ?? '' }}" placeholder="HTML, CSS, Laravel...">
+        @php
+            $skillsString = is_string($profile->skills) && is_array(json_decode($profile->skills, true)) 
+                            ? implode(', ', json_decode($profile->skills, true)) 
+                            : ($profile->skills ?? '');
+        @endphp
+        <input type="text" name="skills" value="{{ $skillsString }}" placeholder="HTML, CSS, Laravel...">
       </div>
     </div>
 
-    <!-- PENGALAMAN -->
-    @for($i = 1; $i <= 2; $i++)
+    <!-- BADGES (Teks Mengambang di Foto) -->
     <div class="card-form">
-      <span class="exp-title"><i class='bx bx-briefcase'></i> Pengalaman {{ $i }}</span>
+      <h3 style="font-size: 14px; margin-bottom: 15px; color: var(--primary);"><i class='bx bx-purchase-tag-alt'></i> Teks Mengambang di Foto Profil</h3>
       <div class="grid2">
-        <div class="form-group">
-          <label>Periode Waktu</label>
-          <input type="text" name="exp{{$i}}_period" value="{{ $profile->{'exp'.$i.'_period'} ?? '' }}" placeholder="2022 - Sekarang">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Badge Atas (Opsional)</label>
+          <input type="text" name="badge_1" value="{{ $profile->badge_1 ?? '' }}" placeholder="Contoh: Sekrum OSIS">
         </div>
-        <div class="form-group">
-          <label>Judul / Posisi</label>
-          <input type="text" name="exp{{$i}}_title" value="{{ $profile->{'exp'.$i.'_title'} ?? '' }}" placeholder="Web Developer">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Badge Bawah (Opsional)</label>
+          <input type="text" name="badge_2" value="{{ $profile->badge_2 ?? '' }}" placeholder="Contoh: Web Dev">
         </div>
-      </div>
-      <div class="form-group">
-        <label>Tempat / Instansi</label>
-        <input type="text" name="exp{{$i}}_place" value="{{ $profile->{'exp'.$i.'_place'} ?? '' }}" placeholder="Nama Perusahaan / Organisasi">
-      </div>
-      <div class="form-group" style="margin-bottom:0;">
-        <label>Deskripsi</label>
-        <textarea name="exp{{$i}}_desc" rows="2" placeholder="Jelaskan peranmu...">{{ $profile->{'exp'.$i.'_desc'} ?? '' }}</textarea>
       </div>
     </div>
-    @endfor
 
-    <button type="submit" class="submit-btn"><i class='bx bx-save'></i> Simpan Semua Perubahan</button>
+    <button type="submit" class="submit-btn"><i class='bx bx-save'></i> Simpan Perubahan Home</button>
   </form>
 </div>
 
@@ -201,24 +157,12 @@
   <div class="custom-modal" id="sizeAlertBox">
     <i class='bx bx-error'></i>
     <h3>File Terlalu Besar!</h3>
-    <p>Aduh, salah satu foto yang kamu pilih ukurannya lebih dari <strong>2MB</strong>. Server butuh file yang lebih kecil, silakan kompres fotomu dulu ya.</p>
+    <p>Aduh, foto yang kamu pilih ukurannya lebih dari <strong>2MB</strong>. Server butuh file yang lebih kecil, silakan kompres fotomu dulu ya.</p>
     <button type="button" onclick="closeAlert()">Mengerti, Ubah Foto</button>
   </div>
 </div>
 
 <script>
-  // 1. Live Preview Galeri
-  function previewImage(input, imageId) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById(imageId).src = e.target.result;
-      }
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  // 2. Live Preview Profil
   function updateProfilePreview(input) {
     document.getElementById('file-name-photo').textContent = input.files[0] ? input.files[0].name : 'Belum ada file dipilih';
     if (input.files && input.files[0]) {
@@ -233,20 +177,14 @@
     }
   }
 
-  // 3. Custom Alert Ukuran File (> 2MB)
   const form = document.querySelector('form');
   const maxSize = 2 * 1024 * 1024; // 2MB
   const modalOverlay = document.getElementById('sizeAlertModal');
   const modalBox = document.getElementById('sizeAlertBox');
 
   form.addEventListener('submit', function(e) {
-    const fileInputs = form.querySelectorAll('input[type="file"]');
-    let isLarge = false;
-    fileInputs.forEach(input => {
-      if (input.files.length > 0 && input.files[0].size > maxSize) isLarge = true;
-    });
-
-    if (isLarge) {
+    const photoInput = form.querySelector('input[name="photo"]');
+    if (photoInput && photoInput.files.length > 0 && photoInput.files[0].size > maxSize) {
       e.preventDefault(); 
       showAlert();        
     }
