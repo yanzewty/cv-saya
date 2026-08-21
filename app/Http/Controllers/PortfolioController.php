@@ -147,128 +147,46 @@ class PortfolioController extends Controller
     }
 
     // ==========================================
-    // CMS: KELOLA LATAR BELAKANG SKILL (KEAHLIAN)
-    // ==========================================
-    public function keahlianAdmin()
-    {
-        // 1. Jika tabel masih kosong, otomatis buatkan 3 kartu aslimu!
-        if (Keahlian::count() == 0) {
-            Keahlian::create([
-                'modul'    => 'MODULE / 01',
-                'judul'    => 'Pemrograman Web & Laravel',
-                'kategori' => 'DEVELOPMENT',
-                'gambar'   => ''
-            ]);
-            Keahlian::create([
-                'modul'    => 'MODULE / 02',
-                'judul'    => 'UI/UX & Poster Digital',
-                'kategori' => 'DESIGN & UI',
-                'gambar'   => ''
-            ]);
-            Keahlian::create([
-                'modul'    => 'MODULE / 03',
-                'judul'    => 'Kegiatan OSIS & Karang Taruna',
-                'kategori' => 'LEADERSHIP',
-                'gambar'   => ''
-            ]);
-        }
-        $dataKeahlian = Keahlian::oldest()->get();
-        
-        // Panggil data profile untuk dimunculkan di halaman Admin (Buat Teks Header)
-        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData()); 
-        
-        return view('portfolio.admin_keahlian', compact('dataKeahlian', 'profile'));
-    }
-
-    // FUNGSI UNTUK MENYIMPAN TEKS HEADER (NUMPANG DI DATABASE PROFILE)
-    public function updateSkillHeader(Request $request)
-    {
-        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
-        $profile->about_sub_3 = $request->skill_tag;   
-        $profile->about_sub_2 = $request->skill_title; 
-        $profile->about_2     = $request->skill_desc;  
-        $profile->save();
-
-        return redirect()->back()->with('success_msg', 'Teks Judul & Deskripsi Utama berhasil diperbarui!');
-    }
-
-    public function keahlianStore(Request $request)
-    {
-        $request->validate([
-            'gambar' => 'required|image|max:2048',
-            'judul'  => 'required'
-        ]);
-
-        $data = $request->all();
-
-        if ($request->hasFile('gambar')) {
-            $uploadPath = public_path('uploads');
-            if (!file_exists($uploadPath)) { mkdir($uploadPath, 0755, true); }
-            
-            $file = $request->file('gambar');
-            $filename = time() . '_keahlian_' . $file->getClientOriginalName();
-            $file->move($uploadPath, $filename);
-            $data['gambar'] = $filename;
-        }
-
-        Keahlian::create($data);
-        return redirect()->back()->with('success_msg', 'Data Keahlian Baru Berhasil Ditambahkan!');
-    }
-
-    public function keahlianEdit($id)
-    {
-        $item = Keahlian::findOrFail($id);
-        return view('portfolio.admin_keahlian_edit', compact('item'));
-    }
-
-    public function keahlianUpdate(Request $request, $id)
-    {
-        $keahlian = Keahlian::findOrFail($id);
-        
-        $request->validate([
-            'gambar' => 'nullable|image|max:2048',
-            'judul'  => 'required'
-        ]);
-
-        $keahlian->modul     = $request->modul;
-        $keahlian->judul     = $request->judul;
-        $keahlian->deskripsi = $request->deskripsi;
-        $keahlian->kategori  = $request->kategori;
-
-        if ($request->hasFile('gambar')) {
-            $uploadPath = public_path('uploads');
-            if (!file_exists($uploadPath)) { mkdir($uploadPath, 0755, true); }
-
-            if (!empty($keahlian->gambar) && file_exists($uploadPath . '/' . $keahlian->gambar)) {
-                @unlink($uploadPath . '/' . $keahlian->gambar);
-            }
-
-            $file = $request->file('gambar');
-            $filename = time() . '_keahlian_' . $file->getClientOriginalName();
-            $file->move($uploadPath, $filename);
-            $keahlian->gambar = $filename;
-        }
-
-        $keahlian->save();
-        return redirect()->route('admin.keahlian')->with('success_msg', 'Data Kartu Keahlian Berhasil Diperbarui!');
-    }
-
-    public function keahlianDestroy($id)
-    {
-        $keahlian = Keahlian::findOrFail($id);
-        if(!empty($keahlian->gambar) && file_exists(public_path('uploads/'.$keahlian->gambar))){
-            @unlink(public_path('uploads/'.$keahlian->gambar));
-        }
-        $keahlian->delete();
-        return redirect()->back()->with('success_msg', 'Data Keahlian Berhasil Dihapus!');
-    }
-
-    // ==========================================
-    // CMS 3: KELOLA ORGANISASI
-    // ==========================================
+    // CMS 3: KELOLA ORGANISASI (TIMELINE)
+    
     public function orgAdmin()
     {
-        return "Halaman Kelola Organisasi (Sedang Dalam Pembuatan)";
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
+        
+        // Kita pinjam field 'education' yang nganggur untuk simpan header organisasi
+        $header = json_decode($profile->education, true);
+        if (!is_array($header) || !isset($header['title'])) {
+            $header = [
+                'tag' => '04 / PENGALAMAN ORGANISASI',
+                'title' => 'Jejak Kepemimpinan',
+                'desc' => 'Peran yang membentuk cara saya bekerja dalam tim dan mengambil keputusan.'
+            ];
+        }
+
+        $experiencesJson = $profile->experiences ?: '[]';
+        
+        return view('portfolio.admin_organizations', compact('profile', 'header', 'experiencesJson'));
+    }
+
+    public function updateOrgAdmin(Request $request)
+    {
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
+        
+        // Simpan Teks Header ke field education
+        $header = [
+            'tag' => $request->org_tag,
+            'title' => $request->org_title,
+            'desc' => $request->org_desc,
+        ];
+        $profile->education = json_encode($header);
+        
+        // Simpan data JSON baris organisasi
+        if ($request->has('experiences_data')) {
+            $profile->experiences = $request->experiences_data;
+        }
+
+        $profile->save();
+        return redirect()->back()->with('success_msg', 'Header & Jejak Organisasi berhasil diperbarui!');
     }
 
     // ==========================================
@@ -344,5 +262,138 @@ class PortfolioController extends Controller
         }
         $project->delete();
         return back()->with('success_msg', 'Proyek berhasil dihapus!');
+    }
+
+    // ==========================================
+    // CMS 6: KELOLA LATAR BELAKANG SKILL (Kartu Modul)
+    // ==========================================
+    public function keahlianAdmin()
+    {
+        if (Keahlian::count() == 0) {
+            Keahlian::create(['modul' => 'MODULE / 01', 'judul' => 'Pemrograman Web & Laravel', 'kategori' => 'DEVELOPMENT', 'gambar' => '']);
+            Keahlian::create(['modul' => 'MODULE / 02', 'judul' => 'UI/UX & Poster Digital', 'kategori' => 'DESIGN & UI', 'gambar' => '']);
+            Keahlian::create(['modul' => 'MODULE / 03', 'judul' => 'Kegiatan OSIS & Karang Taruna', 'kategori' => 'LEADERSHIP', 'gambar' => '']);
+        }
+        $dataKeahlian = Keahlian::oldest()->get();
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData()); 
+        
+        return view('portfolio.admin_latar_belakang_skill', compact('dataKeahlian', 'profile'));
+    }
+
+    public function updateSkillHeader(Request $request)
+    {
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
+        $profile->about_sub_3 = $request->skill_tag;   
+        $profile->about_sub_2 = $request->skill_title; 
+        $profile->about_2     = $request->skill_desc;  
+        $profile->save();
+
+        return redirect()->back()->with('success_msg', 'Teks Judul & Deskripsi Utama berhasil diperbarui!');
+    }
+
+    public function keahlianStore(Request $request)
+    {
+        $request->validate(['gambar' => 'required|image|max:2048', 'judul'  => 'required']);
+        $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+            $uploadPath = public_path('uploads');
+            if (!file_exists($uploadPath)) { mkdir($uploadPath, 0755, true); }
+            $file = $request->file('gambar');
+            $filename = time() . '_keahlian_' . $file->getClientOriginalName();
+            $file->move($uploadPath, $filename);
+            $data['gambar'] = $filename;
+        }
+        Keahlian::create($data);
+        return redirect()->back()->with('success_msg', 'Data Keahlian Baru Berhasil Ditambahkan!');
+    }
+
+    public function keahlianEdit($id)
+    {
+        $item = Keahlian::findOrFail($id);
+        return view('portfolio.admin_latar_belakang_skill_edit', compact('item'));
+    }
+
+    public function keahlianUpdate(Request $request, $id)
+    {
+        $keahlian = Keahlian::findOrFail($id);
+        $request->validate(['gambar' => 'nullable|image|max:2048', 'judul'  => 'required']);
+        $keahlian->modul     = $request->modul;
+        $keahlian->judul     = $request->judul;
+        $keahlian->deskripsi = $request->deskripsi;
+        $keahlian->kategori  = $request->kategori;
+
+        if ($request->hasFile('gambar')) {
+            $uploadPath = public_path('uploads');
+            if (!file_exists($uploadPath)) { mkdir($uploadPath, 0755, true); }
+            if (!empty($keahlian->gambar) && file_exists($uploadPath . '/' . $keahlian->gambar)) {
+                @unlink($uploadPath . '/' . $keahlian->gambar);
+            }
+            $file = $request->file('gambar');
+            $filename = time() . '_keahlian_' . $file->getClientOriginalName();
+            $file->move($uploadPath, $filename);
+            $keahlian->gambar = $filename;
+        }
+        $keahlian->save();
+        return redirect()->route('admin.keahlian')->with('success_msg', 'Data Kartu Keahlian Berhasil Diperbarui!');
+    }
+
+    public function keahlianDestroy($id)
+    {
+        $keahlian = Keahlian::findOrFail($id);
+        if(!empty($keahlian->gambar) && file_exists(public_path('uploads/'.$keahlian->gambar))){
+            @unlink(public_path('uploads/'.$keahlian->gambar));
+        }
+        $keahlian->delete();
+        return redirect()->back()->with('success_msg', 'Data Keahlian Berhasil Dihapus!');
+    }
+
+    // ==========================================
+    // CMS 7: KELOLA BIDANG KEAHLIAN (KOTAK-KOTAK SKILL)
+    // ==========================================
+    public function bidangKeahlianAdmin()
+    {
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
+        
+        $header = json_decode($profile->about_3, true) ?? [
+            'tag' => '03 / KEAHLIAN',
+            'title' => 'Bidang Keahlian Saya',
+            'desc' => 'Memadukan kemampuan teknis IT dengan tata kelola organisasi yang rapi.'
+        ];
+        
+        // Ambil data skill dan ubah ke format objek baru
+        $skillsArray = json_decode($profile->skills, true) ?? [];
+        $formattedSkills = [];
+        foreach($skillsArray as $item) {
+            if(is_string($item)) {
+                // Format lama diubah otomatis ke format baru
+                $formattedSkills[] = ['name' => str_replace(',', '', $item), 'icon' => 'fas fa-code', 'color' => '#3763e0'];
+            } else {
+                $formattedSkills[] = $item;
+            }
+        }
+        $skillsJson = json_encode($formattedSkills);
+
+        return view('portfolio.admin_bidang_keahlian', compact('profile', 'header', 'skillsJson'));
+    }
+
+    public function updateBidangKeahlian(Request $request)
+    {
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
+        
+        $header = [
+            'tag' => $request->skill_tag,
+            'title' => $request->skill_title,
+            'desc' => $request->skill_desc,
+        ];
+        $profile->about_3 = json_encode($header);
+
+        // Simpan data JSON langsung dari form dinamis JavaScript
+        if ($request->has('skills_data')) {
+            $profile->skills = $request->skills_data;
+        }
+
+        $profile->save();
+        return redirect()->back()->with('success_msg', 'Data Bidang Keahlian berhasil diperbarui!');
     }
 }

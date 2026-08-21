@@ -23,7 +23,7 @@ Route::get('/reset-password', [LoginController::class, 'showReset'])->name('pass
 Route::post('/reset-password', [LoginController::class, 'processReset'])->name('password.update');
 
 // ========================================================
-// GRUP ADMIN (Sudah ada prefix /admin, jadi di dalamnya nggak perlu ditulis /admin lagi)
+// GRUP ADMIN
 // ========================================================
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     
@@ -58,11 +58,28 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/panels/{id}/update', [PortfolioController::class, 'panelUpdate'])->name('admin.panels.update');
     Route::delete('/panels/{id}', [PortfolioController::class, 'panelDestroy'])->name('admin.panels.delete');
     
-    // 7. KELOLA LATAR BELAKANG SKILL (URL sudah diganti jadi /latar-belakang-skill)
+    // 7. KELOLA LATAR BELAKANG SKILL 
     Route::get('/latar-belakang-skill', [PortfolioController::class, 'keahlianAdmin'])->name('admin.keahlian');
     Route::post('/latar-belakang-skill', [PortfolioController::class, 'keahlianStore'])->name('admin.keahlian.store');
     Route::get('/latar-belakang-skill/{id}/edit', [PortfolioController::class, 'keahlianEdit'])->name('admin.keahlian.edit');
     Route::post('/latar-belakang-skill/{id}/update', [PortfolioController::class, 'keahlianUpdate'])->name('admin.keahlian.update');
     Route::delete('/latar-belakang-skill/{id}', [PortfolioController::class, 'keahlianDestroy'])->name('admin.keahlian.delete');
     Route::post('/latar-belakang-skill/header', [PortfolioController::class, 'updateSkillHeader'])->name('admin.keahlian.header');
+
+    // 8. KELOLA BIDANG KEAHLIAN (KOTAK-KOTAK SKILL) <-- INI YANG BARU DITAMBAHKAN
+    Route::get('/bidang-keahlian', [PortfolioController::class, 'bidangKeahlianAdmin'])->name('admin.bidang_keahlian');
+    Route::post('/bidang-keahlian', [PortfolioController::class, 'updateBidangKeahlian'])->name('admin.bidang_keahlian.update');
+
+
+
+    // 3. KELOLA ORGANISASI
+    Route::get('/organizations', [PortfolioController::class, 'orgAdmin'])->name('admin.organizations');
+    Route::post('/organizations', [PortfolioController::class, 'updateOrgAdmin'])->name('admin.organizations.update');
+
+
+
+
+
+
+
 });

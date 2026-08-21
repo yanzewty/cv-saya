@@ -157,17 +157,6 @@
   .skill-chip h3{ font-family:var(--font-display); font-size:18px; font-weight:700; }
   .hint{ text-align:center; font-family:var(--font-mono); font-size:11px; color:var(--dim); margin-top:8px; }
 
-  .timeline{ position:relative; padding-left:44px; }
-  .timeline .rail{ position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:var(--line); }
-  .timeline .rail-fill{ position:absolute; left:0; top:0; width:100%; height:0; background:linear-gradient(180deg,var(--violet),var(--pink)); transition:height 1.2s ease; }
-  .t-item{ position:relative; padding-bottom:48px; cursor:pointer; }
-  .t-item:last-child{ padding-bottom:0; }
-  .t-item::before{ content:""; position:absolute; left:-44px; top:4px; width:15px; height:15px; border-radius:50%; background:var(--bg); border:2px solid var(--violet); z-index:2; }
-  .t-item .role{ font-family:var(--font-display); font-weight:700; font-size:18px; transition:color .25s; }
-  .t-item:hover .role{ color:var(--pink); }
-  .t-item .org{ font-family:var(--font-mono); font-size:12px; color:var(--gold); margin:7px 0 9px; }
-  .t-item p{ color:var(--dim); font-size:13.5px; line-height:1.65; max-width:600px; }
-
   .contact-panel{ max-width:720px; margin:0 auto; background:linear-gradient(160deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:24px; padding:52px; }
   .field label{ font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); display:block; margin-bottom:8px; }
   .field input, .field textarea{ width:100%; padding:14px 16px; background:var(--bg); border:1px solid var(--line); border-radius:12px; color:var(--text); font-family:var(--font-body); font-size:14px; transition:border-color .25s; }
@@ -207,6 +196,32 @@
     .cards{ grid-template-columns:1fr; }
     .about-panel{ grid-template-columns:1fr; padding:32px; }
   }
+
+  /* ========================================================
+     CSS TAMBAHAN KHUSUS UNTUK ZIGZAG & TOMBOL LIHAT SEMUA
+     ======================================================== */
+  .timeline-zigzag { position: relative; max-width: 1000px; margin: 40px auto; padding: 20px 0; }
+  .timeline-zigzag::after { content: ''; position: absolute; width: 2px; background: linear-gradient(180deg, var(--cyan), var(--pink)); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+  .tz-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 20px; }
+  .tz-item:nth-child(odd) { left: 0; text-align: right; }
+  .tz-item:nth-child(even) { left: 50%; text-align: left; }
+  .tz-item::after { content: ''; position: absolute; width: 22px; height: 22px; right: -11px; background: var(--bg); border: 4px solid var(--cyan); top: 25px; border-radius: 50%; z-index: 1; transition: 0.3s; }
+  .tz-item:nth-child(even)::after { left: -11px; }
+  .tz-item:hover::after { background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
+  .tz-content { padding: 24px 30px; background: rgba(0,0,0,0.15); border: 1px solid var(--line); border-radius: 16px; position: relative; transition: 0.3s; cursor: pointer; }
+  .tz-content:hover { border-color: var(--pink); transform: translateY(-5px); background: rgba(255,255,255,0.03); }
+  .tz-role { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: #fff; margin-bottom: 5px; }
+  .tz-org { font-family: var(--font-mono); font-size: 12px; color: var(--gold); margin-bottom: 12px; }
+  .tz-desc { color: var(--dim); font-size: 13.5px; line-height: 1.7; }
+  @media screen and (max-width: 768px) {
+      .timeline-zigzag::after { left: 31px; }
+      .tz-item { width: 100%; padding-left: 70px; padding-right: 0; text-align: left !important; left: 0 !important; }
+      .tz-item::after { left: 20px !important; }
+  }
+  .btn-toggle-skill { background: rgba(139, 92, 246, 0.05); border: 1px solid var(--violet); color: var(--violet); padding: 12px 28px; border-radius: 30px; font-family: var(--font-mono); font-size: 13px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 35px; }
+  .btn-toggle-skill:hover { background: var(--violet); color: #fff; box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
+  .btn-toggle-org { background: rgba(78, 225, 214, 0.05); border: 1px solid var(--cyan); color: var(--cyan); padding: 12px 28px; border-radius: 30px; font-family: var(--font-mono); font-size: 13px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; }
+  .btn-toggle-org:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px rgba(78, 225, 214, 0.4); }
 </style>
 </head>
 <body id="home">
@@ -275,7 +290,7 @@
           @for($r = 0; $r < 2; $r++)
           <span>
             @foreach($marqueeSkills as $ms)
-                {{ strtoupper($ms) }} <em>&#10022;</em>
+                {{ strtoupper(is_array($ms) ? ($ms['name'] ?? '') : $ms) }} <em>&#10022;</em>
             @endforeach
           </span>
           @endfor
@@ -321,16 +336,13 @@
     <section id="About">
       <div class="about-panel reveal" style="height: auto; min-height: fit-content; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; width: 100%; margin: 0 auto;">
         
-       <!-- Kiri: Judul Utama -->
         <div style="flex: 1; min-width: 300px;">
-          <!-- Teks kecil sekarang memanggil data dinamis dari form -->
           <div class="sec-tag">{{ $profile->about_sub_1 ?? '01 / TENTANG SAYA' }}</div>
           <h2 style="font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 700; color: #fff; line-height: 1.3;">
             {{ $profile->about_title ?? 'Membangun Solusi Digital dengan Logika & Kreativitas' }}
           </h2>
         </div>
      
-        <!-- Kanan: 1 Kotak Deskripsi Saja -->
         <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
           @if(!empty($profile->about_1))
             <div style="padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; background: rgba(255, 255, 255, 0.03); transition: 0.3s; word-break: break-word; overflow-wrap: break-word;" onmouseover="this.style.borderColor='var(--cyan)'; this.style.background='rgba(255, 255, 255, 0.06)';" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)';">
@@ -338,7 +350,6 @@
             </div>
           @endif
 
-          <!-- Tag Hobi (Akan muncul rapi di bawah kotak deskripsi) -->
           @if(!empty($profile->hobbies) && is_array(json_decode($profile->hobbies, true)))
           <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;">
             @foreach(json_decode($profile->hobbies, true) as $hobby)
@@ -351,14 +362,11 @@
       </div>
     </section>
 
-    <!-- ====================================================== -->
-    <!-- SECTION DINAMIS (TAMBAHAN DARI ADMIN)                  -->
-    <!-- ====================================================== -->
+    <!-- SECTION DINAMIS DARI ADMIN -->
     @foreach($panels as $panel)
     <section>
       <div class="about-panel reveal" style="height: auto; min-height: fit-content; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; width: 100%; margin: 0 auto;">
         
-        <!-- Kiri: Judul Tambahan -->
         <div style="flex: 1; min-width: 300px;">
           <div class="sec-tag">{{ $panel->tag }}</div>
           <h2 style="font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 700; color: #fff; line-height: 1.3;">
@@ -366,7 +374,6 @@
           </h2>
         </div>
         
-        <!-- Kanan: 1 Kotak Deskripsi Tambahan -->
         <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
           @if(!empty($panel->desc_1))
           <div style="padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; background: rgba(255, 255, 255, 0.03); transition: 0.3s; word-break: break-word; overflow-wrap: break-word;" onmouseover="this.style.borderColor='var(--cyan)'; this.style.background='rgba(255, 255, 255, 0.06)';" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)';">
@@ -378,44 +385,41 @@
       </div>
     </section>
     @endforeach
-    <!-- AKHIR MAGIC DINAMIS -->
 
-  </div> <!-- PENUTUP BUNGKUS UTAMA PENYELAMAT -->
+  </div> 
 
   <!-- ====================================================== -->
-  <!-- BAGIAN 02: LATAR BELAKANG SKILL (KARTU 3D)             -->
+  <!-- BAGIAN 02: LATAR BELAKANG SKILL (KARTU 3D + LIHAT SEMUA)-->
   <!-- ====================================================== -->
   <section id="LatarBelakangSkill" style="margin-top: 60px;">
     <div class="sec-head reveal">
-      <div><div class="sec-tag">02 / LATAR BELAKANG SKILL</div><div class="sec-title">LATAR BELAKANG SKILL</div></div>
-      <div class="sec-desc">Dokumentasi kegiatan pemrograman web, desain UI/UX, dan organisasi sosial.</div>
+      <div>
+        <div class="sec-tag">{{ $profile->about_sub_3 ?: '02 / LATAR BELAKANG SKILL' }}</div>
+        <div class="sec-title">{{ $profile->about_sub_2 ?: 'LATAR BELAKANG SKILL' }}</div>
+      </div>
+      <div class="sec-desc">{{ $profile->about_2 ?: 'Dokumentasi kegiatan pemrograman web, desain UI/UX, dan organisasi sosial.' }}</div>
     </div>
     
-    <div class="cards">
-      
+    <div class="cards" id="skillsGridContainer">
       @if(isset($dataKeahlian) && $dataKeahlian->count() > 0)
-          <!-- ============================================== -->
-          <!-- LOOPING DATA DARI DATABASE ADMIN               -->
-          <!-- ============================================== -->
-          @foreach($dataKeahlian as $item)
+          @php $totalSkills = $dataKeahlian->count(); @endphp
           
+          @foreach($dataKeahlian as $index => $item)
             @php
-                // Logika gambar: kalau ada gambar di database, pakai itu. Kalau kosong, pakai gambar default.
                 $gambarUrl = (!empty($item->gambar) && file_exists(public_path('uploads/' . $item->gambar))) 
                              ? asset('uploads/' . $item->gambar) 
-                             : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg'; // Gambar cadangan
+                             : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg'; 
                 
-                // Bersihkan teks dari tanda kutip biar Pop-up Javascript-nya nggak error
                 $judulAman = htmlspecialchars($item->judul, ENT_QUOTES);
                 $kategoriAman = htmlspecialchars($item->kategori, ENT_QUOTES);
-                
-                // Hapus enter/baris baru di deskripsi agar script js onclick tidak rusak
                 $deskripsiAman = trim(preg_replace('/\s+/', ' ', $item->deskripsi));
                 $deskripsiAman = htmlspecialchars($deskripsiAman, ENT_QUOTES);
             @endphp
 
-            <!-- Kartu Dinamis -->
-            <div class="card reveal" data-tilt style="transition-delay: .0{{ $loop->index * 8 }}s"
+            <!-- Kartu Dinamis: Tampilkan 3 awal, sisanya sembunyikan -->
+            <div class="card reveal {{ $index >= 3 ? 'skill-hidden' : '' }}" 
+                 style="{{ $index >= 3 ? 'display:none;' : '' }} transition-delay: .0{{ ($index % 3) * 8 }}s"
+                 data-tilt 
                  onclick="openModal('{{ $judulAman }}', '{{ $kategoriAman }}', '{{ $gambarUrl }}', '{{ $deskripsiAman }}')">
               
               <div class="card-img">
@@ -425,8 +429,6 @@
               <div class="card-body">
                 <div class="idx">{{ $item->modul }}</div>
                 <h3>{{ $item->judul }}</h3>
-                
-                <!-- Str::limit untuk memotong teks kepanjangan di dalam kartu (Max 80 huruf) -->
                 <p>{{ \Illuminate\Support\Str::limit($item->deskripsi, 80, '...') }}</p>
                 
                 <div class="foot">
@@ -439,36 +441,66 @@
           @endforeach
           
       @else
-        
-          <p style="color: var(--dim); width: 100%; text-align: center;">Belum ada data skill yang ditambahkan.</p>
+          <p style="color: var(--dim); width: 100%; text-align: center; grid-column: 1 / -1;">Belum ada data skill yang ditambahkan.</p>
       @endif
-
     </div>
-</section>
+
+    <!-- Tombol Muncul Otomatis Kalau Data Lebih Dari 3 -->
+    @if(isset($totalSkills) && $totalSkills > 3)
+      <div style="text-align: center; width: 100%; position: relative; z-index: 5;">
+        <button id="btnToggleSkill" class="btn-toggle-skill" onclick="toggleSkills()">
+          Lihat Semua ({{ $totalSkills }}) <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+    @endif
+  </section>
 
   <!-- ====================================================== -->
-  <!-- BAGIAN 03: KEAHLIAN (SLIDER)                           -->
+  <!-- BAGIAN 03: KEAHLIAN (SLIDER DINAMIS + DATABASE WARNA)  -->
   <!-- ====================================================== -->
   <section id="Keahlian">
+    @php
+        $skillHeader = json_decode($profile->about_3, true) ?? [
+            'tag' => '03 / KEAHLIAN',
+            'title' => 'Bidang Keahlian Saya',
+            'desc' => 'Memadukan kemampuan teknis IT dengan tata kelola organisasi yang rapi.'
+        ];
+    @endphp
+
     <div class="sec-head reveal">
-      <div><div class="sec-tag">03 / KEAHLIAN</div><div class="sec-title">Bidang Keahlian Saya</div></div>
-      <div class="sec-desc">Memadukan kemampuan teknis IT dengan tata kelola organisasi yang rapi.</div>
+      <div>
+        <div class="sec-tag">{{ $skillHeader['tag'] }}</div>
+        <div class="sec-title">{{ $skillHeader['title'] }}</div>
+      </div>
+      <div class="sec-desc">{{ $skillHeader['desc'] }}</div>
     </div>
 
     <div id="skillsSlider" class="slider">
       <div class="slider-track">
         @if(!empty($profile->skills))
           @php
-            $skillsList = is_string($profile->skills) ? json_decode($profile->skills, true) : $profile->skills;
-            if(is_array($skillsList)){ $originalCount = count($skillsList); $skillsList = array_merge($skillsList, $skillsList); }
+            $skillsList = json_decode($profile->skills, true) ?? [];
+            if(is_array($skillsList) && count($skillsList) > 0){ 
+                $originalCount = count($skillsList); 
+                $skillsList = array_merge($skillsList, $skillsList); 
+            }
           @endphp
-          @if(is_array($skillsList))
-            @foreach($skillsList as $index => $skill)
+          
+          @if(is_array($skillsList) && count($skillsList) > 0)
+            @foreach($skillsList as $index => $item)
+              @php
+                  $skillName = isset($item['name']) ? $item['name'] : 'Skill';
+                  $iconClass = isset($item['icon']) ? $item['icon'] : 'fas fa-code';
+                  $colorHex  = isset($item['color']) ? $item['color'] : '#4facfe';
+              @endphp
+
             <div class="skill-chip">
               <div>
-                <div class="ico"><i class="fas fa-code"></i></div>
+                <div class="ico" style="background: {{ $colorHex }}25; color: {{ $colorHex }}; box-shadow: 0 4px 15px {{ $colorHex }}30;">
+                    <i class="{{ $iconClass }}"></i>
+                </div>
                 <div class="lbl">Skill_{{ str_pad(($index % $originalCount) + 1, 2, '0', STR_PAD_LEFT) }}</div>
-                <h3>{{ $skill }}</h3>
+                <h3>{{ $skillName }}</h3>
               </div>
             </div>
             @endforeach
@@ -480,26 +512,58 @@
   </section>
 
   <!-- ====================================================== -->
-  <!-- BAGIAN 04: PENGALAMAN ORGANISASI (TIMELINE)            -->
+  <!-- BAGIAN 04: PENGALAMAN ORGANISASI (ZIGZAG + LIHAT SEMUA)-->
   <!-- ====================================================== -->
   <section id="organization">
+    @php 
+        $orgHeader = json_decode($profile->education, true);
+        if (!is_array($orgHeader) || !isset($orgHeader['title'])) {
+            $orgHeader = [
+                'tag' => '04 / PENGALAMAN ORGANISASI',
+                'title' => 'Jejak Kepemimpinan',
+                'desc' => 'Peran yang membentuk cara saya bekerja dalam tim dan mengambil keputusan.'
+            ];
+        }
+    @endphp
+
     <div class="sec-head reveal">
-      <div><div class="sec-tag">04 / PENGALAMAN ORGANISASI</div><div class="sec-title">Jejak kepemimpinan</div></div>
-      <div class="sec-desc">Peran yang membentuk cara saya bekerja dalam tim dan mengambil keputusan.</div>
+      <div>
+        <div class="sec-tag">{{ $orgHeader['tag'] }}</div>
+        <div class="sec-title">{{ $orgHeader['title'] }}</div>
+      </div>
+      <div class="sec-desc">{{ $orgHeader['desc'] }}</div>
     </div>
-    <div class="timeline reveal" id="timelineEl">
-      <div class="rail"><div class="rail-fill" id="railFill"></div></div>
-      @php $experiencesData = json_decode($profile->experiences, true); @endphp
-      @if(is_array($experiencesData))
-        @foreach($experiencesData as $exp)
-        <div class="t-item" onclick="openModal('{{ $exp['posisi'] ?? '' }}', '{{ $exp['periode'] ?? '' }}', '', '{{ $exp['deskripsi'] ?? '' }}\n\nInstansi: {{ $exp['instansi'] ?? '' }}')">
-          <div class="role">{{ $exp['posisi'] ?? '' }}</div>
-          <div class="org">{{ $exp['instansi'] ?? '' }} &middot; {{ $exp['periode'] ?? '' }}</div>
-          <p>{{ Str::limit($exp['deskripsi'] ?? '', 140) }}</p>
-        </div>
+    
+    <div class="timeline-zigzag reveal" id="timelineEl">
+      @php 
+        $experiencesData = json_decode($profile->experiences, true); 
+        $totalExp = is_array($experiencesData) ? count($experiencesData) : 0;
+      @endphp
+      
+      @if($totalExp > 0)
+        @foreach($experiencesData as $index => $exp)
+          <!-- Item Zigzag: Data ke-5 disembunyikan -->
+          <div class="tz-item {{ $index >= 4 ? 'tz-hidden' : '' }}" style="{{ $index >= 4 ? 'display:none;' : '' }}">
+            <div class="tz-content" onclick="openModal('{{ $exp['posisi'] ?? '' }}', '{{ $exp['periode'] ?? '' }}', '', '{{ $exp['deskripsi'] ?? '' }}\n\nInstansi: {{ $exp['instansi'] ?? '' }}')">
+              <div class="tz-role">{{ $exp['posisi'] ?? '' }}</div>
+              <div class="tz-org">{{ $exp['instansi'] ?? '' }} &middot; {{ $exp['periode'] ?? '' }}</div>
+              <div class="tz-desc">{{ Str::limit($exp['deskripsi'] ?? '', 120) }}</div>
+            </div>
+          </div>
         @endforeach
+      @else
+        <p style="text-align:center; color:var(--dim); width:100%;">Belum ada jejak organisasi.</p>
       @endif
     </div>
+
+    <!-- Tombol Muncul Otomatis Kalau Data Lebih Dari 4 -->
+    @if($totalExp > 4)
+      <div style="text-align: center; width: 100%; position: relative; z-index: 5;">
+        <button id="btnToggleOrg" class="btn-toggle-org" onclick="toggleOrg()">
+          Lihat Semua ({{ $totalExp }}) <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+    @endif
   </section>
 
   <!-- ====================================================== -->
@@ -519,7 +583,7 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
           <div class="field">
             <label>Nama Anda</label>
-            <input type="text" name="name" required placeholder="Contoh: Budi ang ang">
+            <input type="text" name="name" required placeholder="Contoh: Budi">
           </div>
           <div class="field">
             <label>Email Anda</label>
@@ -613,10 +677,8 @@
     entries.forEach(e=>{
       if(e.isIntersecting){
         e.target.classList.add('in');
-        if(e.target.id === 'timelineEl'){ document.getElementById('railFill').style.height = '100%'; }
       } else {
         e.target.classList.remove('in');
-        if(e.target.id === 'timelineEl'){ document.getElementById('railFill').style.height = '0%'; }
       }
     });
   }, { threshold:.15 });
@@ -758,6 +820,42 @@
   function closeModal() {
     modalContent.classList.remove('modal-scale');
     setTimeout(()=>{ modal.classList.remove('modal-active'); document.body.style.overflow = 'auto'; }, 300);
+  }
+
+  // JAVASCRIPT UNTUK TOMBOL "LIHAT SEMUA"
+  
+  function toggleSkills() {
+      const hiddenItems = document.querySelectorAll('.skill-hidden');
+      const btn = document.getElementById('btnToggleSkill');
+      if(!hiddenItems.length) return;
+      
+      const isHidden = hiddenItems[0].style.display === 'none';
+      hiddenItems.forEach(item => {
+          item.style.display = isHidden ? 'block' : 'none';
+      });
+
+      if(isHidden) {
+          btn.innerHTML = 'Sembunyikan Sebagian <i class="fas fa-chevron-up"></i>';
+      } else {
+          btn.innerHTML = 'Lihat Semua ({{ $totalSkills ?? 0 }}) <i class="fas fa-chevron-down"></i>';
+      }
+  }
+
+  function toggleOrg() {
+      const hiddenItems = document.querySelectorAll('.tz-hidden');
+      const btn = document.getElementById('btnToggleOrg');
+      if(!hiddenItems.length) return;
+      
+      const isHidden = hiddenItems[0].style.display === 'none';
+      hiddenItems.forEach(item => {
+          item.style.display = isHidden ? 'block' : 'none';
+      });
+
+      if(isHidden) {
+          btn.innerHTML = 'Sembunyikan Sebagian <i class="fas fa-chevron-up"></i>';
+      } else {
+          btn.innerHTML = 'Lihat Semua ({{ $totalExp ?? 0 }}) <i class="fas fa-chevron-down"></i>';
+      }
   }
 </script>
 </body>

@@ -76,6 +76,36 @@
     <div class="alert-succ"><i class='bx bx-check-circle' style="font-size: 20px;"></i> <span>{{ session('success_msg') }}</span></div>
   @endif
 
+  <!-- ====================================================== -->
+  <!-- FORM EDIT TEKS HEADER                                  -->
+  <!-- ====================================================== -->
+  <form action="{{ route('admin.keahlian.header') }}" method="POST">
+    @csrf
+    <div class="card-form" style="margin-bottom: 40px;">
+      <div class="form-title" style="color: #4facfe;"><i class='bx bx-edit'></i> Panel Latar Belakang Skill (Utama)</div>
+      
+      <div class="grid2 form-group">
+        <div>
+          <label>TAG KECIL (KIRI ATAS)</label>
+          <input type="text" name="skill_tag" value="{{ $profile->about_sub_3 ?: '02 / LATAR BELAKANG SKILL' }}" required>
+        </div>
+        <div>
+          <label>JUDUL UTAMA (KIRI BAWAH)</label>
+          <input type="text" name="skill_title" value="{{ $profile->about_sub_2 ?: 'LATAR BELAKANG SKILL' }}" required>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label>DESKRIPSI UTAMA (SEBELAH KANAN)</label>
+        <textarea name="skill_desc" rows="3" required style="resize: vertical;">{{ $profile->about_2 ?: 'Dokumentasi kegiatan pemrograman web, desain UI/UX, dan organisasi sosial.' }}</textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" style="background: #3763e0; margin-top: 15px;"><i class='bx bx-save'></i> Simpan Perubahan Utama</button>
+    </div>
+  </form>
+  <!-- ====================================================== -->
+
+
   <!-- BAGIAN ATAS: DAFTAR KARTU -->
   <div>
     <h3 style="font-size: 18px; margin-bottom: 5px; color: #fff; font-family: 'Sora', sans-serif;">
@@ -112,14 +142,15 @@
                     <div class="card-module">{{ $item->modul }}</div>
                     <div class="card-title">{{ $item->judul }}</div>
                     
-                    <!-- INI DIA DESKRIPSI SINGKATNYA YANG BARU DITAMBAH -->
+                    <!-- INI DIA DESKRIPSI SINGKATNYA -->
                     <div class="card-desc">
                         {{ \Illuminate\Support\Str::limit($item->deskripsi, 80, '...') }}
                     </div>
 
+                    <!-- FOOTER KARTU (KLIK DETAIL SUDAH JADI LINK HIDUP MENUJU EDIT) -->
                     <div class="card-footer">
                         <span class="card-cat">{{ $item->kategori }}</span>
-                        <span class="card-detail">Klik detail &rarr;</span>
+                        <a href="{{ route('admin.keahlian.edit', $item->id) }}" class="card-detail" style="text-decoration: none; transition: 0.2s;" onmouseover="this.style.color='#4facfe'" onmouseout="this.style.color='var(--dim)'">Klik detail &rarr;</a>
                     </div>
                 </div>
             </div>

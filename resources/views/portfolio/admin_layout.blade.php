@@ -37,53 +37,52 @@
 <body>
 
     <aside class="sidebar">
-        <div class="brand"><i class='bx bx-cube-alt'></i> Admin CMS</div>
+    <div class="brand"><i class='bx bx-cube-alt'></i> Admin CMS</div>
+    
+    <nav class="nav-menu">
+        <span class="nav-label">Menu Website</span>
         
-        <nav class="nav-menu">
-            <span class="nav-label">Menu Website</span>
-            
-            <a href="{{ route('admin.home') }}" class="nav-link {{ request()->routeIs('admin.home') ? 'active' : '' }}">
-                <i class='bx bx-home-alt'></i> Home
-            </a>
-            
-            <a href="{{ route('admin.about') }}" class="nav-link {{ request()->routeIs('admin.about') ? 'active' : '' }}">
-                <i class='bx bx-user'></i> About
-            </a>
+        <a href="{{ route('admin.home') }}" class="nav-link {{ request()->routeIs('admin.home') ? 'active' : '' }}">
+            <i class='bx bx-home-alt'></i> Home
+        </a>
+        
+        <a href="{{ route('admin.about') }}" class="nav-link {{ request()->routeIs('admin.about') ? 'active' : '' }}">
+            <i class='bx bx-user'></i> About
+        </a>
 
-            <!-- Menu Latar Belakang Skill (Sudah punya halaman khusus) -->
-            <a href="{{ route('admin.keahlian') }}" class="nav-link {{ request()->routeIs('admin.keahlian') ? 'active' : '' }}">
-                <i class='bx bx-layer'></i> Latar Belakang Skill
-            </a>
+        <!-- Menu Latar Belakang Skill -->
+        <a href="{{ route('admin.keahlian') }}" class="nav-link {{ request()->routeIs('admin.keahlian') ? 'active' : '' }}">
+            <i class='bx bx-layer'></i> Latar Belakang Skill
+        </a>
 
-            <!-- Menu Keahlian (Mengarah ke panel dinamis di halaman About) -->
-            <a href="{{ route('admin.about') }}#tambah-section" class="nav-link">
-                <i class='bx bx-wrench'></i> Keahlian
-            </a>
-            
-            <a href="{{ route('admin.organizations') }}" class="nav-link {{ request()->routeIs('admin.organizations*') ? 'active' : '' }}">
-                <i class='bx bx-group'></i> Organisasi
-            </a>
-            
-            <a href="{{ route('admin.projects') }}" class="nav-link {{ request()->routeIs('admin.projects*') ? 'active' : '' }}">
-                <i class='bx bx-briefcase-alt-2'></i> Proyek / Galeri
-            </a>
+        <!-- MENU KEAHLIAN (SUDAH DIBENARKAN & BISA NYALA BIRU) -->
+        <a href="{{ route('admin.bidang_keahlian') }}" class="nav-link {{ request()->routeIs('admin.bidang_keahlian') ? 'active' : '' }}">
+            <i class='bx bx-wrench'></i> Keahlian
+        </a>
+        
+        <a href="{{ route('admin.organizations') }}" class="nav-link {{ request()->routeIs('admin.organizations*') ? 'active' : '' }}">
+            <i class='bx bx-group'></i> Organisasi
+        </a>
+    
 
-            <span class="nav-label">Interaksi</span>
-            
-            <a href="{{ route('admin.messages') }}" class="nav-link {{ request()->routeIs('admin.messages') ? 'active' : '' }}">
-                <i class='bx bx-envelope'></i> Pesan Masuk
-            </a>
-            
-            <div style="margin-top: auto;">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="nav-link logout" style="width:100%; border:none; background:none; cursor:pointer; text-align:left; font-family: 'Inter', sans-serif;">
-                        <i class='bx bx-log-out'></i> Logout
-                    </button>
-                </form>
-            </div>
-        </nav>
-    </aside>
+        <span class="nav-label">Interaksi</span>
+        
+        <a href="{{ route('admin.messages') }}" class="nav-link {{ request()->routeIs('admin.messages') ? 'active' : '' }}">
+            <i class='bx bx-envelope'></i> Pesan Masuk
+        </a>
+        
+        <!-- Pendorong agar tombol logout selalu ada di bawah -->
+        <div style="flex-grow: 1; margin-top: 40px;"></div>
+
+        <!-- Tombol Logout -->
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="nav-link" style="border: none; background: transparent; width: 100%; text-align: left; cursor: pointer;">
+                <i class='bx bx-log-out'></i> Logout
+            </button>
+        </form>
+    </nav>
+</aside>
 
     <main class="main-content">
         @if(session('success_msg'))
