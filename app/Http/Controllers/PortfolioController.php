@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\AboutPanel; 
 use App\Models\Keahlian; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PortfolioController extends Controller
 {
@@ -52,9 +53,20 @@ class PortfolioController extends Controller
         return view('portfolio.portofolio', compact('profile', 'projects', 'panels', 'dataKeahlian'));
     }
 
-    // ==========================================
-    // CMS 1: KELOLA HOME
-    // ==========================================
+    
+    public function dashboard()
+    {
+        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
+        
+        // PERUBAHAN: Ngitung statistik pesan yang BELUM DIBACA saja
+        $totalMessages = Message::where('is_read', false)->count();
+        $totalKeahlian = Keahlian::count();
+        $totalProjects = Project::count();
+
+        return view('portfolio.admin_dashboard', compact('profile', 'totalMessages', 'totalKeahlian', 'totalProjects'));
+    }
+
+    
     public function editHome()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
@@ -148,7 +160,7 @@ class PortfolioController extends Controller
 
     // ==========================================
     // CMS 3: KELOLA ORGANISASI (TIMELINE)
-    
+    // ==========================================
     public function orgAdmin()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
@@ -218,6 +230,24 @@ class PortfolioController extends Controller
     {
         Message::findOrFail($id)->delete();
         return redirect()->back()->with('success_msg', 'Pesan berhasil dihapus!'); 
+    }
+
+    // PERUBAHAN: Fungsi untuk menandai SATU pesan sebagai dibaca (dipanggil via Javascript)
+    public function markAsRead($id)
+    {
+        $message = Message::findOrFail($id);
+        $message->is_read = true;
+        $message->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    // PERUBAHAN: Fungsi untuk menandai SEMUA pesan sebagai dibaca
+    public function markAllAsRead()
+    {
+        Message::where('is_read', false)->update(['is_read' => true]);
+
+        return redirect()->back()->with('success_msg', 'Semua pesan telah ditandai sebagai dibaca.');
     }
 
     // ==========================================
@@ -335,7 +365,7 @@ class PortfolioController extends Controller
             $keahlian->gambar = $filename;
         }
         $keahlian->save();
-        return redirect()->route('admin.keahlian')->with('success_msg', 'Data Kartu Keahlian Berhasil Diperbarui!');
+        return redirect()->route('admin.latar_belakang')->with('success_msg', 'Data Kartu Keahlian Berhasil Diperbarui!');
     }
 
     public function keahlianDestroy($id)

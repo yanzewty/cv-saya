@@ -1,95 +1,117 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Area - @yield('title')</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Admin Panel') - Portfolio Manager</title>
+    
+    <!-- Google Fonts: Inter & Sora -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons & FontAwesome -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-<!-- Ikon Boxicons -->
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070B14;
+            --panel-dark: #10151F;
+            --border-line: rgba(255, 255, 255, 0.06);
+            --text-main: #EAEEF5;
+            --text-dim: #8792A6;
+            --cyan: #4facfe;
+            --violet: #8B5CF6;
+            --danger: #ff3b30;
+        }
 
-<style>
-    :root {
-        --bg: #0A0E17; --panel: #10151F; --panel-2: #141B29; --line: #232D3E;
-        --text: #EAEEF5; --dim: #8792A6; --primary: #3763E0; --danger: #ff5f56; --success: #27c93f;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
-    
-    .sidebar { width: 260px; background: var(--panel); border-right: 1px solid var(--line); padding: 30px 24px; display: flex; flex-direction: column; position: fixed; height: 100vh; top: 0; left: 0; z-index: 100; }
-    .brand { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 30px; display: flex; align-items: center; gap: 12px; }
-    .brand i { color: var(--primary); font-size: 28px; }
-    
-    .nav-menu { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .nav-label { font-size: 11px; color: var(--dim); padding: 16px 16px 8px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-    
-    .nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: var(--dim); text-decoration: none; border-radius: 12px; font-size: 13.5px; font-weight: 500; transition: all 0.2s; }
-    .nav-link i { font-size: 20px; }
-    .nav-link:hover, .nav-link.active { background: rgba(55, 99, 224, 0.1); color: var(--primary); }
-    .nav-link.logout:hover { background: rgba(255, 95, 86, 0.1); color: var(--danger); }
-    
-    .main-content { flex: 1; margin-left: 260px; padding: 40px; min-height: 100vh; background: var(--bg); }
-    .alert-global { padding: 16px; border-radius: 12px; margin-bottom: 24px; font-size: 14px; display: flex; align-items: center; gap: 10px; }
-    .alert-success { background: rgba(39, 201, 63, 0.1); border: 1px solid rgba(39, 201, 63, 0.3); color: var(--success); }
-</style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; overflow-x: hidden; }
+        a { text-decoration: none; }
+
+        /* ============================
+           AREA KONTEN UTAMA (FULL SCREEN)
+           ============================ */
+        .main-wrapper {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Bar */
+        .topbar {
+            height: 70px;
+            border-bottom: 1px solid var(--border-line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .topbar-breadcrumb { font-size: 13px; color: var(--text-dim); font-weight: 500; display: flex; align-items: center; gap: 14px; }
+        .topbar-breadcrumb span { color: #fff; font-weight: 600; }
+
+        /* Tombol Home Baru (Untuk Balik ke Portal) */
+        .btn-home { color: var(--cyan); background: rgba(79, 172, 254, 0.1); padding: 8px 14px; border-radius: 10px; display: flex; align-items: center; transition: 0.3s; border: 1px solid rgba(79, 172, 254, 0.3); font-size: 18px; }
+        .btn-home:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px rgba(79,172,254,0.4); transform: translateY(-2px); }
+
+        .topbar-right { display: flex; align-items: center; gap: 24px; }
+        .topbar-date { font-size: 12px; font-family: var(--font-mono); color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+        
+        /* Tombol Logout Pindah ke Kanan Atas */
+        .btn-logout { background: rgba(255,59,48,0.1); border: 1px solid rgba(255,59,48,0.3); color: var(--danger); padding: 9px 18px; border-radius: 10px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn-logout:hover { background: var(--danger); color: #fff; box-shadow: 0 0 15px rgba(255,59,48,0.4); transform: translateY(-2px); }
+
+        /* Wrapper Konten */
+        .content-area {
+            padding: 40px;
+            flex-grow: 1;
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-    <div class="brand"><i class='bx bx-cube-alt'></i> Admin CMS</div>
-    
-    <nav class="nav-menu">
-        <span class="nav-label">Menu Website</span>
+    <!-- ==========================================
+         AREA KONTEN (TANPA SIDEBAR KIRI)
+         ========================================== -->
+    <main class="main-wrapper">
         
-        <a href="{{ route('admin.home') }}" class="nav-link {{ request()->routeIs('admin.home') ? 'active' : '' }}">
-            <i class='bx bx-home-alt'></i> Home
-        </a>
-        
-        <a href="{{ route('admin.about') }}" class="nav-link {{ request()->routeIs('admin.about') ? 'active' : '' }}">
-            <i class='bx bx-user'></i> About
-        </a>
+        <!-- Topbar Keren -->
+        <header class="topbar">
+            <div class="topbar-breadcrumb">
+                <a href="{{ route('admin.dashboard') }}" class="btn-home" title="Kembali ke Dashboard Utama"><i class='bx bx-home-alt-2'></i></a>
+                <div><i class='bx bx-folder'></i> Admin / <span>@yield('title')</span></div>
+            </div>
+            
+            <div class="topbar-right">
+                <div class="topbar-date">
+                    <i class='bx bxs-circle' style="font-size: 8px; color: var(--cyan);"></i> {{ date('l, d M Y') }}
+                </div>
+                
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn-logout">
+                        <i class='bx bx-log-out'></i> Logout
+                    </button>
+                </form>
+            </div>
+        </header>
 
-        <!-- Menu Latar Belakang Skill -->
-        <a href="{{ route('admin.keahlian') }}" class="nav-link {{ request()->routeIs('admin.keahlian') ? 'active' : '' }}">
-            <i class='bx bx-layer'></i> Latar Belakang Skill
-        </a>
+        <!-- Area Dynamic Form -->
+        <section class="content-area">
+            @yield('content')
+        </section>
 
-        <!-- MENU KEAHLIAN (SUDAH DIBENARKAN & BISA NYALA BIRU) -->
-        <a href="{{ route('admin.bidang_keahlian') }}" class="nav-link {{ request()->routeIs('admin.bidang_keahlian') ? 'active' : '' }}">
-            <i class='bx bx-wrench'></i> Keahlian
-        </a>
-        
-        <a href="{{ route('admin.organizations') }}" class="nav-link {{ request()->routeIs('admin.organizations*') ? 'active' : '' }}">
-            <i class='bx bx-group'></i> Organisasi
-        </a>
-    
-
-        <span class="nav-label">Interaksi</span>
-        
-        <a href="{{ route('admin.messages') }}" class="nav-link {{ request()->routeIs('admin.messages') ? 'active' : '' }}">
-            <i class='bx bx-envelope'></i> Pesan Masuk
-        </a>
-        
-        <!-- Pendorong agar tombol logout selalu ada di bawah -->
-        <div style="flex-grow: 1; margin-top: 40px;"></div>
-
-        <!-- Tombol Logout -->
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="nav-link" style="border: none; background: transparent; width: 100%; text-align: left; cursor: pointer;">
-                <i class='bx bx-log-out'></i> Logout
-            </button>
-        </form>
-    </nav>
-</aside>
-
-    <main class="main-content">
-        @if(session('success_msg'))
-            <div class="alert-global alert-success"><i class='bx bx-check-circle'></i> {{ session('success_msg') }}</div>
-        @endif
-        
-        @yield('content')
     </main>
 
 </body>

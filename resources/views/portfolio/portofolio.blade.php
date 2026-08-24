@@ -580,6 +580,15 @@
 
       <form id="contactForm">
         @csrf
+        
+        <!-- ============================================== -->
+        <!-- LAPIS 1: JEBAKAN BOT (HONEYPOT)                -->
+        <!-- ============================================== -->
+        <div style="display:none; visibility:hidden; opacity:0; position:absolute; left:-9999px;">
+            <label>If you are human, leave this blank</label>
+            <input type="text" name="hp_website_url" tabindex="-1" autocomplete="off">
+        </div>
+
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
           <div class="field">
             <label>Nama Anda</label>

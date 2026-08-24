@@ -3,53 +3,51 @@
 
 @section('content')
 <style>
-  /* ========================================= */
-  /* CSS PREMIUM UNTUK HALAMAN ADMIN ABOUT     */
-  /* ========================================= */
   .wrap-form { max-width: 800px; }
-  .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-  
-  .btn-outline { padding: 10px 18px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-weight: 500; }
-  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(55,99,224,0.1); }
+  .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+  .header-flex h1 { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .header-flex p { color: var(--dim); font-size: 13.5px; }
 
-  .alert-succ { background:rgba(46,213,115,0.1); border:1px solid rgba(46,213,115,0.3); color:#2ed573; padding: 14px 16px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px; font-weight: 500; }
+  .btn-outline { padding: 10px 18px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(76,111,255,0.10); }
 
-  .card-form { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 30px; margin-bottom: 24px; transition: 0.3s; }
-  .card-form:hover { border-color: rgba(255, 255, 255, 0.15); }
-  .card-dashed { border: 1px dashed var(--cyan); background: rgba(0, 229, 255, 0.02); }
-  
+  .alert-succ { background:rgba(52,199,123,0.10); border:1px solid rgba(52,199,123,0.28); color:var(--success); padding: 14px 16px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px; font-weight: 500; }
+
+  .card-form { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 30px; margin-bottom: 24px; transition: border-color .2s; box-shadow: 0 20px 40px -28px rgba(0,0,0,0.6); }
+  .card-form:hover { border-color: rgba(255, 255, 255, 0.14); }
+  .card-dashed { border: 1px dashed var(--cyan); background: rgba(41,199,192,0.03); }
+
   .form-group { margin-bottom: 20px; }
-  label { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--dim); display: block; margin-bottom: 8px; }
-  
-  input[type=text], textarea { width: 100%; padding: 14px 16px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; color: var(--text); font-size: 14px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-  input[type=text]:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(55,99,224,0.15); }
-  input.cyan-focus:focus, textarea.cyan-focus:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.15); }
+  label { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); display: block; margin-bottom: 9px; }
+
+  input[type=text], textarea { width: 100%; padding: 13px 15px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; color: var(--text); font-size: 13.5px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+  input[type=text]:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(76,111,255,0.15); }
+  input.cyan-focus:focus, textarea.cyan-focus:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(41,199,192,0.15); }
 
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
 
-  .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; cursor: pointer; background: var(--primary); color: #fff; font-size: 14px; font-weight: 600; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.5px;}
-  .submit-btn:hover { background: #2b4eb5; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(55,99,224,0.3); }
-  
-  .btn-add { background: var(--cyan); color: #000; }
-  .btn-add:hover { background: #00e5ff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 229, 255, 0.25); }
+  .submit-btn { width: 100%; padding: 15px; border: none; border-radius: 12px; cursor: pointer; background: var(--primary); color: #fff; font-size: 13.5px; font-weight: 700; transition: all 0.25s ease; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px;}
+  .submit-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 14px 28px -10px rgba(76,111,255,0.4); }
 
-  .btn-edit { padding: 10px 16px; background: rgba(55,99,224,0.1); color: var(--primary); border: 1px solid rgba(55,99,224,0.3); border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; transition: 0.2s; text-decoration: none; }
-  .btn-edit:hover { background: var(--primary); color: #fff; box-shadow: 0 5px 15px rgba(55,99,224,0.3); }
+  .btn-add { background: var(--cyan); color: #06231f; }
+  .btn-add:hover { background: #35d8d0; box-shadow: 0 14px 28px -10px rgba(41,199,192,0.4); }
 
-  .btn-delete { padding: 10px 16px; background: rgba(255, 93, 162, 0.1); color: var(--pink); border: 1px solid rgba(255, 93, 162, 0.3); border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; transition: 0.2s; }
-  .btn-delete:hover { background: var(--pink); color: #fff; box-shadow: 0 5px 15px rgba(255, 93, 162, 0.3); }
+  .btn-edit { padding: 10px 16px; background: rgba(76,111,255,0.10); color: var(--primary); border: 1px solid rgba(76,111,255,0.3); border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12.5px; transition: 0.2s; text-decoration: none; }
+  .btn-edit:hover { background: var(--primary); color: #fff; }
 
-  .list-item { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-  .list-item:hover { transform: translateX(5px); border-color: rgba(255, 255, 255, 0.2); }
+  .btn-delete { padding: 10px 16px; background: rgba(242,84,91,0.10); color: var(--pink); border: 1px solid rgba(242,84,91,0.3); border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12.5px; transition: 0.2s; }
+  .btn-delete:hover { background: var(--danger); color: #fff; }
+
+  .list-item { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+  .list-item:hover { transform: translateX(4px); border-color: rgba(255, 255, 255, 0.18); }
 </style>
 
 <div class="wrap-form">
-  <!-- HEADER -->
   <div class="header-flex">
     <div>
-      <h1 style="font-family: 'Sora', sans-serif; font-size: 28px; margin-bottom: 5px; color: #fff;">Kelola Tentang Saya</h1>
-      <p style="color: var(--dim); font-size: 14px;">Atur section utama dan tambahkan panel latar belakang dengan mudah.</p>
+      <h1>Kelola Tentang Saya</h1>
+      <p>Atur section utama dan tambahkan panel latar belakang dengan mudah.</p>
     </div>
     <a href="{{ route('portofolio.index') }}#gallery" target="_blank" class="btn-outline">
       <i class='bx bx-link-external'></i> Lihat Website
@@ -60,16 +58,13 @@
     <div class="alert-succ"><i class='bx bx-check-circle' style="font-size: 18px;"></i> <span>{{ session('success_msg') }}</span></div>
   @endif
 
-  <!-- ========================================================= -->
-  <!-- BAGIAN 1: SECTION UTAMA (BAWAAN DEFAULT)                  -->
-  <!-- ========================================================= -->
   <form action="{{ route('admin.about.update') }}" method="POST">
     @csrf
     <div class="card-form">
-      <h3 style="color: var(--primary); margin-bottom: 24px; font-size: 15px; display: flex; align-items: center; gap: 8px;">
-        <i class='bx bx-edit-alt' style="font-size: 20px;"></i> Panel Tentang Saya (Utama)
+      <h3 style="color: var(--primary); margin-bottom: 22px; font-size: 14px; display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight:700;">
+        <i class='bx bx-edit-alt' style="font-size: 19px;"></i> Panel Tentang Saya (Utama)
       </h3>
-      
+
       <div class="grid2 form-group">
         <div>
           <label>Tag Kecil (Kiri Atas)</label>
@@ -87,24 +82,20 @@
       </div>
     </div>
 
-    <!-- Hidden inputs to prevent null errors from controller -->
     <input type="hidden" name="about_2" value="">
     <input type="hidden" name="about_sub_2" value="">
     <input type="hidden" name="about_3" value="">
     <input type="hidden" name="about_sub_3" value="">
 
     <button type="submit" class="submit-btn">
-      <i class='bx bx-save' style="font-size: 18px;"></i> Simpan Perubahan Utama
+      <i class='bx bx-save' style="font-size: 17px;"></i> Simpan Perubahan Utama
     </button>
   </form>
 
-  <hr style="border-top: 2px dashed var(--line); border-bottom: none; border-left: none; border-right: none; margin: 50px 0;">
+  <hr style="border-top: 1px dashed var(--line); border-bottom: none; border-left: none; border-right: none; margin: 46px 0;">
 
-  <!-- ========================================================= -->
-  <!-- BAGIAN 2: TOMBOL TAMBAH PANEL BARU (TAK TERBATAS)         -->
-  <!-- ========================================================= -->
-  <div style="margin-bottom: 24px;">
-    <h2 style="font-family: 'Sora', sans-serif; font-size: 22px; color: #fff; margin-bottom: 6px;">Tambah Section Baru</h2>
+  <div style="margin-bottom: 22px;">
+    <h2 style="font-family: var(--font-display); font-size: 20px; color: #fff; margin-bottom: 6px; font-weight:700;">Tambah Section Baru</h2>
     <p style="color: var(--dim); font-size: 13px;">Isi form ini untuk menambah blok baru (1 Judul + 1 Deskripsi) ke halaman depan.</p>
   </div>
 
@@ -128,22 +119,19 @@
       </div>
 
       <button type="submit" class="submit-btn btn-add">
-        <i class='bx bx-layer-plus' style="font-size: 18px;"></i> Tambahkan Section Ke Website
+        <i class='bx bx-layer-plus' style="font-size: 17px;"></i> Tambahkan Section Ke Website
       </button>
     </div>
   </form>
 
-  <!-- ========================================================= -->
-  <!-- LIST SECTION YANG UDAH DIBIKIN (BISA DIEDIT & DIHAPUS)    -->
-  <!-- ========================================================= -->
-  <div style="margin-top: 40px;">
-    <h3 style="font-size: 15px; margin-bottom: 20px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-      <i class='bx bx-list-ul' style="color: var(--cyan); font-size: 20px;"></i> Section yang telah ditambahkan:
+  <div style="margin-top: 36px;">
+    <h3 style="font-size: 14px; margin-bottom: 18px; color: var(--text); display: flex; align-items: center; gap: 8px; font-weight:600;">
+      <i class='bx bx-list-ul' style="color: var(--cyan); font-size: 19px;"></i> Section yang telah ditambahkan:
     </h3>
-    
+
     @if(isset($panels) && $panels->isEmpty())
-      <div style="text-align: center; padding: 40px; background: rgba(255,255,255,0.02); border: 1px dashed var(--line); border-radius: 14px;">
-        <i class='bx bx-ghost' style="font-size: 40px; color: var(--dim); margin-bottom: 10px;"></i>
+      <div style="text-align: center; padding: 38px; background: rgba(255,255,255,0.02); border: 1px dashed var(--line); border-radius: 14px;">
+        <i class='bx bx-ghost' style="font-size: 36px; color: var(--dim); margin-bottom: 10px;"></i>
         <p style="color: var(--dim); font-size: 13px; font-style: italic;">Belum ada section tambahan yang dibuat.</p>
       </div>
     @endif
@@ -152,11 +140,10 @@
       @foreach($panels as $panel)
       <div class="list-item">
         <div>
-          <span style="font-size: 11px; font-weight: 600; color: var(--cyan); font-family: monospace; letter-spacing: 1px; text-transform: uppercase;">{{ $panel->tag }}</span>
-          <h4 style="color: #fff; margin-top: 6px; font-size: 18px; font-family: 'Sora', sans-serif;">{{ $panel->title }}</h4>
+          <span style="font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase;">{{ $panel->tag }}</span>
+          <h4 style="color: #fff; margin-top: 6px; font-size: 17px; font-family: var(--font-display); font-weight:700;">{{ $panel->title }}</h4>
         </div>
-        
-        <!-- BUNGKUS TOMBOL EDIT & HAPUS -->
+
         <div style="display: flex; gap: 8px; align-items: center;">
             <a href="{{ route('admin.panels.edit', $panel->id) }}" class="btn-edit">
                 <i class='bx bx-edit'></i> Edit
