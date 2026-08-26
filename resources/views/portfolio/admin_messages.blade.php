@@ -56,9 +56,9 @@
     .btn-delete-bulk { background: rgba(255,59,48,0.10); border-color: rgba(255,59,48,0.3); color: var(--danger); }
     .btn-delete-bulk:hover { background: var(--danger); color: #fff; box-shadow: 0 8px 20px -6px rgba(255,59,48,0.5); transform: translateY(-2px); }
 
-    .checkbox-wrapper { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 10px 16px; border-radius: var(--radius-md); border: 1px solid var(--line-strong); cursor: pointer; transition: 0.2s var(--ease); }
+    .checkbox-wrapper { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 10px 16px; border-radius: var(--radius-md); border: 1px solid var(--line-strong); cursor: pointer; transition: 0.2s var(--ease); margin-bottom: 0; text-transform: none; font-family: 'Inter', sans-serif; letter-spacing: normal; }
     .checkbox-wrapper:hover { border-color: var(--cyan); background: rgba(41,199,192,0.06); }
-    .checkbox-wrapper span { font-size: 12.5px; font-weight: 600; color: #fff; }
+    .checkbox-wrapper span { font-size: 12.5px; font-weight: 600; color: #fff; text-transform: none; font-family: 'Inter', sans-serif; letter-spacing: normal; }
 
     /* ============ CUSTOM CHECKBOX ============ */
     input.custom-checkbox { position: absolute; opacity: 0; width: 0; height: 0; }
