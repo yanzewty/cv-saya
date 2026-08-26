@@ -73,11 +73,11 @@
     <div class="alert-succ"><i class='bx bx-check-circle' style="font-size: 18px;"></i> <span>{{ session('success_msg') }}</span></div>
   @endif
 
-  <!-- SUDAH DIUBAH KE admin.latar_belakang.header -->
+
   <form action="{{ route('admin.latar_belakang.header') }}" method="POST">
     @csrf
     <div class="card-form" style="margin-bottom: 36px;">
-      <div class="form-title" style="color: var(--cyan);"><i class='bx bx-edit' style="color:var(--cyan);"></i> Panel Latar Belakang Skill (Utama)</div>
+      <div class="form-title" style="color: var(--cyan);"><i class='bx bx-edit' style="color:var(--cyan);"></i> Latar Belakang Skill (Utama)</div>
 
       <div class="grid2 form-group">
         <div>
@@ -103,7 +103,7 @@
     <h3 style="font-size: 16px; margin-bottom: 5px; color: #fff; font-family: var(--font-display); font-weight:700;">
         <i class='bx bx-grid-alt' style="color: var(--primary); margin-right: 5px;"></i> Data yang sudah ada
     </h3>
-    <p style="font-size: 12.5px; color: var(--dim);">Arahkan kursor ke kartu untuk <strong>Edit Gambar/Teks</strong> atau <strong>Menghapus</strong>.</p>
+    <p style="font-size: 12.5px; color: var(--dim);"> Silahkan <strong>Edit Gambar/Teks</strong> atau <strong>Menghapus</strong>.</p>
 
     <div class="skill-grid">
         @if(isset($dataKeahlian))
@@ -127,7 +127,7 @@
                     @if(!empty($item->gambar) && file_exists(public_path('uploads/' . $item->gambar)))
                         <img src="{{ asset('uploads/'.$item->gambar) }}" alt="Skill Image">
                     @else
-                        <div class="no-img-text"><i class='bx bx-image-alt'></i> Belum Ada Gambar (Klik Edit)</div>
+                        <div class="no-img-text"><i class='bx bx-image-alt'></i> Belum Ada Gambar (Silahkan Edit)</div>
                     @endif
                 </div>
 
@@ -141,7 +141,7 @@
 
                     <div class="card-footer">
                         <span class="card-cat">{{ $item->kategori }}</span>
-                        <!-- SUDAH DIUBAH KE admin.latar_belakang.edit -->
+                        
                         <a href="{{ route('admin.latar_belakang.edit', $item->id) }}" class="card-detail" style="text-decoration: none; transition: 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--dim)'">Klik detail &rarr;</a>
                     </div>
                 </div>

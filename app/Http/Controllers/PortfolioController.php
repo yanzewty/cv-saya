@@ -53,12 +53,11 @@ class PortfolioController extends Controller
         return view('portfolio.portofolio', compact('profile', 'projects', 'panels', 'dataKeahlian'));
     }
 
-    
     public function dashboard()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        // PERUBAHAN: Ngitung statistik pesan yang BELUM DIBACA saja
+        // Ngitung statistik pesan yang BELUM DIBACA saja
         $totalMessages = Message::where('is_read', false)->count();
         $totalKeahlian = Keahlian::count();
         $totalProjects = Project::count();
@@ -66,7 +65,6 @@ class PortfolioController extends Controller
         return view('portfolio.admin_dashboard', compact('profile', 'totalMessages', 'totalKeahlian', 'totalProjects'));
     }
 
-    
     public function editHome()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
@@ -136,7 +134,7 @@ class PortfolioController extends Controller
     public function panelStore(Request $request)
     {
         AboutPanel::create($request->all());
-        return redirect()->back()->with('success_msg', 'Section Baru Berhasil Ditambahkan!');
+        return redirect()->back()->with('success_msg', ' Berhasil Ditambahkan!');
     }
 
     public function panelEdit($id)
@@ -149,13 +147,13 @@ class PortfolioController extends Controller
     {
         $panel = AboutPanel::findOrFail($id);
         $panel->update($request->all());
-        return redirect()->route('admin.about')->with('success_msg', 'Section berhasil diperbarui!');
+        return redirect()->route('admin.about')->with('success_msg', 'Berhasil berhasil diperbarui!');
     }
 
     public function panelDestroy($id)
     {
         AboutPanel::findOrFail($id)->delete();
-        return redirect()->back()->with('success_msg', 'Section Berhasil Dihapus dari website!');
+        return redirect()->back()->with('success_msg', 'Berhasil Dihapus dari website!');
     }
 
     // ==========================================
@@ -184,7 +182,6 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        // Simpan Teks Header ke field education
         $header = [
             'tag' => $request->org_tag,
             'title' => $request->org_title,
@@ -192,7 +189,6 @@ class PortfolioController extends Controller
         ];
         $profile->education = json_encode($header);
         
-        // Simpan data JSON baris organisasi
         if ($request->has('experiences_data')) {
             $profile->experiences = $request->experiences_data;
         }
@@ -222,7 +218,8 @@ class PortfolioController extends Controller
 
     public function messagesAdmin()
     {
-        $messages = Message::latest()->get();
+        // PERBAIKAN: Urutkan yang belum dibaca (0) ke atas, sudah dibaca (1) ke bawah.
+        $messages = Message::orderBy('is_read', 'asc')->latest()->get();
         return view('portfolio.admin_messages', compact('messages')); 
     }
 
@@ -232,22 +229,41 @@ class PortfolioController extends Controller
         return redirect()->back()->with('success_msg', 'Pesan berhasil dihapus!'); 
     }
 
-    // PERUBAHAN: Fungsi untuk menandai SATU pesan sebagai dibaca (dipanggil via Javascript)
+    // PERBAIKAN: Format dikembalikan jadi redirect back biar halamannya otomatis ke-refresh
+    // KITA PAKAI JALUR PAKSA (Bypass Fillable)
     public function markAsRead($id)
     {
         $message = Message::findOrFail($id);
-        $message->is_read = true;
-        $message->save();
+        $message->is_read = true; // Tembak langsung propertinya
+        $message->save(); // Simpan paksa!
 
-        return response()->json(['success' => true]);
+        return back()->with('success_msg', 'Pesan ditandai sudah dibaca.');
     }
 
-    // PERUBAHAN: Fungsi untuk menandai SEMUA pesan sebagai dibaca
     public function markAllAsRead()
     {
+        // Langsung tembak ke query database
         Message::where('is_read', false)->update(['is_read' => true]);
+        
+        return back()->with('success_msg', 'Semua pesan telah ditandai sebagai dibaca.');
+    }
 
-        return redirect()->back()->with('success_msg', 'Semua pesan telah ditandai sebagai dibaca.');
+    // ini katanya sih select pesan admin
+    public function bulkDeleteMessages(Request $request)
+    {
+        // Pecah string "1,2,3" jadi array, lalu hapus semuanya
+        $ids = explode(',', $request->ids);
+        Message::whereIn('id', $ids)->delete();
+        
+        return back()->with('success_msg', count($ids) . ' pesan terpilih berhasil dihapus!');
+    }
+
+    public function bulkReadMessages(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+        Message::whereIn('id', $ids)->update(['is_read' => true]);
+        
+        return back()->with('success_msg', count($ids) . ' pesan terpilih ditandai sudah dibaca.');
     }
 
     // ==========================================

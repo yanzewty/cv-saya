@@ -2,48 +2,7 @@
 @section('title', 'Kelola Tentang Saya')
 
 @section('content')
-<style>
-  .wrap-form { max-width: 800px; }
-  .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-  .header-flex h1 { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-  .header-flex p { color: var(--dim); font-size: 13.5px; }
-
-  .btn-outline { padding: 10px 18px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
-  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(76,111,255,0.10); }
-
-  .alert-succ { background:rgba(52,199,123,0.10); border:1px solid rgba(52,199,123,0.28); color:var(--success); padding: 14px 16px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px; font-weight: 500; }
-
-  .card-form { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 30px; margin-bottom: 24px; transition: border-color .2s; box-shadow: 0 20px 40px -28px rgba(0,0,0,0.6); }
-  .card-form:hover { border-color: rgba(255, 255, 255, 0.14); }
-  .card-dashed { border: 1px dashed var(--cyan); background: rgba(41,199,192,0.03); }
-
-  .form-group { margin-bottom: 20px; }
-  label { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); display: block; margin-bottom: 9px; }
-
-  input[type=text], textarea { width: 100%; padding: 13px 15px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; color: var(--text); font-size: 13.5px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-  input[type=text]:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(76,111,255,0.15); }
-  input.cyan-focus:focus, textarea.cyan-focus:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(41,199,192,0.15); }
-
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
-
-  .submit-btn { width: 100%; padding: 15px; border: none; border-radius: 12px; cursor: pointer; background: var(--primary); color: #fff; font-size: 13.5px; font-weight: 700; transition: all 0.25s ease; display: flex; justify-content: center; align-items: center; gap: 8px; letter-spacing: 0.3px;}
-  .submit-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 14px 28px -10px rgba(76,111,255,0.4); }
-
-  .btn-add { background: var(--cyan); color: #06231f; }
-  .btn-add:hover { background: #35d8d0; box-shadow: 0 14px 28px -10px rgba(41,199,192,0.4); }
-
-  .btn-edit { padding: 10px 16px; background: rgba(76,111,255,0.10); color: var(--primary); border: 1px solid rgba(76,111,255,0.3); border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12.5px; transition: 0.2s; text-decoration: none; }
-  .btn-edit:hover { background: var(--primary); color: #fff; }
-
-  .btn-delete { padding: 10px 16px; background: rgba(242,84,91,0.10); color: var(--pink); border: 1px solid rgba(242,84,91,0.3); border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12.5px; transition: 0.2s; }
-  .btn-delete:hover { background: var(--danger); color: #fff; }
-
-  .list-item { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-  .list-item:hover { transform: translateX(4px); border-color: rgba(255, 255, 255, 0.18); }
-</style>
-
-<div class="wrap-form">
+<div class="wrap-form" style="max-width: 800px;">
   <div class="header-flex">
     <div>
       <h1>Kelola Tentang Saya</h1>
@@ -61,9 +20,7 @@
   <form action="{{ route('admin.about.update') }}" method="POST">
     @csrf
     <div class="card-form">
-      <h3 style="color: var(--primary); margin-bottom: 22px; font-size: 14px; display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight:700;">
-        <i class='bx bx-edit-alt' style="font-size: 19px;"></i> Panel Tentang Saya (Utama)
-      </h3>
+      <div class="form-title"><i class='bx bx-edit-alt'></i>Tentang Saya</div>
 
       <div class="grid2 form-group">
         <div>
@@ -88,51 +45,52 @@
     <input type="hidden" name="about_sub_3" value="">
 
     <button type="submit" class="submit-btn">
-      <i class='bx bx-save' style="font-size: 17px;"></i> Simpan Perubahan Utama
+      <i class='bx bx-save'></i> Simpan Perubahan Utama
     </button>
   </form>
 
-  <hr style="border-top: 1px dashed var(--line); border-bottom: none; border-left: none; border-right: none; margin: 46px 0;">
+  <hr class="section-divider">
 
   <div style="margin-bottom: 22px;">
-    <h2 style="font-family: var(--font-display); font-size: 20px; color: #fff; margin-bottom: 6px; font-weight:700;">Tambah Section Baru</h2>
-    <p style="color: var(--dim); font-size: 13px;">Isi form ini untuk menambah blok baru (1 Judul + 1 Deskripsi) ke halaman depan.</p>
+    <h2 class="section-heading">Tambah Section Baru</h2>
+    <p class="section-subheading">Isi form ini untuk menambah blok baru.</p>
   </div>
 
   <form action="{{ route('admin.panels.store') }}" method="POST">
     @csrf
-    <div class="card-form card-dashed">
+    <div class="card-form dashed" style="--accent: var(--cyan);">
       <div class="grid2 form-group">
         <div>
           <label>Tag Kecil Atas</label>
-          <input type="text" name="tag" class="cyan-focus" placeholder="Contoh: 01.5 / PENGALAMAN KERJA" required>
+          <input type="text" name="tag" placeholder="Contoh: Nomor 01.5 " required>
         </div>
         <div>
           <label>Judul Utama (Kiri)</label>
-          <input type="text" name="title" class="cyan-focus" placeholder="Contoh: Pengalaman Industri" required>
+          <input type="text" name="title" placeholder="Contoh: Pengalaman Industri" required>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Deskripsi Panjang (Kanan)</label>
-        <textarea name="desc_1" class="cyan-focus" rows="4" required placeholder="Tuliskan deskripsi untuk section ini..."></textarea>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label>Deskripsi Panjang</label>
+        <textarea name="desc_1" rows="4" required placeholder="Tuliskan deskripsi ..."></textarea>
       </div>
-
-      <button type="submit" class="submit-btn btn-add">
-        <i class='bx bx-layer-plus' style="font-size: 17px;"></i> Tambahkan Section Ke Website
-      </button>
     </div>
+
+    <button type="submit" class="submit-btn accent-cyan">
+      <i class='bx bx-layer-plus'></i> Menambahkan Ke Website
+    </button>
   </form>
 
   <div style="margin-top: 36px;">
-    <h3 style="font-size: 14px; margin-bottom: 18px; color: var(--text); display: flex; align-items: center; gap: 8px; font-weight:600;">
-      <i class='bx bx-list-ul' style="color: var(--cyan); font-size: 19px;"></i> Section yang telah ditambahkan:
+    <h3 style="font-size: 14px; margin-bottom: 18px; color: var(--text); display: flex; align-items: center; gap: 8px; font-weight: 600;">
+      <i class='bx bx-list-ul' style="color: var(--cyan); font-size: 19px;"></i>
+       telah ditambahkan
     </h3>
 
     @if(isset($panels) && $panels->isEmpty())
-      <div style="text-align: center; padding: 38px; background: rgba(255,255,255,0.02); border: 1px dashed var(--line); border-radius: 14px;">
-        <i class='bx bx-ghost' style="font-size: 36px; color: var(--dim); margin-bottom: 10px;"></i>
-        <p style="color: var(--dim); font-size: 13px; font-style: italic;">Belum ada section tambahan yang dibuat.</p>
+      <div class="empty-state">
+        <i class='bx bx-ghost'></i>
+        <p>Belum ada yang tambahan.</p>
       </div>
     @endif
 
@@ -141,7 +99,7 @@
       <div class="list-item">
         <div>
           <span style="font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase;">{{ $panel->tag }}</span>
-          <h4 style="color: #fff; margin-top: 6px; font-size: 17px; font-family: var(--font-display); font-weight:700;">{{ $panel->title }}</h4>
+          <h4 style="color: #fff; margin-top: 6px; font-size: 17px; font-family: var(--font-display); font-weight: 700;">{{ $panel->title }}</h4>
         </div>
 
         <div style="display: flex; gap: 8px; align-items: center;">

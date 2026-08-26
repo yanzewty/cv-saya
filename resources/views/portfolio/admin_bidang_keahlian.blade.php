@@ -2,56 +2,33 @@
 @section('title', 'Kelola Bidang Keahlian')
 
 @section('content')
-<!-- Memanggil FontAwesome agar Ikon bisa tampil di Admin -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
-  .wrap-form { max-width: 950px; margin: 0 auto; }
-  .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px; }
-  .btn-outline { padding: 10px 18px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; font-size: 13px; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-weight: 500; background: rgba(255,255,255,0.02); }
-  .btn-outline:hover { border-color: var(--primary); color: #fff; background: rgba(55,99,224,0.1); }
-  .alert-succ { background:rgba(46,213,115,0.1); border:1px solid rgba(46,213,115,0.3); color:#2ed573; padding: 16px 20px; border-radius: 12px; font-size: 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px; font-weight: 500; }
-  
-  .card-form { background: var(--panel); border: 1px solid rgba(55, 99, 224, 0.2); border-radius: 16px; padding: 35px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-  .form-title { font-size: 16px; color: #fff; margin-bottom: 25px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
-  .form-group { margin-bottom: 20px; }
-  label { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); display: block; margin-bottom: 8px; }
-  
-  input[type=text], textarea, select { width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-radius: 12px; color: #fff; font-size: 14px; transition: all 0.2s; font-family: 'Inter', sans-serif; appearance: none; }
-  input[type=text]:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(55,99,224,0.15); background: rgba(0,0,0,0.3); }
-  select option { background: var(--panel-2); color: #fff; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  
-  .submit-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; cursor: pointer; background: var(--primary); color: #fff; font-size: 15px; font-weight: 700; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top:20px; }
-  .submit-btn:hover { background: #2b4eb5; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(55,99,224,0.3); }
+  .skill-row {
+      display: grid; grid-template-columns: 56px 1.4fr 1.4fr 120px 44px; gap: 14px; align-items: end;
+      background: var(--panel); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--line);
+      margin-bottom: 14px; transition: 0.25s var(--ease);
+  }
+  .skill-row:hover { border-color: var(--gold); }
+  @media (max-width: 800px) { .skill-row { grid-template-columns: 1fr; } }
 
-  /* ========================================================
-     STYLE BARIS DINAMIS (DI-UPGRADE)
-     ======================================================== */
-  .skill-row { display: grid; grid-template-columns: 60px 1.5fr 1.5fr 130px 45px; gap: 15px; align-items: center; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 15px; transition: 0.3s; }
-  .skill-row:hover { border-color: #ffab00; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: translateY(-2px); }
-  
-  .icon-preview { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-top: 20px; transition: 0.3s; }
-  
-  /* Desain Color Picker Premium ala Figma */
-  .color-wrapper { position: relative; width: 100%; height: 52px; background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-radius: 12px; display: flex; align-items: center; padding: 0 12px; transition: 0.2s; }
-  .color-wrapper:hover { border-color: var(--primary); background: rgba(0,0,0,0.3); }
-  .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; }
-  .color-hex { margin-left: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #fff; text-transform: uppercase; font-weight: 500; }
+  .icon-preview { width: 46px; height: 46px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 22px; transition: 0.25s var(--ease); }
+
+  .color-wrapper { position: relative; width: 100%; height: 48px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); display: flex; align-items: center; padding: 0 12px; transition: 0.2s var(--ease); }
+  .color-wrapper:hover { border-color: var(--gold); }
+  .color-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; }
+  .color-hex { margin-left: 10px; font-family: var(--font-mono); font-size: 12.5px; color: #fff; text-transform: uppercase; font-weight: 500; }
   .hidden-color-picker { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
 
-  .btn-remove { background: rgba(255, 93, 162, 0.1); color: #ff1744; border: 1px solid rgba(255, 93, 162, 0.3); width: 45px; height: 45px; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-top: 18px; }
-  .btn-remove:hover { background: #ff1744; color: #fff; transform: scale(1.05); }
-  
-  .btn-add { background: rgba(78, 225, 214, 0.1); color: #4facfe; border: 1px dashed #4facfe; width: 100%; padding: 16px; border-radius: 12px; cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 14px; transition: 0.2s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
-  .btn-add:hover { background: #4facfe; color: #000; }
+  .select-wrap { position: relative; }
+  .select-wrap i { position: absolute; right: 14px; bottom: 15px; pointer-events: none; color: var(--dim); font-size: 12px; }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="wrap-form">
+<div class="wrap-form" style="max-width: 950px;">
   <div class="header-flex">
     <div>
-      <h1 style="font-family: 'Sora', sans-serif; font-size: 32px; margin-bottom: 5px; color: #fff;">Bidang Keahlian</h1>
-      <p style="color: var(--dim); font-size: 14px;">Tinggal pilih Icon, ketik Nama, sesuaikan Warna, lalu Simpan!</p>
+      <h1>Bidang Keahlian</h1>
+      <p>Tinggal pilih Icon, ketik Nama, sesuaikan Warna, lalu Simpan.</p>
     </div>
     <a href="{{ route('portofolio.index') }}#Keahlian" target="_blank" class="btn-outline">
       <i class='bx bx-link-external'></i> Lihat Website
@@ -59,17 +36,15 @@
   </div>
 
   @if (session('success_msg'))
-    <div class="alert-succ"><i class='bx bx-check-circle' style="font-size: 20px;"></i> <span>{{ session('success_msg') }}</span></div>
+    <div class="alert-succ"><i class='bx bx-check-circle'></i> <span>{{ session('success_msg') }}</span></div>
   @endif
 
-  <!-- Form Utama -->
   <form action="{{ route('admin.bidang_keahlian.update') }}" method="POST" id="mainForm" onsubmit="prepareData(event)">
     @csrf
     <input type="hidden" name="skills_data" id="skills_data">
-    
-    <!-- BAGIAN 1: TEKS HEADER -->
+
     <div class="card-form">
-      <div class="form-title" style="color: #4facfe;"><i class='bx bx-text'></i> Teks Judul (Header)</div>
+      <div class="form-title"><i class='bx bx-text'></i> Teks Judul (Header)</div>
       <div class="grid2 form-group">
         <div>
           <label>Tag (Kiri Atas)</label>
@@ -86,15 +61,10 @@
       </div>
     </div>
 
-    <!-- BAGIAN 2: KOTAK SKILL DINAMIS -->
-    <div class="card-form" style="border-color: rgba(255, 171, 0, 0.3);">
-      <div class="form-title" style="color: #ffab00;">
-        <i class='bx bx-category'></i> Daftar Keahlian (UI Premium)
-      </div>
-      
-      <div id="skills-container">
-        <!-- JS Render Masuk Sini -->
-      </div>
+    <div class="card-form" style="--accent: var(--gold);">
+      <div class="form-title"><i class='bx bx-category'></i> Daftar Keahlian</div>
+
+      <div id="skills-container"></div>
 
       <button type="button" class="btn-add" onclick="addSkillRow()">
         <i class="fas fa-plus-circle"></i> Tambah Skill Baru
@@ -109,7 +79,6 @@
   let skillsData = {!! $skillsJson !!};
   const container = document.getElementById('skills-container');
 
-  // Daftar Pilihan Ikon Siap Pakai
   const iconList = [
       { val: 'fas fa-code', name: '--- Default (Code) ---' },
       { val: 'fab fa-html5', name: 'HTML5' },
@@ -139,48 +108,44 @@
   function renderSkills() {
     container.innerHTML = '';
     skillsData.forEach((skill, index) => {
-      
-      // Bikin Dropdown Option-nya
+
       let optionsHTML = '';
       let isCustom = true;
       iconList.forEach(i => {
           let sel = (i.val === skill.icon) ? 'selected' : '';
-          if(sel) isCustom = false;
+          if (sel) isCustom = false;
           optionsHTML += `<option value="${i.val}" ${sel}>${i.name}</option>`;
       });
-      // Kalau pakai kode custom
-      if(isCustom && skill.icon) {
+      if (isCustom && skill.icon) {
           optionsHTML += `<option value="${skill.icon}" selected>Custom: ${skill.icon}</option>`;
       }
 
       const row = document.createElement('div');
       row.className = 'skill-row';
       row.innerHTML = `
-        <div class="icon-preview" style="background: ${skill.color}25; color: ${skill.color}; box-shadow: 0 0 15px ${skill.color}40;">
+        <div class="icon-preview" style="background: ${skill.color}25; color: ${skill.color}; box-shadow: 0 0 14px ${skill.color}35;">
             <i class="${skill.icon}"></i>
         </div>
         <div>
-          <label>NAMA SKILL</label>
+          <label>Nama Skill</label>
           <input type="text" value="${skill.name}" onchange="updateData(${index}, 'name', this.value)" placeholder="ex: Laravel" required>
         </div>
-        <div style="position: relative;">
-          <label>PILIH ICON</label>
+        <div class="select-wrap">
+          <label>Pilih Icon</label>
           <select onchange="updateData(${index}, 'icon', this.value); renderSkills();">
              ${optionsHTML}
           </select>
-          <i class="fas fa-chevron-down" style="position: absolute; right: 15px; top: 40px; pointer-events: none; color: var(--dim);"></i>
+          <i class="fas fa-chevron-down"></i>
         </div>
         <div>
-          <label>PILIH WARNA</label>
+          <label>Pilih Warna</label>
           <div class="color-wrapper">
              <div class="color-dot" style="background: ${skill.color};"></div>
              <span class="color-hex">${skill.color}</span>
              <input type="color" class="hidden-color-picker" value="${skill.color}" onchange="updateData(${index}, 'color', this.value); renderSkills();">
           </div>
         </div>
-        <div style="display:flex; align-items:flex-end;">
-          <button type="button" class="btn-remove" onclick="removeSkillRow(${index})" title="Hapus"><i class='bx bx-trash'></i></button>
-        </div>
+        <button type="button" class="btn-remove" onclick="removeSkillRow(${index})" title="Hapus"><i class='bx bx-trash'></i></button>
       `;
       container.appendChild(row);
     });

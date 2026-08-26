@@ -800,7 +800,7 @@
       msgBox.style.background = 'rgba(255,93,162,.1)';
       msgBox.style.border = '1px solid rgba(255,93,162,.4)';
       msgBox.style.color = 'var(--pink)';
-      msgBox.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Gagal mengirim pesan. Silakan coba lagi.`;
+      msgBox.innerHTML = `<i class="fas fa-exclamation-triangle"></i> SPAM TERDETEKSI!. silahkan coba lagi nanti, Mohon jangan spam`;
       msgBox.style.display = 'block';
       btn.disabled = false;
       spinner.style.display = 'none';

@@ -110,11 +110,11 @@
           <button type="button" class="eye-btn" onclick="togglePasswordVisibility()"><i id="eyeIcon" class="fas fa-eye"></i></button>
         </div>
         
-        
-        <div style="text-align: right; margin-top: 8px;">
+        {{-- ini untuk lupa password --}}
+        {{-- <div style="text-align: right; margin-top: 8px;">
           <a href="{{ route('password.forget') }}" style="color: var(--dim); font-size: 11px; font-family: var(--font-mono); text-decoration: none; transition: color .2s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--dim)'">Lupa Password?</a>
         </div>
-      </div>
+      </div> --}}
 
       <button type="submit" class="submit-btn"><i class="fas fa-sign-in-alt"></i> Masuk Admin</button>
     </form>
