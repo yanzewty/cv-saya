@@ -3,7 +3,7 @@
 
 @section('content')
 <style>
-  /* Desain Banner Welcome */
+ 
   .dash-welcome { 
       background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(79,172,254,0.15)); 
       border: 1px solid rgba(79,172,254,0.3); 
@@ -34,7 +34,7 @@
   }
   .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3); filter: brightness(1.1); }
 
-  /* Desain Navigasi Kotak-kotak (Menu Portal) */
+
   .section-title { font-family: 'Sora', sans-serif; font-size: 18px; color: #fff; margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
   .section-title i { color: var(--cyan); }
 
@@ -55,7 +55,7 @@
   .ql-arrow { margin-left: auto; color: var(--text-dim); font-size: 24px; transition: 0.3s; }
   .ql-card:hover .ql-arrow { color: var(--cyan); transform: translateX(5px); }
 
-  /* Label Total Pesan (Netral, bukan notif merah) */
+  
   .badge-total {
       background-color: rgba(255,255,255,0.1);
       color: var(--text-main);
@@ -68,8 +68,8 @@
 
 <div class="dash-welcome">
   <div class="welcome-text">
-    <h1>Halo, {{ explode(' ', trim($profile->name))[0] ?? 'Admin' }}! 👋</h1>
-    <p>Selamat datang di pusat kendali portofoliomu. Pantau pesan pengunjung dan kelola konten website-mu melalui menu navigasi di bawah ini.</p>
+    <h1>Halo, Admin </h1>
+    <p>Selamat datang di pusat kendali. Pantau pesan pengunjung dan kelola konten website-mu melalui menu navigasi di bawah ini.</p>
     <a href="{{ route('portofolio.index') }}" target="_blank" class="btn-primary">
         <i class='bx bx-rocket'></i> Lihat Website Sekarang
     </a>
@@ -101,7 +101,7 @@
         <div class="ql-icon"><i class='bx bx-layer'></i></div>
         <div class="ql-text">
             <h4>Latar Belakang Skill</h4>
-            <p>Edit daftar kartu skill utama.</p>
+            <p>Edit daftar skill utama.</p>
         </div>
         <div class="ql-arrow"><i class='bx bx-right-arrow-alt'></i></div>
     </a>
@@ -110,7 +110,7 @@
         <div class="ql-icon"><i class='bx bx-wrench'></i></div>
         <div class="ql-text">
             <h4>Bidang Keahlian</h4>
-            <p>Edit slider tech stack berjalan.</p>
+            <p>Edit Banner berjalan.</p>
         </div>
         <div class="ql-arrow"><i class='bx bx-right-arrow-alt'></i></div>
     </a>
@@ -124,7 +124,7 @@
         <div class="ql-arrow"><i class='bx bx-right-arrow-alt'></i></div>
     </a>
 
-    <!-- KHUSUS PESAN MASUK (BERSIH DARI NOTIF MERAH) -->
+    {{-- pesan masuk --}}
     <a href="{{ route('admin.messages') }}" class="ql-card" style="border-color: rgba(255, 171, 0, 0.2);">
         <div class="ql-icon" style="color: #ffab00;">
             <i class='bx bx-envelope'></i>
@@ -133,7 +133,7 @@
         <div class="ql-text">
             <h4>
                 Pesan Masuk 
-                <!-- Hanya menampilkan total pesan dengan warna netral abu-abu -->
+                
                 <span class="badge-total">{{ $totalMessages }} Pesan</span>
             </h4>
             <p>Baca pesan dari pengunjung website.</p>

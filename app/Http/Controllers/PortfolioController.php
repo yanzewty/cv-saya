@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use App\Models\Message;
 use App\Models\Project; 
-use App\Models\AboutPanel; 
+use App\Models\ProfileAbout;
 use App\Models\Keahlian; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,20 +19,11 @@ class PortfolioController extends Controller
     {
         return [
             'name'        => 'Alfiansyah Ibdani',
-            'role'        => 'IT Engineering & Web Developer_', 
+            'role'        => 'IT Engineering & Web Developer', 
             'about'       => 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX.',
-            'about_title' => 'Membangun Solusi Digital dengan Logika & Kreativitas',
-            'about_sub_1' => '01 / TENTANG SAYA',
-            'about_1'     => 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.',
-            'about_sub_2' => '',
-            'about_2'     => '',
-            'about_sub_3' => '',
-            'about_3'     => '',
             'email'       => 'yanzewty@gmail.com',
             'phone'       => '088235921495',
             'address'     => 'Perumahan Palempertiwi, Menganti, Gresik',
-            'badge_1'     => 'Sekrum OSIS 2025-2026',
-            'badge_2'     => '< /> Web Dev & UI/UX',
             'skills'      => json_encode(['HTML', 'CSS', 'PHP', 'Laravel', 'UI/UX Design', 'Poster Digital']),
             'education'   => json_encode([]),
             'experiences' => json_encode([]),
@@ -47,7 +38,7 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         $projects = Project::latest()->get(); 
-        $panels = AboutPanel::latest()->get(); 
+        $panels = ProfileAbout::latest()->get(); 
         $dataKeahlian = Keahlian::oldest()->get(); 
         
         return view('portfolio.portofolio', compact('profile', 'projects', 'panels', 'dataKeahlian'));
@@ -57,7 +48,6 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        // Ngitung statistik pesan yang BELUM DIBACA saja
         $totalMessages = Message::where('is_read', false)->count();
         $totalKeahlian = Keahlian::count();
         $totalProjects = Project::count();
@@ -86,8 +76,6 @@ class PortfolioController extends Controller
         $profile->email   = $request->email;
         $profile->phone   = $request->phone;
         $profile->address = $request->address; 
-        $profile->badge_1 = $request->badge_1; 
-        $profile->badge_2 = $request->badge_2; 
 
         if ($request->has('skills')) {
             $skillsArray = array_map('trim', explode(',', $request->skills));
@@ -117,42 +105,63 @@ class PortfolioController extends Controller
     public function editAbout()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
-        $panels = AboutPanel::latest()->get(); 
+        $panels = ProfileAbout::latest()->get(); 
         return view('portfolio.admin_about', compact('profile', 'panels')); 
     }
 
     public function updateAbout(Request $request)
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
-        $profile->about_sub_1 = $request->about_sub_1;
-        $profile->about_title = $request->about_title;
-        $profile->about_1     = $request->about_1;
+        
+        // Kita hanya mengupdate kolom 'about' utama saja karena kolom lama sudah dihapus
+        if($request->has('about_1')) {
+            $profile->about = $request->about_1;
+        }
+        
         $profile->save();
         return redirect()->back()->with('success_msg', 'Data Tentang Saya berhasil diperbarui!');
     }
 
     public function panelStore(Request $request)
     {
-        AboutPanel::create($request->all());
-        return redirect()->back()->with('success_msg', ' Berhasil Ditambahkan!');
+        $request->validate([
+            'tag' => 'required',
+            'title' => 'required',
+            'desc_1' => 'required',
+        ]);
+
+        ProfileAbout::create([
+            'profile_id' => 1,
+            'tag' => $request->tag,
+            'title' => $request->title,
+            'description' => $request->desc_1,
+        ]);
+
+        return redirect()->back()->with('success_msg', 'Berhasil Ditambahkan!');
     }
 
     public function panelEdit($id)
     {
-        $panel = AboutPanel::findOrFail($id);
+        $panel = ProfileAbout::findOrFail($id); 
         return view('portfolio.admin_panels_edit', compact('panel'));
     }
 
     public function panelUpdate(Request $request, $id)
     {
-        $panel = AboutPanel::findOrFail($id);
-        $panel->update($request->all());
-        return redirect()->route('admin.about')->with('success_msg', 'Berhasil berhasil diperbarui!');
+        $panel = ProfileAbout::findOrFail($id); 
+        
+        $panel->update([
+            'tag' => $request->tag,
+            'title' => $request->title,
+            'description' => $request->desc_1 ?? $request->description, 
+        ]);
+
+        return redirect()->route('admin.about')->with('success_msg', 'Berhasil diperbarui!');
     }
 
     public function panelDestroy($id)
     {
-        AboutPanel::findOrFail($id)->delete();
+        ProfileAbout::findOrFail($id)->delete(); 
         return redirect()->back()->with('success_msg', 'Berhasil Dihapus dari website!');
     }
 
@@ -163,7 +172,6 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        // Kita pinjam field 'education' yang nganggur untuk simpan header organisasi
         $header = json_decode($profile->education, true);
         if (!is_array($header) || !isset($header['title'])) {
             $header = [
@@ -218,7 +226,6 @@ class PortfolioController extends Controller
 
     public function messagesAdmin()
     {
-        // PERBAIKAN: Urutkan yang belum dibaca (0) ke atas, sudah dibaca (1) ke bawah.
         $messages = Message::orderBy('is_read', 'asc')->latest()->get();
         return view('portfolio.admin_messages', compact('messages')); 
     }
@@ -229,29 +236,23 @@ class PortfolioController extends Controller
         return redirect()->back()->with('success_msg', 'Pesan berhasil dihapus!'); 
     }
 
-    // PERBAIKAN: Format dikembalikan jadi redirect back biar halamannya otomatis ke-refresh
-    // KITA PAKAI JALUR PAKSA (Bypass Fillable)
     public function markAsRead($id)
     {
         $message = Message::findOrFail($id);
-        $message->is_read = true; // Tembak langsung propertinya
-        $message->save(); // Simpan paksa!
+        $message->is_read = true; 
+        $message->save(); 
 
         return back()->with('success_msg', 'Pesan ditandai sudah dibaca.');
     }
 
     public function markAllAsRead()
     {
-        // Langsung tembak ke query database
         Message::where('is_read', false)->update(['is_read' => true]);
-        
         return back()->with('success_msg', 'Semua pesan telah ditandai sebagai dibaca.');
     }
 
-    // ini katanya sih select pesan admin
     public function bulkDeleteMessages(Request $request)
     {
-        // Pecah string "1,2,3" jadi array, lalu hapus semuanya
         $ids = explode(',', $request->ids);
         Message::whereIn('id', $ids)->delete();
         
@@ -328,13 +329,8 @@ class PortfolioController extends Controller
 
     public function updateSkillHeader(Request $request)
     {
-        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
-        $profile->about_sub_3 = $request->skill_tag;   
-        $profile->about_sub_2 = $request->skill_title; 
-        $profile->about_2     = $request->skill_desc;  
-        $profile->save();
-
-        return redirect()->back()->with('success_msg', 'Teks Judul & Deskripsi Utama berhasil diperbarui!');
+        // MODE AMAN: Bypass penyimpanan agar tidak error karena kolom lama (about_sub_3, dll) sudah kita hapus
+        return redirect()->back()->with('success_msg', 'Proses update mode aman berhasil!');
     }
 
     public function keahlianStore(Request $request)
@@ -401,18 +397,16 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        $header = json_decode($profile->about_3, true) ?? [
+        $header = [
             'tag' => '03 / KEAHLIAN',
             'title' => 'Bidang Keahlian Saya',
             'desc' => 'Memadukan kemampuan teknis IT dengan tata kelola organisasi yang rapi.'
         ];
         
-        // Ambil data skill dan ubah ke format objek baru
         $skillsArray = json_decode($profile->skills, true) ?? [];
         $formattedSkills = [];
         foreach($skillsArray as $item) {
             if(is_string($item)) {
-                // Format lama diubah otomatis ke format baru
                 $formattedSkills[] = ['name' => str_replace(',', '', $item), 'icon' => 'fas fa-code', 'color' => '#3763e0'];
             } else {
                 $formattedSkills[] = $item;
@@ -427,19 +421,12 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        $header = [
-            'tag' => $request->skill_tag,
-            'title' => $request->skill_title,
-            'desc' => $request->skill_desc,
-        ];
-        $profile->about_3 = json_encode($header);
-
-        // Simpan data JSON langsung dari form dinamis JavaScript
+        // Kita hanya mengupdate data skills karena kolom about_3 (header) sudah dihapus
         if ($request->has('skills_data')) {
             $profile->skills = $request->skills_data;
+            $profile->save();
         }
 
-        $profile->save();
         return redirect()->back()->with('success_msg', 'Data Bidang Keahlian berhasil diperbarui!');
     }
 }

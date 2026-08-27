@@ -4,13 +4,12 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', [PortfolioController::class, 'index'])->name('portofolio.index');
 
 // throttle (satpam anti-spam) di rute contact ini!
 Route::post('/contact/send', [PortfolioController::class, 'storeMessage'])
     ->name('contact.send')
-    ->middleware('throttle:2,15'); // Maksimal 2 request per 15 menit ini buat time limited mamps
+    ->middleware('throttle:3,3'); // Maksimal 3 request per 3 menit ini buat time limited mamps
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -27,13 +26,8 @@ Route::post('/forget-password', [LoginController::class, 'sendResetOtp'])->name(
 Route::get('/reset-password', [LoginController::class, 'showReset'])->name('password.reset');
 Route::post('/reset-password', [LoginController::class, 'processReset'])->name('password.update');
 
-// ========================================================
-// GRUP ADMIN (SUPER CLEAN & ANTI DUPLIKAT)
-// ========================================================
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-    
-    // 0. DASHBOARD UTAMA
-    Route::get('/', [PortfolioController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/', [PortfolioController::class, 'dashboard'])->name('admin.dashboard');
 
     // 1. KELOLA HOME
     Route::get('/home', [PortfolioController::class, 'editHome'])->name('admin.home');

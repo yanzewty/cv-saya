@@ -51,15 +51,15 @@
   @keyframes float2{ 0%,100%{transform:translate(0,0);} 50%{transform:translate(-50px,-40px);} }
   .noise{ position:fixed; inset:0; z-index:1; opacity:.02; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-  .progress{ position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--violet),var(--pink),var(--cyan)); z-index:200; width:0%; }
+  .progress{ position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--violet),var(--cyan)); z-index:200; width:0%; }
   main{ position:relative; z-index:2; width: 100%; overflow-x: hidden; }
 
   nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 56px; background:rgba(10,14,23,.72); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); width: 100%; }
   .logo{ font-family:var(--font-display); font-weight:700; font-size:18px; letter-spacing:-.5px; }
-  .logo span{ background:linear-gradient(90deg,var(--violet),var(--pink)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .logo span{ background:linear-gradient(90deg,var(--violet),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .navlinks{ display:flex; gap:26px; font-family:var(--font-mono); font-size:12.5px; color:var(--dim); align-items:center; }
   .navlinks a{ position:relative; }
-  .navlinks a::after{ content:""; position:absolute; left:0; bottom:-5px; width:0; height:1px; background:var(--pink); transition:width .3s; }
+  .navlinks a::after{ content:""; position:absolute; left:0; bottom:-5px; width:0; height:1px; background:var(--cyan); transition:width .3s; }
   .navlinks a:hover::after{ width:100%; }
   .navlinks a:hover{ color:var(--text); }
   
@@ -72,63 +72,57 @@
   .login-btn { background: var(--panel-2); border: 1px solid var(--line); color: var(--dim); }
   .login-btn:hover { border-color: var(--cyan); color: var(--text); }
 
-  .navcta{ font-family:var(--font-mono); font-size:11.5px; padding:10px 22px; border-radius:20px; background:linear-gradient(90deg,var(--violet),var(--pink)); color:#fff; border:none; display:inline-flex; align-items:center; gap:8px; }
+  .navcta{ font-family:var(--font-mono); font-size:11.5px; padding:10px 22px; border-radius:20px; background:linear-gradient(90deg,var(--violet),var(--cyan)); color:#fff; border:none; display:inline-flex; align-items:center; gap:8px; }
 
   section{ padding:0 56px; position:relative; width: 100%; max-width: 1400px; margin: 0 auto; }
   
   .hero{ min-height:92vh; display:grid; grid-template-columns: 1.1fr 0.9fr; gap:40px; align-items:center; padding-top:40px; width: 100%; }
   .hero-copy { min-width: 0; }
   .eyebrow{ font-family:var(--font-mono); font-size:12px; color:var(--cyan); letter-spacing:2px; text-transform:uppercase; margin-bottom:22px; display:flex; align-items:center; gap:10px; opacity:0; }
-  .eyebrow::before{ content:""; width:30px; height:1px; background:var(--cyan); }
   .split-title .row{ overflow:hidden; }
   h1.title{ font-family:var(--font-display); font-weight:800; font-size:clamp(32px, 4.5vw, 68px); line-height:1.05; letter-spacing:-1.5px; word-break: break-word; overflow-wrap: break-word; }
   h1.title .word{ display:inline-block; transform:translateY(0); }
-  .grad-text{ background:linear-gradient(90deg,var(--violet),var(--cyan) 55%,var(--violet)); background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:gradmove 3.5s ease-in-out 3; }
+  
+  .grad-text{ background:linear-gradient(90deg, #3763E0, #4E9BE0, #3763E0); background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:gradmove 3.5s ease-in-out 3; }
   @keyframes gradmove{ to{ background-position:200% center; } }
-  .typing-cursor::after{ content:'_'; animation:blink 1s step-start infinite; color:var(--pink); }
   @keyframes blink{ 50%{ opacity:0; } }
+  
   .lede{ font-family:var(--font-body); font-size:15px; line-height:1.75; color:var(--dim); max-width:540px; margin:22px 0 28px; opacity:0; word-break: break-word; }
   .hero-cta{ display:flex; gap:16px; opacity:0; }
   .btn{ position:relative; font-family:var(--font-mono); font-size:13px; padding:14px 28px; border-radius:8px; cursor:pointer; }
-  .btn-primary{ background:linear-gradient(90deg,var(--violet),var(--pink)); color:#fff; border:none; }
+  .btn-primary{ background:linear-gradient(90deg,var(--violet),var(--cyan)); color:#fff; border:none; }
   .btn-ghost{ border:1px solid var(--line); color:var(--text); background:transparent; }
   .btn-ghost:hover{ border-color:var(--cyan); }
 
   .marquee-wrap{ margin-top:40px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16px 0; overflow:hidden; white-space:nowrap; width: 100%; }
   .marquee{ display:inline-flex; gap:40px; animation:marquee 22s linear infinite; }
-  .marquee span{ font-family:var(--font-display); font-size:14px; font-weight:600; color:var(--dim); display:flex; align-items:center; gap:40px; }
-  .marquee span em{ font-style:normal; color:var(--pink); }
+  .marquee span{ font-family:var(--font-display); font-size:14px; font-weight:600; color:var(--dim); display:flex; align-items:center; gap:30px; }
+  .marquee span .plus { font-style:normal; color:var(--cyan); font-weight:800; font-size:18px; }
   @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 
   .hero-img-wrap{ position:relative; width:100%; max-width:340px; margin:0 auto; }
-  .hero-img{ position:relative; width:100%; aspect-ratio:3/4; border-radius:22px; overflow:hidden; background:linear-gradient(150deg,#241C3D,#3A1E36 55%,#123B3A); border:1px solid var(--line); }
+  .hero-img{ position:relative; width:100%; aspect-ratio:3/4; border-radius:22px; overflow:hidden; background:linear-gradient(150deg,#F5B895,#E49B7A); border:1px solid var(--line); }
   .hero-img img{ width:100%; height:100%; object-fit:cover; display:block; }
   .hero-img .glow-ring{ position:absolute; inset:-2px; border-radius:23px; padding:2px; background:linear-gradient(135deg,var(--violet),var(--cyan)); opacity:.55; -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
-  .hero-img .cap{ position:absolute; left:0; right:0; bottom:0; padding:20px 22px; background:linear-gradient(0deg, rgba(10,10,18,.9), transparent); font-family:var(--font-mono); font-size:11.5px; color:var(--dim); z-index:2; }
-  .hero-img .cap b{ display:block; font-family:var(--font-display); color:var(--text); font-size:15px; margin-bottom:4px; font-weight:600; }
+  .hero-img .cap{ position:absolute; left:0; right:0; bottom:0; padding:20px 22px; background:linear-gradient(0deg, rgba(10,10,18,.9), transparent); font-family:var(--font-mono); font-size:11.5px; color:var(--dim); z-index:2; text-align: center; }
+  
   .float-badge{ position:absolute; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 16px; font-family:var(--font-mono); font-size:11px; display:flex; align-items:center; gap:10px; box-shadow:0 20px 40px -20px rgba(0,0,0,.6); z-index:5; white-space: nowrap; }
   .fb1{ top:-16px; right:-16px; animation:bob 5s ease-in-out infinite; }
   .fb2{ bottom:60px; left:-22px; animation:bob 4s ease-in-out infinite 1s; }
   @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
   .fb-dot{ width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan); }
 
-  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; margin:60px auto; max-width: 1400px; }
-  .stat{ background:var(--panel); padding:28px 24px; }
-  .stat .tag{ font-family:var(--font-mono); font-size:10.5px; color:var(--cyan); letter-spacing:1px; }
-  .stat .val{ font-family:var(--font-display); font-weight:700; font-size:22px; margin-top:10px; }
-  .stat .sub{ font-family:var(--font-body); font-size:12px; color:var(--dim); margin-top:5px; }
-
   .sec-head{ display:flex; justify-content:space-between; align-items:flex-end; margin:120px 0 44px; flex-wrap:wrap; gap:20px; }
-  .sec-tag{ font-family:var(--font-mono); font-size:12px; color:var(--gold); letter-spacing:1px; margin-bottom:14px; }
+  .sec-tag{ font-family:var(--font-mono); font-size:12px; color:var(--cyan); letter-spacing:1px; margin-bottom:14px; }
   .sec-title{ font-family:var(--font-display); font-weight:800; font-size:40px; letter-spacing:-1px; }
   .sec-desc{ font-family:var(--font-body); font-size:14px; color:var(--dim); max-width:280px; text-align:right; line-height:1.6; }
   @media (max-width:900px){ .sec-desc{ text-align:left; } }
 
   .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; perspective:1200px; }
   .card{ background:linear-gradient(160deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:18px; padding:0 0 28px; position:relative; overflow:hidden; transform-style:preserve-3d; transition:transform .15s ease, border-color .3s; cursor:pointer; }
-  .card::before{ content:""; position:absolute; inset:0; opacity:0; transition:opacity .4s; pointer-events:none; background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%), rgba(139,92,246,.18), transparent 60%); }
+  .card::before{ content:""; position:absolute; inset:0; opacity:0; transition:opacity .4s; pointer-events:none; background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%), rgba(78,155,224,.18), transparent 60%); }
   .card:hover::before{ opacity:1; }
-  .card:hover{ border-color:var(--violet); }
+  .card:hover{ border-color:var(--cyan); }
   .card-img{ height:200px; position:relative; overflow:hidden; clip-path:inset(0 0 100% 0); transition:clip-path 1s cubic-bezier(.16,1,.3,1); }
   .card.in .card-img{ clip-path:inset(0 0 0% 0); }
   .card-img img{ width:100%; height:100%; object-fit:cover; }
@@ -143,16 +137,14 @@
   .about-panel{ background:linear-gradient(160deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:24px; padding:56px; display:grid; grid-template-columns:1fr 1.3fr; gap:50px; align-items:center; margin:120px auto; max-width: 1400px; }
   .about-panel h2{ font-family:var(--font-display); font-weight:800; font-size:32px; letter-spacing:-1px; line-height:1.25; margin-top:14px; }
   .about-panel p{ color:var(--dim); font-size:16px; line-height:1.8; }
-  .hobby-tag{ display:inline-flex; align-items:center; gap:8px; padding:10px 18px; background:var(--bg); border:1px solid var(--line); border-radius:999px; font-size:13px; color:var(--text); margin:6px 6px 0 0; transition:border-color .3s; }
-  .hobby-tag:hover{ border-color:var(--cyan); }
 
   .slider{ position:relative; width:100%; overflow-x:auto; padding:24px 0; margin-top:8px; cursor:grab; user-select:none; scrollbar-width:none; }
   .slider::-webkit-scrollbar{ display:none; }
   .slider:active{ cursor:grabbing; }
   .slider-track{ display:flex; gap:20px; width:max-content; }
   .skill-chip{ background:linear-gradient(160deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:18px; padding:26px; min-width:250px; min-height:140px; display:flex; flex-direction:column; justify-content:space-between; transition:border-color .3s, transform .3s; flex-shrink:0; }
-  .skill-chip:hover{ border-color:var(--violet); transform:translateY(-4px); }
-  .skill-chip .ico{ width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,var(--violet),var(--pink)); display:flex; align-items:center; justify-content:center; margin-bottom:14px; font-size:15px; color:#fff; }
+  .skill-chip:hover{ border-color:var(--cyan); transform:translateY(-4px); }
+  .skill-chip .ico{ width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,var(--violet),var(--cyan)); display:flex; align-items:center; justify-content:center; margin-bottom:14px; font-size:15px; color:#fff; }
   .skill-chip .lbl{ font-family:var(--font-mono); font-size:10.5px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
   .skill-chip h3{ font-family:var(--font-display); font-size:18px; font-weight:700; }
   .hint{ text-align:center; font-family:var(--font-mono); font-size:11px; color:var(--dim); margin-top:8px; }
@@ -160,11 +152,11 @@
   .contact-panel{ max-width:720px; margin:0 auto; background:linear-gradient(160deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:24px; padding:52px; }
   .field label{ font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); display:block; margin-bottom:8px; }
   .field input, .field textarea{ width:100%; padding:14px 16px; background:var(--bg); border:1px solid var(--line); border-radius:12px; color:var(--text); font-family:var(--font-body); font-size:14px; transition:border-color .25s; }
-  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--violet); }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--cyan); }
 
   footer{ margin-top:150px; padding:80px 56px 40px; border-top:1px solid var(--line); text-align:center; width: 100%; }
   .footer-title{ font-family:var(--font-display); font-weight:800; font-size:clamp(30px,5vw,56px); letter-spacing:-1.5px; line-height:1.1; }
-  .footer-cta{ margin-top:28px; display:inline-flex; padding:16px 34px; border-radius:30px; cursor:pointer; background:linear-gradient(90deg,var(--violet),var(--cyan)); background-size:200% auto; font-family:var(--font-mono); font-size:13px; color:#08101F; font-weight:700; border:none; transition:background-position .6s ease; }
+  .footer-cta{ margin-top:28px; display:inline-flex; padding:16px 34px; border-radius:30px; cursor:pointer; background:linear-gradient(90deg,var(--violet),var(--cyan)); background-size:200% auto; font-family:var(--font-mono); font-size:13px; color:#fff; font-weight:700; border:none; transition:background-position .6s ease; }
   .footer-cta:hover{ background-position:100% center; }
   .footer-links{ display:flex; justify-content:center; flex-wrap:wrap; gap:24px; margin-top:50px; font-family:var(--font-mono); font-size:12px; color:var(--dim); }
   .footer-links a:hover{ color:var(--cyan); }
@@ -179,7 +171,7 @@
   .modal-box{ position:relative; z-index:2; width:100%; max-width:640px; background:var(--panel); border:1px solid var(--line); border-radius:22px; overflow:hidden; transform:scale(.95); opacity:0; transition:transform .3s ease, opacity .3s ease; }
   .modal-box.modal-scale{ transform:scale(1); opacity:1; }
   .modal-close{ position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; color:#fff; z-index:3; border:none; cursor:pointer; transition:background .25s; }
-  .modal-close:hover{ background:var(--pink); }
+  .modal-close:hover{ background:var(--cyan); color:#000; }
   .modal-img{ width:100%; height:240px; background:var(--panel-2); }
   .modal-img img{ width:100%; height:100%; object-fit:cover; }
   .modal-content{ padding:36px 40px; }
@@ -201,7 +193,7 @@
      CSS TAMBAHAN KHUSUS UNTUK ZIGZAG & TOMBOL LIHAT SEMUA
      ======================================================== */
   .timeline-zigzag { position: relative; max-width: 1000px; margin: 40px auto; padding: 20px 0; }
-  .timeline-zigzag::after { content: ''; position: absolute; width: 2px; background: linear-gradient(180deg, var(--cyan), var(--pink)); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+  .timeline-zigzag::after { content: ''; position: absolute; width: 2px; background: linear-gradient(180deg, var(--cyan), var(--violet)); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
   .tz-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 20px; }
   .tz-item:nth-child(odd) { left: 0; text-align: right; }
   .tz-item:nth-child(even) { left: 50%; text-align: left; }
@@ -209,7 +201,7 @@
   .tz-item:nth-child(even)::after { left: -11px; }
   .tz-item:hover::after { background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
   .tz-content { padding: 24px 30px; background: rgba(0,0,0,0.15); border: 1px solid var(--line); border-radius: 16px; position: relative; transition: 0.3s; cursor: pointer; }
-  .tz-content:hover { border-color: var(--pink); transform: translateY(-5px); background: rgba(255,255,255,0.03); }
+  .tz-content:hover { border-color: var(--cyan); transform: translateY(-5px); background: rgba(255,255,255,0.03); }
   .tz-role { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: #fff; margin-bottom: 5px; }
   .tz-org { font-family: var(--font-mono); font-size: 12px; color: var(--gold); margin-bottom: 12px; }
   .tz-desc { color: var(--dim); font-size: 13.5px; line-height: 1.7; }
@@ -218,8 +210,8 @@
       .tz-item { width: 100%; padding-left: 70px; padding-right: 0; text-align: left !important; left: 0 !important; }
       .tz-item::after { left: 20px !important; }
   }
-  .btn-toggle-skill { background: rgba(139, 92, 246, 0.05); border: 1px solid var(--violet); color: var(--violet); padding: 12px 28px; border-radius: 30px; font-family: var(--font-mono); font-size: 13px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 35px; }
-  .btn-toggle-skill:hover { background: var(--violet); color: #fff; box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
+  .btn-toggle-skill { background: rgba(78, 225, 214, 0.05); border: 1px solid var(--cyan); color: var(--cyan); padding: 12px 28px; border-radius: 30px; font-family: var(--font-mono); font-size: 13px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 35px; }
+  .btn-toggle-skill:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px rgba(78, 225, 214, 0.4); }
   .btn-toggle-org { background: rgba(78, 225, 214, 0.05); border: 1px solid var(--cyan); color: var(--cyan); padding: 12px 28px; border-radius: 30px; font-family: var(--font-mono); font-size: 13px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; }
   .btn-toggle-org:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px rgba(78, 225, 214, 0.4); }
 </style>
@@ -232,7 +224,7 @@
 </div>
 
 <div class="progress"></div>
-<div class="mesh"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="mesh"><div class="blob b1"></div><div class="blob b2"></div></div>
 <div class="noise"></div>
 
 <main>
@@ -268,11 +260,11 @@
 
   <section class="hero" id="home">
     <div class="hero-copy">
-      <div class="eyebrow" data-anim="fade">Portofolio Siswa &middot; IT Engineering</div>
+      <div class="eyebrow" data-anim="fade"><span style="color:var(--cyan)">—</span> PORTOFOLIO SISWA &middot; IT ENGINEERING</div>
       <div class="split-title">
         <div class="row"><h1 class="title"><span class="word grad-text typing-cursor" id="typewriter-text"></span></h1></div>
       </div>
-      <p class="lede" data-anim="fade">{{ $profile->about ?? '-' }}</p>
+      <p class="lede" data-anim="fade">{{ $profile->about ?? 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX.' }}</p>
       <div class="hero-cta" data-anim="fade">
         <a href="#contact" class="btn btn-primary" data-magnet>Hubungi Saya</a>
       </div>
@@ -285,13 +277,14 @@
                 $ms = is_string($profile->skills) ? json_decode($profile->skills, true) : $profile->skills;
                 if(is_array($ms)) $marqueeSkills = $ms;
             }
-            if(empty($marqueeSkills)) $marqueeSkills = ['WEB DEVELOPMENT','UI/UX DESIGN','LARAVEL','LEADERSHIP'];
+            if(empty($marqueeSkills)) $marqueeSkills = ['CSS','PHP','LARAVEL','UI/UX DESIGN'];
           @endphp
           @for($r = 0; $r < 2; $r++)
           <span>
             @foreach($marqueeSkills as $ms)
-                {{ strtoupper(is_array($ms) ? ($ms['name'] ?? '') : $ms) }} <em>&#10022;</em>
+                <span class="plus">+</span> &nbsp; {{ strtoupper(is_array($ms) ? ($ms['name'] ?? '') : $ms) }} &nbsp;
             @endforeach
+            <span class="plus">+</span> &nbsp;
           </span>
           @endfor
         </div>
@@ -302,61 +295,40 @@
       <div class="hero-img">
         <div class="glow-ring"></div>
         @if(!empty($profile->photo))
-            <img src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" onerror="this.src='https://img.freepik.com/free-vector/cute-boy-working-laptop-cartoon-vector-icon-illustration-people-technology-icon-concept-isolated-premium-vector-flat-cartoon-style_138676-3522.jpg'">
+            <img src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" onerror="this.src='https://img.freepik.com/free-vector/cute-panda-playing-skateboard-cartoon-vector-icon-illustration-animal-sport-icon-concept-isolated_138676-5868.jpg'">
         @else
-            <img src="https://img.freepik.com/free-vector/cute-boy-working-laptop-cartoon-vector-icon-illustration-people-technology-icon-concept-isolated-premium-vector-flat-cartoon-style_138676-3522.jpg" alt="Foto Profil">
+            <!-- Placeholder Panda Default -->
+            <img src="https://img.freepik.com/free-vector/cute-panda-playing-skateboard-cartoon-vector-icon-illustration-animal-sport-icon-concept-isolated_138676-5868.jpg" alt="Foto Profil Panda">
         @endif
         <div class="cap">
-          {{ $profile->address ?? 'Alamat' }}
+          {{ $profile->address ?? 'Perumahan Palempertiwi, Menganti, Gresik' }}
       </div>
       </div>
-      
-      <!-- Badge 1 (Atas) -->
-      @if(!empty($profile->badge_1))
-      <div class="float-badge fb1">
-          <span class="fb-dot"></span> {{ $profile->badge_1 }}
-      </div>
-      @endif
-
-      <!-- Badge 2 (Bawah) -->
-      @if(!empty($profile->badge_2))
-      <div class="float-badge fb2">
-          <i class="fas fa-code" style="color:var(--cyan)"></i> {{ $profile->badge_2 }}
-      </div>
-      @endif
     </div>
+
+
   </section>
 
-  <!-- BUNGKUS UTAMA PENYELAMAT -->
+  <!-- BUNGKUS UTAMA -->
   <div style="display: flex; flex-direction: column; gap: 30px; width: 100%; margin: 80px 0;">
-
-    <!-- ====================================================== -->
-    <!-- SECTION 1: TENTANG SAYA (DEFAULT)                      -->
-    <!-- ====================================================== -->
+    
+    <!-- SECTION 1: TENTANG SAYA -->
     <section id="About">
       <div class="about-panel reveal" style="height: auto; min-height: fit-content; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; width: 100%; margin: 0 auto;">
         
         <div style="flex: 1; min-width: 300px;">
-          <div class="sec-tag">{{ $profile->about_sub_1 ?? '01 / TENTANG SAYA' }}</div>
+          <div class="sec-tag" style="color:var(--cyan)">{{ $profile->about_sub_1 ?? '01 / TENTANG SAYA' }}</div>
           <h2 style="font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 700; color: #fff; line-height: 1.3;">
             {{ $profile->about_title ?? 'Membangun Solusi Digital dengan Logika & Kreativitas' }}
           </h2>
         </div>
      
         <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
-          @if(!empty($profile->about_1))
             <div style="padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; background: rgba(255, 255, 255, 0.03); transition: 0.3s; word-break: break-word; overflow-wrap: break-word;" onmouseover="this.style.borderColor='var(--cyan)'; this.style.background='rgba(255, 255, 255, 0.06)';" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)';">
-              <div style="color: var(--dim); font-size: 15px; line-height: 1.8;">{!! nl2br(e($profile->about_1)) !!}</div>
+              <div style="color: var(--dim); font-size: 15px; line-height: 1.8;">
+                {!! nl2br(e($profile->about_1 ?? 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.')) !!}
+              </div>
             </div>
-          @endif
-
-          @if(!empty($profile->hobbies) && is_array(json_decode($profile->hobbies, true)))
-          <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;">
-            @foreach(json_decode($profile->hobbies, true) as $hobby)
-              <span class="hobby-tag"><i class="fas fa-check-circle" style="color:var(--cyan)"></i> {{ $hobby }}</span>
-            @endforeach
-          </div>
-          @endif
         </div>
 
       </div>
@@ -368,7 +340,7 @@
       <div class="about-panel reveal" style="height: auto; min-height: fit-content; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; width: 100%; margin: 0 auto;">
         
         <div style="flex: 1; min-width: 300px;">
-          <div class="sec-tag">{{ $panel->tag }}</div>
+          <div class="sec-tag" style="color:var(--cyan)">{{ $panel->tag }}</div>
           <h2 style="font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 700; color: #fff; line-height: 1.3;">
             {{ $panel->title }}
           </h2>
@@ -385,17 +357,15 @@
       </div>
     </section>
     @endforeach
-
   </div> 
 
   <!-- ====================================================== -->
-  <!-- BAGIAN 02: LATAR BELAKANG SKILL (KARTU 3D + LIHAT SEMUA)-->
+  <!-- BAGIAN 02: LATAR BELAKANG SKILL                        -->
   <!-- ====================================================== -->
   <section id="LatarBelakangSkill" style="margin-top: 60px;">
     <div class="sec-head reveal">
       <div>
-        <div class="sec-tag">{{ $profile->about_sub_3 ?: '02 / LATAR BELAKANG SKILL' }}</div>
-        <div class="sec-title">{{ $profile->about_sub_2 ?: 'LATAR BELAKANG SKILL' }}</div>
+        <div class="sec-title" style="text-transform: uppercase;">{{ $profile->about_sub_2 ?: 'LATAR BELAKANG SKILL' }}</div>
       </div>
       <div class="sec-desc">{{ $profile->about_2 ?: 'Dokumentasi kegiatan pemrograman web, desain UI/UX, dan organisasi sosial.' }}</div>
     </div>
@@ -416,7 +386,6 @@
                 $deskripsiAman = htmlspecialchars($deskripsiAman, ENT_QUOTES);
             @endphp
 
-            <!-- Kartu Dinamis: Tampilkan 3 awal, sisanya sembunyikan -->
             <div class="card reveal {{ $index >= 3 ? 'skill-hidden' : '' }}" 
                  style="{{ $index >= 3 ? 'display:none;' : '' }} transition-delay: .0{{ ($index % 3) * 8 }}s"
                  data-tilt 
@@ -441,11 +410,39 @@
           @endforeach
           
       @else
-          <p style="color: var(--dim); width: 100%; text-align: center; grid-column: 1 / -1;">Belum ada data skill yang ditambahkan.</p>
+          <!-- SMART FALLBACK KARTU (Sekarang BISA DIKLIK!) -->
+          <div class="card reveal" data-tilt onclick="openModal('Pemrograman Web & Laravel', 'DEVELOPMENT', 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg', 'Ini adalah contoh deskripsi lengkap. Membangun sistem website dinamis dengan framework modern dan arsitektur rapi. \n\nData asli akan diambil dari Database Admin.')">
+              <div class="card-img"><img src="https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg" alt="Dummy"></div>
+              <div class="card-body">
+                  <div class="idx">MODULE / 01</div>
+                  <h3>Pemrograman Web & Laravel</h3>
+                  <p>Membangun sistem website dinamis dengan framework modern dan arsitektur rapi.</p>
+                  <div class="foot"><span>DEVELOPMENT</span><span>Klik detail &rarr;</span></div>
+              </div>
+          </div>
+          
+          <div class="card reveal" data-tilt onclick="openModal('UI/UX & Poster Digital', 'DESIGN & UI', 'https://img.freepik.com/free-vector/ui-ux-design-concept-illustration_114360-5524.jpg', 'Ini adalah contoh deskripsi lengkap. Merancang antarmuka yang ramah pengguna, estetis, dan fungsional. \n\nData asli akan diambil dari Database Admin.')">
+              <div class="card-img"><img src="https://img.freepik.com/free-vector/ui-ux-design-concept-illustration_114360-5524.jpg" alt="Dummy"></div>
+              <div class="card-body">
+                  <div class="idx">MODULE / 02</div>
+                  <h3>UI/UX & Poster Digital</h3>
+                  <p>Merancang antarmuka yang ramah pengguna, estetis, dan fungsional.</p>
+                  <div class="foot"><span>DESIGN & UI</span><span>Klik detail &rarr;</span></div>
+              </div>
+          </div>
+          
+          <div class="card reveal" data-tilt onclick="openModal('Kegiatan OSIS & Karang Taruna', 'LEADERSHIP', 'https://img.freepik.com/free-vector/team-leader-concept-illustration_114360-5544.jpg', 'Ini adalah contoh deskripsi lengkap. Mengelola tim, kepemimpinan, dan komunikasi sosial di lingkungan masyarakat. \n\nData asli akan diambil dari Database Admin.')">
+              <div class="card-img"><img src="https://img.freepik.com/free-vector/team-leader-concept-illustration_114360-5544.jpg" alt="Dummy"></div>
+              <div class="card-body">
+                  <div class="idx">MODULE / 03</div>
+                  <h3>Kegiatan OSIS & Karang Taruna</h3>
+                  <p>Mengelola tim, kepemimpinan, dan komunikasi sosial di lingkungan masyarakat.</p>
+                  <div class="foot"><span>LEADERSHIP</span><span>Klik detail &rarr;</span></div>
+              </div>
+          </div>
       @endif
     </div>
 
-    <!-- Tombol Muncul Otomatis Kalau Data Lebih Dari 3 -->
     @if(isset($totalSkills) && $totalSkills > 3)
       <div style="text-align: center; width: 100%; position: relative; z-index: 5;">
         <button id="btnToggleSkill" class="btn-toggle-skill" onclick="toggleSkills()">
@@ -456,7 +453,7 @@
   </section>
 
   <!-- ====================================================== -->
-  <!-- BAGIAN 03: KEAHLIAN (SLIDER DINAMIS + DATABASE WARNA)  -->
+  <!-- BAGIAN 03: KEAHLIAN                                    -->
   <!-- ====================================================== -->
   <section id="Keahlian">
     @php
@@ -469,7 +466,7 @@
 
     <div class="sec-head reveal">
       <div>
-        <div class="sec-tag">{{ $skillHeader['tag'] }}</div>
+        <div class="sec-tag" style="color:var(--cyan)">{{ $skillHeader['tag'] }}</div>
         <div class="sec-title">{{ $skillHeader['title'] }}</div>
       </div>
       <div class="sec-desc">{{ $skillHeader['desc'] }}</div>
@@ -512,7 +509,7 @@
   </section>
 
   <!-- ====================================================== -->
-  <!-- BAGIAN 04: PENGALAMAN ORGANISASI (ZIGZAG + LIHAT SEMUA)-->
+  <!-- BAGIAN 04: PENGALAMAN ORGANISASI                       -->
   <!-- ====================================================== -->
   <section id="organization">
     @php 
@@ -528,7 +525,7 @@
 
     <div class="sec-head reveal">
       <div>
-        <div class="sec-tag">{{ $orgHeader['tag'] }}</div>
+        <div class="sec-tag" style="color:var(--cyan)">{{ $orgHeader['tag'] }}</div>
         <div class="sec-title">{{ $orgHeader['title'] }}</div>
       </div>
       <div class="sec-desc">{{ $orgHeader['desc'] }}</div>
@@ -542,7 +539,6 @@
       
       @if($totalExp > 0)
         @foreach($experiencesData as $index => $exp)
-          <!-- Item Zigzag: Data ke-5 disembunyikan -->
           <div class="tz-item {{ $index >= 4 ? 'tz-hidden' : '' }}" style="{{ $index >= 4 ? 'display:none;' : '' }}">
             <div class="tz-content" onclick="openModal('{{ $exp['posisi'] ?? '' }}', '{{ $exp['periode'] ?? '' }}', '', '{{ $exp['deskripsi'] ?? '' }}\n\nInstansi: {{ $exp['instansi'] ?? '' }}')">
               <div class="tz-role">{{ $exp['posisi'] ?? '' }}</div>
@@ -552,11 +548,23 @@
           </div>
         @endforeach
       @else
-        <p style="text-align:center; color:var(--dim); width:100%;">Belum ada jejak organisasi.</p>
+        <div class="tz-item">
+            <div class="tz-content">
+                <div class="tz-role">Sekretaris Umum</div>
+                <div class="tz-org">OSIS SMA &middot; 2025 - 2026</div>
+                <div class="tz-desc">Mengelola administrasi, surat menyurat, dan dokumentasi seluruh kegiatan penting sekolah.</div>
+            </div>
+        </div>
+        <div class="tz-item">
+            <div class="tz-content">
+                <div class="tz-role">Ketua Karang Taruna</div>
+                <div class="tz-org">Desa Palempertiwi &middot; 2024 - Sekarang</div>
+                <div class="tz-desc">Memimpin pemuda desa dalam program sosial, olahraga, dan pengembangan lingkungan masyarakat.</div>
+            </div>
+        </div>
       @endif
     </div>
 
-    <!-- Tombol Muncul Otomatis Kalau Data Lebih Dari 4 -->
     @if($totalExp > 4)
       <div style="text-align: center; width: 100%; position: relative; z-index: 5;">
         <button id="btnToggleOrg" class="btn-toggle-org" onclick="toggleOrg()">
@@ -571,7 +579,7 @@
   <!-- ====================================================== -->
   <section id="contact">
     <div class="sec-head reveal" style="margin-bottom:34px">
-      <div><div class="sec-tag">05 / CONTACT</div><div class="sec-title">Kirim Pesan</div></div>
+      <div><div class="sec-tag" style="color:var(--cyan)">05 / CONTACT</div><div class="sec-title">Kirim Pesan</div></div>
       <div class="sec-desc">Punya pertanyaan, tawaran proyek, atau ingin berdiskusi? Kirim lewat form ini.</div>
     </div>
 
@@ -580,10 +588,6 @@
 
       <form id="contactForm">
         @csrf
-        
-        <!-- ============================================== -->
-        <!-- LAPIS 1: JEBAKAN BOT (HONEYPOT)                -->
-        <!-- ============================================== -->
         <div style="display:none; visibility:hidden; opacity:0; position:absolute; left:-9999px;">
             <label>If you are human, leave this blank</label>
             <input type="text" name="hp_website_url" tabindex="-1" autocomplete="off">
@@ -646,10 +650,11 @@
 <script>
   window.addEventListener('DOMContentLoaded', ()=>{
     const pre = document.getElementById('preloader');
-    setTimeout(()=>{ pre.classList.add('leave'); setTimeout(()=>pre.remove(), 950); }, 700);
+    // Preloader Speed-Up: Diubah jadi super cepat!
+    setTimeout(()=>{ pre.classList.add('leave'); setTimeout(()=>pre.remove(), 300); }, 150);
   });
 
-  const textToType = {!! json_encode($profile->role ?? 'Developer') !!};
+  const textToType = {!! json_encode($profile->role ?? 'IT Engineering & Web Developer') !!};
   const typewriterElement = document.getElementById('typewriter-text');
   let typeIndex = 0;
   function typeWriter(){
@@ -799,7 +804,7 @@
     } catch (err) {
       msgBox.style.background = 'rgba(255,93,162,.1)';
       msgBox.style.border = '1px solid rgba(255,93,162,.4)';
-      msgBox.style.color = 'var(--pink)';
+      msgBox.style.color = 'var(--cyan)';
       msgBox.innerHTML = `<i class="fas fa-exclamation-triangle"></i> SPAM TERDETEKSI!. silahkan coba lagi nanti, Mohon jangan spam`;
       msgBox.style.display = 'block';
       btn.disabled = false;
@@ -831,8 +836,6 @@
     setTimeout(()=>{ modal.classList.remove('modal-active'); document.body.style.overflow = 'auto'; }, 300);
   }
 
-  // JAVASCRIPT UNTUK TOMBOL "LIHAT SEMUA"
-  
   function toggleSkills() {
       const hiddenItems = document.querySelectorAll('.skill-hidden');
       const btn = document.getElementById('btnToggleSkill');
