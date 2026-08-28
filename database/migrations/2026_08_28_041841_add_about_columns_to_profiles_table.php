@@ -8,7 +8,7 @@
       <h1>Kelola Tentang Saya</h1>
       <p>Atur section utama dan tambahkan panel latar belakang dengan mudah.</p>
     </div>
-    <a href="{{ route('portofolio.index') }}#gallery" target="_blank" class="btn-outline">
+    <a href="{{ route('portofolio.index') }}#About" target="_blank" class="btn-outline">
       <i class='bx bx-link-external'></i> Lihat Website
     </a>
   </div>
@@ -25,17 +25,17 @@
       <div class="grid2 form-group">
         <div>
           <label>Tag Kecil (Kiri Atas)</label>
-          <input type="text" name="about_sub_1" value="{{ $about->tag ?? '01 / TENTANG SAYA' }}" required placeholder="01 / TENTANG SAYA">
+          <input type="text" name="about_sub_1" value="{{ $profile->about_sub_1 ?? '01 / TENTANG SAYA' }}" required placeholder="01 / TENTANG SAYA">
         </div>
         <div>
           <label>Judul Utama (Kiri Bawah)</label>
-          <input type="text" name="about_title" value="{{ $about->title ?? '' }}" placeholder="Contoh: Membangun Solusi Digital..." required>
+          <input type="text" name="about_title" value="{{ $profile->about_title ?? '' }}" placeholder="Contoh: Membangun Solusi Digital..." required>
         </div>
       </div>
 
       <div class="form-group" style="margin-bottom: 0;">
         <label>Deskripsi Utama (Sebelah Kanan)</label>
-        <textarea name="about_1" rows="5" required placeholder="Tuliskan deskripsi lengkapmu di sini...">{{ $about->description ?? '' }}</textarea>
+        <textarea name="about_1" rows="5" required placeholder="Tuliskan deskripsi lengkapmu di sini...">{{ $profile->about_1 ?? '' }}</textarea>
       </div>
     </div>
 

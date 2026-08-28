@@ -38,10 +38,19 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         $projects = Project::latest()->get(); 
-        $panels = ProfileAbout::latest()->get(); 
+        $panels = ProfileAbout::where('is_main', false)->latest()->get(); 
         $dataKeahlian = Keahlian::oldest()->get(); 
+
+        $about = ProfileAbout::firstOrCreate(
+            ['profile_id' => 1, 'is_main' => true],
+            [
+                'tag'         => '01 / TENTANG SAYA',
+                'title'       => 'Membangun Solusi Digital dengan Logika & Kreativitas',
+                'description' => 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.',
+            ]
+        );
         
-        return view('portfolio.portofolio', compact('profile', 'projects', 'panels', 'dataKeahlian'));
+        return view('portfolio.portofolio', compact('profile', 'projects', 'panels', 'dataKeahlian', 'about'));
     }
 
     public function dashboard()
@@ -76,6 +85,8 @@ class PortfolioController extends Controller
         $profile->email   = $request->email;
         $profile->phone   = $request->phone;
         $profile->address = $request->address; 
+        $profile->badge_1 = $request->badge_1;
+        $profile->badge_2 = $request->badge_2;
 
         if ($request->has('skills')) {
             $skillsArray = array_map('trim', explode(',', $request->skills));
@@ -105,20 +116,33 @@ class PortfolioController extends Controller
     public function editAbout()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
-        $panels = ProfileAbout::latest()->get(); 
-        return view('portfolio.admin_about', compact('profile', 'panels')); 
+
+        $about = ProfileAbout::firstOrCreate(
+            ['profile_id' => 1, 'is_main' => true],
+            [
+                'tag'         => '01 / TENTANG SAYA',
+                'title'       => '',
+                'description' => '',
+            ]
+        );
+
+        $panels = ProfileAbout::where('is_main', false)->latest()->get();
+        return view('portfolio.admin_about', compact('profile', 'about', 'panels')); 
     }
 
     public function updateAbout(Request $request)
     {
-        $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
-        
-        // Kita hanya mengupdate kolom 'about' utama saja karena kolom lama sudah dihapus
-        if($request->has('about_1')) {
-            $profile->about = $request->about_1;
-        }
-        
-        $profile->save();
+        $about = ProfileAbout::firstOrCreate(
+            ['profile_id' => 1, 'is_main' => true],
+            ['tag' => '', 'title' => '', 'description' => '']
+        );
+
+        // Menangkap 3 inputan dari form utama Kelola Tentang Saya
+        $about->tag         = $request->about_sub_1;
+        $about->title       = $request->about_title;
+        $about->description = $request->about_1;
+
+        $about->save();
         return redirect()->back()->with('success_msg', 'Data Tentang Saya berhasil diperbarui!');
     }
 
@@ -132,9 +156,10 @@ class PortfolioController extends Controller
 
         ProfileAbout::create([
             'profile_id' => 1,
+            'is_main' => false,
             'tag' => $request->tag,
             'title' => $request->title,
-            'description' => $request->desc_1,
+            'description' => $request->desc_1, // DIARAHKAN KE DESCRIPTION
         ]);
 
         return redirect()->back()->with('success_msg', 'Berhasil Ditambahkan!');
@@ -153,7 +178,7 @@ class PortfolioController extends Controller
         $panel->update([
             'tag' => $request->tag,
             'title' => $request->title,
-            'description' => $request->desc_1 ?? $request->description, 
+            'description' => $request->desc_1, // DIARAHKAN KE DESCRIPTION
         ]);
 
         return redirect()->route('admin.about')->with('success_msg', 'Berhasil diperbarui!');
@@ -311,9 +336,7 @@ class PortfolioController extends Controller
         return back()->with('success_msg', 'Proyek berhasil dihapus!');
     }
 
-    // ==========================================
-    // CMS 6: KELOLA LATAR BELAKANG SKILL (Kartu Modul)
-    // ==========================================
+    
     public function keahlianAdmin()
     {
         if (Keahlian::count() == 0) {
@@ -329,7 +352,6 @@ class PortfolioController extends Controller
 
     public function updateSkillHeader(Request $request)
     {
-        // MODE AMAN: Bypass penyimpanan agar tidak error karena kolom lama (about_sub_3, dll) sudah kita hapus
         return redirect()->back()->with('success_msg', 'Proses update mode aman berhasil!');
     }
 
@@ -421,7 +443,6 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         
-        // Kita hanya mengupdate data skills karena kolom about_3 (header) sudah dihapus
         if ($request->has('skills_data')) {
             $profile->skills = $request->skills_data;
             $profile->save();

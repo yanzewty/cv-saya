@@ -9,7 +9,7 @@ Route::get('/', [PortfolioController::class, 'index'])->name('portofolio.index')
 // throttle (satpam anti-spam) di rute contact ini!
 Route::post('/contact/send', [PortfolioController::class, 'storeMessage'])
     ->name('contact.send')
-    ->middleware('throttle:3,3'); // Maksimal 3 request per 3 menit ini buat time limited mamps
+    ->middleware('throttle:3,5'); // Maksimal 3 request per 5 menit ini buat time limited mamps
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);

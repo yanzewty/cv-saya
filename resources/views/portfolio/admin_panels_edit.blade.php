@@ -109,8 +109,8 @@
         <div class="form-group" style="margin-bottom: 0;">
           <label><i class='bx bx-text'></i> Deskripsi Panjang (Kanan)</label>
           <div class="input-wrapper">
-            <!-- Textarea sengaja gak dikasih icon padding kiri biar leluasa ngetik -->
-            <textarea name="desc_1" rows="7" required style="line-height: 1.7;">{{ $panel->desc_1 }}</textarea>
+            
+             <textarea name="desc_1" rows="7" required style="line-height: 1.7;">{{ $panel->description }}</textarea>
           </div>
           <span class="help-text">Gunakan Enter untuk membuat paragraf baru.</span>
         </div>

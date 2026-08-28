@@ -189,9 +189,7 @@
     .about-panel{ grid-template-columns:1fr; padding:32px; }
   }
 
-  /* ========================================================
-     CSS TAMBAHAN KHUSUS UNTUK ZIGZAG & TOMBOL LIHAT SEMUA
-     ======================================================== */
+  /* zigzag    */
   .timeline-zigzag { position: relative; max-width: 1000px; margin: 40px auto; padding: 20px 0; }
   .timeline-zigzag::after { content: ''; position: absolute; width: 2px; background: linear-gradient(180deg, var(--cyan), var(--violet)); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
   .tz-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 20px; }
@@ -295,24 +293,34 @@
       <div class="hero-img">
         <div class="glow-ring"></div>
         @if(!empty($profile->photo))
-            <img src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" onerror="this.src='https://img.freepik.com/free-vector/cute-panda-playing-skateboard-cartoon-vector-icon-illustration-animal-sport-icon-concept-isolated_138676-5868.jpg'">
+            <img src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" onerror="this.src='{{ asset('uploads/1786586192_profil_IMG_20260707_112708_146.jpg') }}'">
         @else
-            <!-- Placeholder Panda Default -->
-            <img src="https://img.freepik.com/free-vector/cute-panda-playing-skateboard-cartoon-vector-icon-illustration-animal-sport-icon-concept-isolated_138676-5868.jpg" alt="Foto Profil Panda">
+            <img src="{{ asset('uploads/1786586192_profil_IMG_20260707_112708_146.jpg') }}" alt="Foto Profil">
         @endif
         <div class="cap">
           {{ $profile->address ?? 'Perumahan Palempertiwi, Menganti, Gresik' }}
+        </div>
       </div>
-      </div>
-    </div>
 
+      <!-- 👇 BADGE MELAYANG DIKEMBALIKAN DI SINI 👇 -->
+      @if(!empty($profile->badge_1))
+      <div class="float-badge fb1">
+          <span class="fb-dot"></span> {{ $profile->badge_1 }}
+      </div>
+      @endif
+
+      @if(!empty($profile->badge_2))
+      <div class="float-badge fb2">
+          <i class="fas fa-code" style="color:var(--cyan)"></i> {{ $profile->badge_2 }}
+      </div>
+      @endif
+    </div>
 
   </section>
 
-  <!-- BUNGKUS UTAMA -->
   <div style="display: flex; flex-direction: column; gap: 30px; width: 100%; margin: 80px 0;">
     
-    <!-- SECTION 1: TENTANG SAYA -->
+    {{-- SECTION 1 TENTANG SAYA --}}
     <section id="About">
       <div class="about-panel reveal" style="height: auto; min-height: fit-content; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; width: 100%; margin: 0 auto;">
         
@@ -359,9 +367,7 @@
     @endforeach
   </div> 
 
-  <!-- ====================================================== -->
-  <!-- BAGIAN 02: LATAR BELAKANG SKILL                        -->
-  <!-- ====================================================== -->
+  {{-- LATAR BELAKANG SKILL --}}
   <section id="LatarBelakangSkill" style="margin-top: 60px;">
     <div class="sec-head reveal">
       <div>
@@ -373,33 +379,33 @@
     <div class="cards" id="skillsGridContainer">
       @if(isset($dataKeahlian) && $dataKeahlian->count() > 0)
           @php $totalSkills = $dataKeahlian->count(); @endphp
-          
+
           @foreach($dataKeahlian as $index => $item)
             @php
-                $gambarUrl = (!empty($item->gambar) && file_exists(public_path('uploads/' . $item->gambar))) 
-                             ? asset('uploads/' . $item->gambar) 
-                             : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg'; 
-                
+                $gambarUrl = (!empty($item->gambar) && file_exists(public_path('uploads/' . $item->gambar)))
+                             ? asset('uploads/' . $item->gambar)
+                             : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg';
+
                 $judulAman = htmlspecialchars($item->judul, ENT_QUOTES);
                 $kategoriAman = htmlspecialchars($item->kategori, ENT_QUOTES);
                 $deskripsiAman = trim(preg_replace('/\s+/', ' ', $item->deskripsi));
                 $deskripsiAman = htmlspecialchars($deskripsiAman, ENT_QUOTES);
             @endphp
 
-            <div class="card reveal {{ $index >= 3 ? 'skill-hidden' : '' }}" 
+            <div class="card reveal {{ $index >= 3 ? 'skill-hidden' : '' }}"
                  style="{{ $index >= 3 ? 'display:none;' : '' }} transition-delay: .0{{ ($index % 3) * 8 }}s"
-                 data-tilt 
+                 data-tilt
                  onclick="openModal('{{ $judulAman }}', '{{ $kategoriAman }}', '{{ $gambarUrl }}', '{{ $deskripsiAman }}')">
-              
+
               <div class="card-img">
                 <img src="{{ $gambarUrl }}" alt="{{ $item->judul }}">
               </div>
-              
+
               <div class="card-body">
                 <div class="idx">{{ $item->modul }}</div>
                 <h3>{{ $item->judul }}</h3>
                 <p>{{ \Illuminate\Support\Str::limit($item->deskripsi, 80, '...') }}</p>
-                
+
                 <div class="foot">
                     <span>{{ $item->kategori }}</span>
                     <span>Klik detail &rarr;</span>
@@ -408,11 +414,25 @@
 
             </div>
           @endforeach
-          
+
       @else
-          <!-- SMART FALLBACK KARTU (Sekarang BISA DIKLIK!) -->
-          <div class="card reveal" data-tilt onclick="openModal('Pemrograman Web & Laravel', 'DEVELOPMENT', 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg', 'Ini adalah contoh deskripsi lengkap. Membangun sistem website dinamis dengan framework modern dan arsitektur rapi. \n\nData asli akan diambil dari Database Admin.')">
-              <div class="card-img"><img src="https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg" alt="Dummy"></div>
+          {{-- KEAHLIAN (fallback foto lokal) --}}
+          @php
+              $imgCard1 = (file_exists(public_path('uploads/1786421475_g1_rpl.jpg')))
+                          ? asset('uploads/1786421475_g1_rpl.jpg')
+                          : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg';
+
+              $imgCard2 = (file_exists(public_path('uploads/1787207896_keahlian_IMG_20260715_071115_152.jpg')))
+                          ? asset('uploads/1787207896_keahlian_IMG_20260715_071115_152.jpg')
+                          : 'https://img.freepik.com/free-vector/ui-ux-design-concept-illustration_114360-5524.jpg';
+
+              $imgCard3 = (file_exists(public_path('uploads/1786516895_g3_DSC07615.jpg')))
+                          ? asset('uploads/1786516895_g3_DSC07615.jpg')
+                          : 'https://img.freepik.com/free-vector/team-leader-concept-illustration_114360-5544.jpg';
+          @endphp
+
+          <div class="card reveal" data-tilt onclick="openModal('Pemrograman Web & Laravel', 'DEVELOPMENT', '{{ $imgCard1 }}', 'Ini adalah contoh deskripsi lengkap. Membangun sistem website dinamis dengan framework modern dan arsitektur rapi. \n\nData asli akan diambil dari Database Admin.')">
+              <div class="card-img"><img src="{{ $imgCard1 }}" alt="Pemrograman Web & Laravel"></div>
               <div class="card-body">
                   <div class="idx">MODULE / 01</div>
                   <h3>Pemrograman Web & Laravel</h3>
@@ -420,9 +440,9 @@
                   <div class="foot"><span>DEVELOPMENT</span><span>Klik detail &rarr;</span></div>
               </div>
           </div>
-          
-          <div class="card reveal" data-tilt onclick="openModal('UI/UX & Poster Digital', 'DESIGN & UI', 'https://img.freepik.com/free-vector/ui-ux-design-concept-illustration_114360-5524.jpg', 'Ini adalah contoh deskripsi lengkap. Merancang antarmuka yang ramah pengguna, estetis, dan fungsional. \n\nData asli akan diambil dari Database Admin.')">
-              <div class="card-img"><img src="https://img.freepik.com/free-vector/ui-ux-design-concept-illustration_114360-5524.jpg" alt="Dummy"></div>
+
+          <div class="card reveal" data-tilt onclick="openModal('UI/UX & Poster Digital', 'DESIGN & UI', '{{ $imgCard2 }}', 'Ini adalah contoh deskripsi lengkap. Merancang antarmuka yang ramah pengguna, estetis, dan fungsional. \n\nData asli akan diambil dari Database Admin.')">
+              <div class="card-img"><img src="{{ $imgCard2 }}" alt="UI/UX & Poster Digital"></div>
               <div class="card-body">
                   <div class="idx">MODULE / 02</div>
                   <h3>UI/UX & Poster Digital</h3>
@@ -430,9 +450,9 @@
                   <div class="foot"><span>DESIGN & UI</span><span>Klik detail &rarr;</span></div>
               </div>
           </div>
-          
-          <div class="card reveal" data-tilt onclick="openModal('Kegiatan OSIS & Karang Taruna', 'LEADERSHIP', 'https://img.freepik.com/free-vector/team-leader-concept-illustration_114360-5544.jpg', 'Ini adalah contoh deskripsi lengkap. Mengelola tim, kepemimpinan, dan komunikasi sosial di lingkungan masyarakat. \n\nData asli akan diambil dari Database Admin.')">
-              <div class="card-img"><img src="https://img.freepik.com/free-vector/team-leader-concept-illustration_114360-5544.jpg" alt="Dummy"></div>
+
+          <div class="card reveal" data-tilt onclick="openModal('Kegiatan OSIS & Karang Taruna', 'LEADERSHIP', '{{ $imgCard3 }}', 'Ini adalah contoh deskripsi lengkap. Mengelola tim, kepemimpinan, dan komunikasi sosial di lingkungan masyarakat. \n\nData asli akan diambil dari Database Admin.')">
+              <div class="card-img"><img src="{{ $imgCard3 }}" alt="Kegiatan OSIS & Karang Taruna"></div>
               <div class="card-body">
                   <div class="idx">MODULE / 03</div>
                   <h3>Kegiatan OSIS & Karang Taruna</h3>
@@ -443,6 +463,7 @@
       @endif
     </div>
 
+
     @if(isset($totalSkills) && $totalSkills > 3)
       <div style="text-align: center; width: 100%; position: relative; z-index: 5;">
         <button id="btnToggleSkill" class="btn-toggle-skill" onclick="toggleSkills()">
@@ -452,9 +473,7 @@
     @endif
   </section>
 
-  <!-- ====================================================== -->
-  <!-- BAGIAN 03: KEAHLIAN                                    -->
-  <!-- ====================================================== -->
+  {{-- KEAHLIAN --}}
   <section id="Keahlian">
     @php
         $skillHeader = json_decode($profile->about_3, true) ?? [
@@ -603,10 +622,10 @@
             <input type="email" name="email" required placeholder="email@gmail.com">
           </div>
         </div>
-        <div class="field" style="margin-bottom:24px;">
-          <label>Pesan</label>
-          <textarea name="message" rows="5" required placeholder="Tuliskan pesan atau kalimat kolaborasi di sini..."></textarea>
-        </div>
+       <div class="field" style="margin-bottom:24px;">
+        <label>Pesan</label>
+        <textarea name="message" rows="5" required placeholder="Tuliskan pesan atau kalimat kolaborasi di sini..." style="resize:none;"></textarea>
+      </div>
         <button type="submit" id="submitBtn" class="btn btn-primary" data-magnet style="width:100%;text-align:center;">
           <span id="btnText"><i class="fas fa-paper-plane"></i> Kirim Pesan Sekarang</span>
           <span id="spinner" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Mengirim Pesan...</span>
@@ -650,7 +669,6 @@
 <script>
   window.addEventListener('DOMContentLoaded', ()=>{
     const pre = document.getElementById('preloader');
-    // Preloader Speed-Up: Diubah jadi super cepat!
     setTimeout(()=>{ pre.classList.add('leave'); setTimeout(()=>pre.remove(), 300); }, 150);
   });
 
@@ -797,7 +815,7 @@
         msgBox.innerHTML = `<i class="fas fa-check-circle"></i> ${result.success}`;
         msgBox.style.display = 'block';
         e.target.reset();
-        setTimeout(()=>{ msgBox.style.display='none'; window.location.reload(); }, 3000);
+        setTimeout(()=>{ msgBox.style.display='none'; window.location.reload(); }, 5800);
       } else {
         throw new Error(result.error || 'Terjadi kesalahan sistem.');
       }
@@ -808,6 +826,9 @@
       msgBox.innerHTML = `<i class="fas fa-exclamation-triangle"></i> SPAM TERDETEKSI!. silahkan coba lagi nanti, Mohon jangan spam`;
       msgBox.style.display = 'block';
       btn.disabled = false;
+      // REFRESH
+      e.target.reset();
+      setTimeout(()=>{ msgBox.style.display='none'; window.location.reload(); }, 5800);
       spinner.style.display = 'none';
       btnText.style.display = 'inline';
     }
