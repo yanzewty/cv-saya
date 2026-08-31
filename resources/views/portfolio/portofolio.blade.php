@@ -85,7 +85,6 @@
   
   .grad-text{ background:linear-gradient(90deg, #3763E0, #4E9BE0, #3763E0); background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent; animation:gradmove 3.5s ease-in-out 3; }
   @keyframes gradmove{ to{ background-position:200% center; } }
-  @keyframes blink{ 50%{ opacity:0; } }
   
   .lede{ font-family:var(--font-body); font-size:15px; line-height:1.75; color:var(--dim); max-width:540px; margin:22px 0 28px; opacity:0; word-break: break-word; }
   .hero-cta{ display:flex; gap:16px; opacity:0; }
@@ -189,7 +188,6 @@
     .about-panel{ grid-template-columns:1fr; padding:32px; }
   }
 
-  /* zigzag    */
   .timeline-zigzag { position: relative; max-width: 1000px; margin: 40px auto; padding: 20px 0; }
   .timeline-zigzag::after { content: ''; position: absolute; width: 2px; background: linear-gradient(180deg, var(--cyan), var(--violet)); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
   .tz-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 20px; }
@@ -289,12 +287,14 @@
       </div>
     </div>
 
+    <!-- PENGATURAN FOTO CADANGAN HERO -->
     <div class="hero-img-wrap">
       <div class="hero-img">
         <div class="glow-ring"></div>
         @if(!empty($profile->photo))
             <img src="{{ asset('uploads/' . $profile->photo) }}" alt="Foto Profil" onerror="this.src='{{ asset('uploads/1786586192_profil_IMG_20260707_112708_146.jpg') }}'">
         @else
+            <!-- Ini foto cadangan yang akan dipanggil jika database kosong -->
             <img src="{{ asset('uploads/1786586192_profil_IMG_20260707_112708_146.jpg') }}" alt="Foto Profil">
         @endif
         <div class="cap">
@@ -302,7 +302,6 @@
         </div>
       </div>
 
-      <!-- 👇 BADGE MELAYANG DIKEMBALIKAN DI SINI 👇 -->
       @if(!empty($profile->badge_1))
       <div class="float-badge fb1">
           <span class="fb-dot"></span> {{ $profile->badge_1 }}
@@ -315,7 +314,6 @@
       </div>
       @endif
     </div>
-
   </section>
 
   <div style="display: flex; flex-direction: column; gap: 30px; width: 100%; margin: 80px 0;">
@@ -325,16 +323,17 @@
       <div class="about-panel reveal" style="height: auto; min-height: fit-content; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 40px; width: 100%; margin: 0 auto;">
         
         <div style="flex: 1; min-width: 300px;">
-          <div class="sec-tag" style="color:var(--cyan)">{{ $profile->about_sub_1 ?? '01 / TENTANG SAYA' }}</div>
+          <!-- Menggunakan ?: untuk kebal dari database kosong -->
+          <div class="sec-tag" style="color:var(--cyan)">{{ $about->tag ?: '01 / TENTANG SAYA' }}</div>
           <h2 style="font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 700; color: #fff; line-height: 1.3;">
-            {{ $profile->about_title ?? 'Membangun Solusi Digital dengan Logika & Kreativitas' }}
+            {{ $about->title ?: 'Membangun Solusi Digital dengan Logika & Kreativitas' }}
           </h2>
         </div>
      
         <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
             <div style="padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; background: rgba(255, 255, 255, 0.03); transition: 0.3s; word-break: break-word; overflow-wrap: break-word;" onmouseover="this.style.borderColor='var(--cyan)'; this.style.background='rgba(255, 255, 255, 0.06)';" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)';">
               <div style="color: var(--dim); font-size: 15px; line-height: 1.8;">
-                {!! nl2br(e($profile->about_1 ?? 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.')) !!}
+                {!! nl2br(e($about->description ?: 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.')) !!}
               </div>
             </div>
         </div>
@@ -355,9 +354,9 @@
         </div>
         
         <div style="flex: 1.2; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
-          @if(!empty($panel->desc_1))
+          @if(!empty($panel->description))
           <div style="padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; background: rgba(255, 255, 255, 0.03); transition: 0.3s; word-break: break-word; overflow-wrap: break-word;" onmouseover="this.style.borderColor='var(--cyan)'; this.style.background='rgba(255, 255, 255, 0.06)';" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)';">
-              <div style="color: var(--dim); font-size: 15px; line-height: 1.8;">{!! nl2br(e($panel->desc_1)) !!}</div>
+              <div style="color: var(--dim); font-size: 15px; line-height: 1.8;">{!! nl2br(e($panel->description)) !!}</div>
           </div>
           @endif
         </div>
@@ -382,32 +381,54 @@
 
           @foreach($dataKeahlian as $index => $item)
             @php
+                // MENGGANTI GAMBAR KARTUN DENGAN FOTO ASLI YANG SESUAI DENGAN FOLDER
+                $fotoHardcode = '';
+                $deskripsiHardcode = '';
+
+                if ($index == 0) {
+                    $fotoHardcode = asset('uploads/1786586192_profil_IMG_20260707_112708_146.jpg');
+                    $deskripsiHardcode = "Membangun sistem website dinamis dan responsif menggunakan PHP dan framework Laravel. Terbiasa mengelola database MySQL, merancang arsitektur MVC (Model-View-Controller), dan menyusun kodingan backend yang rapi untuk menghasilkan aplikasi berbasis web yang fungsional, aman, dan efisien.";
+                } elseif ($index == 1) {
+                    $fotoHardcode = asset('uploads/1787207896_keahlian_IMG_20260715_071115_152.jpg');
+                    $deskripsiHardcode = "Merancang antarmuka web dan aplikasi (UI) yang ramah pengguna, estetis, dan memiliki alur interaksi yang jelas (UX). Selain berfokus pada kerangka website, saya juga aktif mendesain grafis dan poster digital yang menarik untuk berbagai keperluan promosi, event organisasi, hingga konten media sosial.";
+                } else {
+                    $fotoHardcode = asset('uploads/1786516895_g3_DSC07615.jpg');
+                    $deskripsiHardcode = "Aktif mengasah kepemimpinan, manajemen waktu, dan komunikasi sosial di luar jam pelajaran. Berpengalaman mengurus tata kelola administrasi dan surat-menyurat sebagai Sekretaris Umum OSIS SMA, serta memimpin pemuda desa dalam mengeksekusi program sosial kemasyarakatan sebagai Ketua Karang Taruna Desa Palempertiwi.";
+                }
+
                 $gambarUrl = (!empty($item->gambar) && file_exists(public_path('uploads/' . $item->gambar)))
                              ? asset('uploads/' . $item->gambar)
-                             : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg';
+                             : $fotoHardcode; 
 
-                $judulAman = htmlspecialchars($item->judul, ENT_QUOTES);
-                $kategoriAman = htmlspecialchars($item->kategori, ENT_QUOTES);
-                $deskripsiAman = trim(preg_replace('/\s+/', ' ', $item->deskripsi));
-                $deskripsiAman = htmlspecialchars($deskripsiAman, ENT_QUOTES);
+                // Perbaikan Anti-Bug &amp; dan Anti-Kosong untuk Modal Javascript
+                $judulModal = $item->judul ?? 'Judul Tidak Tersedia';
+                $kategoriModal = $item->kategori ?? 'Kategori';
+                
+                // Cek apakah database kosong, jika kosong gunakan teks cadangan yang sudah kita siapkan
+                $deskripsiAsli = trim($item->deskripsi ?? '');
+                $deskripsiModal = !empty($deskripsiAsli) ? $deskripsiAsli : $deskripsiHardcode;
             @endphp
 
             <div class="card reveal {{ $index >= 3 ? 'skill-hidden' : '' }}"
                  style="{{ $index >= 3 ? 'display:none;' : '' }} transition-delay: .0{{ ($index % 3) * 8 }}s"
                  data-tilt
-                 onclick="openModal('{{ $judulAman }}', '{{ $kategoriAman }}', '{{ $gambarUrl }}', '{{ $deskripsiAman }}')">
+                 data-title="{{ $judulModal }}"
+                 data-category="{{ $kategoriModal }}"
+                 data-image="{{ $gambarUrl }}"
+                 data-desc="{{ $deskripsiModal }}"
+                 onclick="openModal(this)">
 
               <div class="card-img">
-                <img src="{{ $gambarUrl }}" alt="{{ $item->judul }}">
+                <img src="{{ $gambarUrl }}" alt="{{ $judulModal }}">
               </div>
 
               <div class="card-body">
                 <div class="idx">{{ $item->modul }}</div>
-                <h3>{{ $item->judul }}</h3>
-                <p>{{ \Illuminate\Support\Str::limit($item->deskripsi, 80, '...') }}</p>
+                <h3>{{ $judulModal }}</h3>
+                <p>{{ \Illuminate\Support\Str::limit($deskripsiModal, 80, '...') }}</p>
 
                 <div class="foot">
-                    <span>{{ $item->kategori }}</span>
+                    <span>{{ $kategoriModal }}</span>
                     <span>Klik detail &rarr;</span>
                 </div>
               </div>
@@ -416,53 +437,63 @@
           @endforeach
 
       @else
-          {{-- KEAHLIAN (fallback foto lokal) --}}
+          {{-- KEAHLIAN (fallback foto lokal jika database benar-benar terhapus) --}}
           @php
-              $imgCard1 = (file_exists(public_path('uploads/1786421475_g1_rpl.jpg')))
-                          ? asset('uploads/1786421475_g1_rpl.jpg')
-                          : 'https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg';
-
-              $imgCard2 = (file_exists(public_path('uploads/1787207896_keahlian_IMG_20260715_071115_152.jpg')))
-                          ? asset('uploads/1787207896_keahlian_IMG_20260715_071115_152.jpg')
-                          : 'https://img.freepik.com/free-vector/ui-ux-design-concept-illustration_114360-5524.jpg';
-
-              $imgCard3 = (file_exists(public_path('uploads/1786516895_g3_DSC07615.jpg')))
-                          ? asset('uploads/1786516895_g3_DSC07615.jpg')
-                          : 'https://img.freepik.com/free-vector/team-leader-concept-illustration_114360-5544.jpg';
+              $imgCard1 = asset('uploads/1786586192_profil_IMG_20260707_112708_146.jpg');
+              $imgCard2 = asset('uploads/1787207896_keahlian_IMG_20260715_071115_152.jpg');
+              $imgCard3 = asset('uploads/1786516895_g3_DSC07615.jpg');
+              
+              $descCard1 = "Membangun sistem website dinamis dan responsif menggunakan PHP dan framework Laravel. Terbiasa mengelola database MySQL, merancang arsitektur MVC (Model-View-Controller), dan menyusun kodingan backend yang rapi untuk menghasilkan aplikasi berbasis web yang fungsional, aman, dan efisien.";
+              $descCard2 = "Merancang antarmuka web dan aplikasi (UI) yang ramah pengguna, estetis, dan memiliki alur interaksi yang jelas (UX). Selain berfokus pada kerangka website, saya juga aktif mendesain grafis dan poster digital yang menarik untuk berbagai keperluan promosi, event organisasi, hingga konten media sosial.";
+              $descCard3 = "Aktif mengasah kepemimpinan, manajemen waktu, dan komunikasi sosial di luar jam pelajaran. Berpengalaman mengurus tata kelola administrasi dan surat-menyurat sebagai Sekretaris Umum OSIS SMA, serta memimpin pemuda desa dalam mengeksekusi program sosial kemasyarakatan sebagai Ketua Karang Taruna Desa Palempertiwi.";
           @endphp
 
-          <div class="card reveal" data-tilt onclick="openModal('Pemrograman Web & Laravel', 'DEVELOPMENT', '{{ $imgCard1 }}', 'Ini adalah contoh deskripsi lengkap. Membangun sistem website dinamis dengan framework modern dan arsitektur rapi. \n\nData asli akan diambil dari Database Admin.')">
+          <div class="card reveal" data-tilt 
+               data-title="Pemrograman Web & Laravel" 
+               data-category="DEVELOPMENT" 
+               data-image="{{ $imgCard1 }}" 
+               data-desc="{{ $descCard1 }}"
+               onclick="openModal(this)">
               <div class="card-img"><img src="{{ $imgCard1 }}" alt="Pemrograman Web & Laravel"></div>
               <div class="card-body">
                   <div class="idx">MODULE / 01</div>
                   <h3>Pemrograman Web & Laravel</h3>
-                  <p>Membangun sistem website dinamis dengan framework modern dan arsitektur rapi.</p>
+                  <p>{{ \Illuminate\Support\Str::limit($descCard1, 80, '...') }}</p>
                   <div class="foot"><span>DEVELOPMENT</span><span>Klik detail &rarr;</span></div>
               </div>
           </div>
 
-          <div class="card reveal" data-tilt onclick="openModal('UI/UX & Poster Digital', 'DESIGN & UI', '{{ $imgCard2 }}', 'Ini adalah contoh deskripsi lengkap. Merancang antarmuka yang ramah pengguna, estetis, dan fungsional. \n\nData asli akan diambil dari Database Admin.')">
+          <div class="card reveal" data-tilt 
+               data-title="UI/UX & Poster Digital" 
+               data-category="DESIGN & UI" 
+               data-image="{{ $imgCard2 }}" 
+               data-desc="{{ $descCard2 }}"
+               onclick="openModal(this)">
               <div class="card-img"><img src="{{ $imgCard2 }}" alt="UI/UX & Poster Digital"></div>
               <div class="card-body">
                   <div class="idx">MODULE / 02</div>
                   <h3>UI/UX & Poster Digital</h3>
-                  <p>Merancang antarmuka yang ramah pengguna, estetis, dan fungsional.</p>
+                  <p>{{ \Illuminate\Support\Str::limit($descCard2, 80, '...') }}</p>
                   <div class="foot"><span>DESIGN & UI</span><span>Klik detail &rarr;</span></div>
               </div>
           </div>
 
-          <div class="card reveal" data-tilt onclick="openModal('Kegiatan OSIS & Karang Taruna', 'LEADERSHIP', '{{ $imgCard3 }}', 'Ini adalah contoh deskripsi lengkap. Mengelola tim, kepemimpinan, dan komunikasi sosial di lingkungan masyarakat. \n\nData asli akan diambil dari Database Admin.')">
+          <div class="card reveal" data-tilt 
+               data-title="Kegiatan OSIS & Karang Taruna" 
+               data-category="LEADERSHIP" 
+               data-image="{{ $imgCard3 }}" 
+               data-desc="{{ $descCard3 }}"
+               onclick="openModal(this)">
               <div class="card-img"><img src="{{ $imgCard3 }}" alt="Kegiatan OSIS & Karang Taruna"></div>
               <div class="card-body">
                   <div class="idx">MODULE / 03</div>
                   <h3>Kegiatan OSIS & Karang Taruna</h3>
-                  <p>Mengelola tim, kepemimpinan, dan komunikasi sosial di lingkungan masyarakat.</p>
+                  <p>{{ \Illuminate\Support\Str::limit($descCard3, 80, '...') }}</p>
                   <div class="foot"><span>LEADERSHIP</span><span>Klik detail &rarr;</span></div>
               </div>
           </div>
       @endif
     </div>
-
 
     @if(isset($totalSkills) && $totalSkills > 3)
       <div style="text-align: center; width: 100%; position: relative; z-index: 5;">
@@ -559,7 +590,12 @@
       @if($totalExp > 0)
         @foreach($experiencesData as $index => $exp)
           <div class="tz-item {{ $index >= 4 ? 'tz-hidden' : '' }}" style="{{ $index >= 4 ? 'display:none;' : '' }}">
-            <div class="tz-content" onclick="openModal('{{ $exp['posisi'] ?? '' }}', '{{ $exp['periode'] ?? '' }}', '', '{{ $exp['deskripsi'] ?? '' }}\n\nInstansi: {{ $exp['instansi'] ?? '' }}')">
+            <div class="tz-content" 
+                 data-title="{{ $exp['posisi'] ?? 'Posisi' }}"
+                 data-category="{{ $exp['periode'] ?? 'Periode' }}"
+                 data-image=""
+                 data-desc="{{ $exp['deskripsi'] ?? 'Deskripsi tidak tersedia' }}&#10;&#10;Instansi: {{ $exp['instansi'] ?? '-' }}"
+                 onclick="openModal(this)">
               <div class="tz-role">{{ $exp['posisi'] ?? '' }}</div>
               <div class="tz-org">{{ $exp['instansi'] ?? '' }} &middot; {{ $exp['periode'] ?? '' }}</div>
               <div class="tz-desc">{{ Str::limit($exp['deskripsi'] ?? '', 120) }}</div>
@@ -568,14 +604,24 @@
         @endforeach
       @else
         <div class="tz-item">
-            <div class="tz-content">
+            <div class="tz-content"
+                 data-title="Sekretaris Umum"
+                 data-category="2025 - 2026"
+                 data-image=""
+                 data-desc="Mengelola administrasi, surat menyurat, dan dokumentasi seluruh kegiatan penting sekolah.&#10;&#10;Instansi: OSIS SMA"
+                 onclick="openModal(this)">
                 <div class="tz-role">Sekretaris Umum</div>
                 <div class="tz-org">OSIS SMA &middot; 2025 - 2026</div>
                 <div class="tz-desc">Mengelola administrasi, surat menyurat, dan dokumentasi seluruh kegiatan penting sekolah.</div>
             </div>
         </div>
         <div class="tz-item">
-            <div class="tz-content">
+            <div class="tz-content"
+                 data-title="Ketua Karang Taruna"
+                 data-category="2024 - Sekarang"
+                 data-image=""
+                 data-desc="Memimpin pemuda desa dalam program sosial, olahraga, dan pengembangan lingkungan masyarakat.&#10;&#10;Instansi: Desa Palempertiwi"
+                 onclick="openModal(this)">
                 <div class="tz-role">Ketua Karang Taruna</div>
                 <div class="tz-org">Desa Palempertiwi &middot; 2024 - Sekarang</div>
                 <div class="tz-desc">Memimpin pemuda desa dalam program sosial, olahraga, dan pengembangan lingkungan masyarakat.</div>
@@ -826,7 +872,6 @@
       msgBox.innerHTML = `<i class="fas fa-exclamation-triangle"></i> SPAM TERDETEKSI!. silahkan coba lagi nanti, Mohon jangan spam`;
       msgBox.style.display = 'block';
       btn.disabled = false;
-      // REFRESH
       e.target.reset();
       setTimeout(()=>{ msgBox.style.display='none'; window.location.reload(); }, 5800);
       spinner.style.display = 'none';
@@ -838,20 +883,32 @@
   const modalContent = document.getElementById('modalContent');
   const imgContainer = document.getElementById('modalImageContainer');
 
-  function openModal(title, category, imageUrl, description) {
+  // FUNGSI MODAL YANG SUDAH DI-UPGRADE ANTI-BUG
+  function openModal(element) {
+    let title, category, imageUrl, description;
+
+    // Menarik data dengan aman menggunakan Data-Attributes HTML
+    title = element.getAttribute('data-title') || 'Judul Tidak Tersedia';
+    category = element.getAttribute('data-category') || 'Kategori';
+    description = element.getAttribute('data-desc') || 'Deskripsi belum ditambahkan.';
+    imageUrl = element.getAttribute('data-image');
+
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalCategory').innerText = category;
     document.getElementById('modalDescription').innerText = description;
+    
     if (imageUrl) {
       document.getElementById('modalImage').src = imageUrl;
       imgContainer.style.display = 'block';
     } else {
       imgContainer.style.display = 'none';
     }
+
     modal.classList.add('modal-active');
     setTimeout(()=>{ modalContent.classList.add('modal-scale'); }, 10);
     document.body.style.overflow = 'hidden';
   }
+
   function closeModal() {
     modalContent.classList.remove('modal-scale');
     setTimeout(()=>{ modal.classList.remove('modal-active'); document.body.style.overflow = 'auto'; }, 300);

@@ -1,213 +1,246 @@
 @extends('portfolio.admin_layout')
-@section('title', 'Edit Latar Belakang Skill')
+@section('title', 'Kelola Latar Belakang Skill')
 
 @section('content')
 <style>
-  .edit-wrapper { max-width: 1000px; margin: 0 auto; padding-bottom: 60px; }
+  .wrap-form { max-width: 1050px; margin: 0 auto; animation: fadeIn 0.5s ease; padding-bottom: 60px;}
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px; position: relative; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .header-flex h1 { font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 6px; color: #fff; letter-spacing: -0.5px; }
+  .header-flex p { color: #8792A6; font-size: 14px; }
+  .btn-outline { padding: 12px 20px; border: 1px solid #232D3E; border-radius: 12px; font-size: 13px; color: #EAEEF5; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; background: rgba(10,14,23,0.5); font-weight: 600; }
+  .btn-outline:hover { border-color: #4E9BE0; color: #fff; background: rgba(78, 155, 224, 0.1); transform: translateY(-2px); }
   
-  .page-header { margin-bottom: 35px; }
-  .page-title { font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
-  .page-desc { color: #8792A6; font-size: 14.5px; }
+  .alert-succ { background: rgba(52,199,123,0.1); border-left: 4px solid #34C77B; color: #34C77B; padding: 16px 20px; border-radius: 12px; font-size: 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 30px; font-weight: 600; backdrop-filter: blur(5px); }
 
-  /* SISTEM 2 KOLOM (GAMBAR DI KIRI, FORM DI KANAN) */
-  .edit-grid { display: grid; grid-template-columns: 320px 1fr; gap: 30px; align-items: start; }
-  @media (max-width: 768px) { .edit-grid { grid-template-columns: 1fr; } }
+  /* GAYA KARTU PREMIUM (GLASSMORPHISM) */
+  .glass-card { background: rgba(16, 21, 31, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); margin-bottom: 40px; }
 
-  /* KARTU KACA MINIMALIS */
-  .glass-card {
-      background: #10151F;
-      border: 1px solid #232D3E;
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-  }
-
-  .image-card { position: sticky; top: 100px; padding: 20px; }
-
-  /* ==========================================
-     AREA GAMBAR YANG PERFECT (NGGAK MENCENG)
-     ========================================== */
-  .upload-container {
-      width: 100%;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #0A0E17;
-      border: 2px dashed #232D3E;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-  }
-  .upload-container:hover { border-color: #4E9BE0; }
+  /* FORM INPUTAN ELEGAN */
+  .form-title { font-size: 18px; color: #fff; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; font-weight: 700; font-family: 'Sora', sans-serif; }
+  .form-title .icon-wrap { background: rgba(78, 155, 224, 0.1); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: #4E9BE0; font-size: 20px; }
   
-  .preview-wrapper {
-      width: 100%;
-      aspect-ratio: 16 / 9; /* Rasio gambar proporsional memanjang */
-      background: #0A0E17;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-  }
+  .form-group-new { margin-bottom: 24px; position: relative; }
+  .form-label-new { display: block; color: #8792A6; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; font-weight: 600; font-family: 'Inter', sans-serif; }
+  .form-control-new { width: 100%; background: rgba(10, 14, 23, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); color: #EAEEF5; padding: 16px 20px; border-radius: 14px; font-family: 'Inter', sans-serif; font-size: 14px; transition: all 0.3s; }
+  .form-control-new:focus { background: rgba(10, 14, 23, 0.8); border-color: #4E9BE0; box-shadow: 0 0 0 4px rgba(78, 155, 224, 0.1); outline: none; transform: translateY(-2px); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   
-  /* Ini rahasia biar gambarnya ngisi penuh dan nggak kecil! */
-  .preview-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; 
-  }
+  .submit-btn-glow { background: linear-gradient(135deg, #3763E0, #4E9BE0); color: #fff; padding: 14px 32px; border-radius: 14px; border: none; font-weight: 600; font-family: 'Inter', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 20px rgba(55, 99, 224, 0.3); }
+  .submit-btn-glow:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(55, 99, 224, 0.5); }
+
+  /* GRID KARTU */
+  .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 26px; margin-top: 18px; margin-bottom: 50px; }
+  .card-item { background: #10151F; border: 1px solid #232D3E; border-radius: 20px; overflow: hidden; position: relative; transition: 0.3s; display: flex; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+  .card-item:hover { transform: translateY(-6px); border-color: rgba(78, 155, 224, 0.4); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
   
-  .image-empty { color: #8792A6; font-size: 40px; }
+  .card-image-wrap { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #0A0E17; }
+  .card-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+  .card-item:hover .card-image-wrap img { transform: scale(1.05); }
+  .card-image-wrap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(16,21,31,0.95), transparent 60%); pointer-events: none; }
   
-  .upload-actions {
-      padding: 20px 15px;
-      text-align: center;
-      background: #10151F;
-      border-top: 1px solid #232D3E;
-  }
-
-  /* DESAIN TOMBOL CHOOSE FILE PREMIUM */
-  input[type="file"] {
-      color: #8792A6; font-family: 'Inter', sans-serif; font-size: 12px;
-      outline: none; cursor: pointer; width: 100%;
-  }
-  input[type="file"]::file-selector-button {
-      background: rgba(78, 155, 224, 0.1); border: 1px solid rgba(78, 155, 224, 0.3);
-      color: #4E9BE0; padding: 8px 16px; border-radius: 8px;
-      cursor: pointer; margin-right: 12px; font-family: 'Inter', sans-serif;
-      font-weight: 600; transition: 0.3s;
-  }
-  input[type="file"]::file-selector-button:hover { background: #4E9BE0; color: #000; }
-
-  /* FORM INPUTAN */
-  .form-title { font-size: 16px; color: #fff; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-family: 'Sora', sans-serif; border-bottom: 1px solid #232D3E; padding-bottom: 15px; }
-  .form-title i { color: #4E9BE0; font-size: 20px; }
-
-  .form-label {
-      display: block; color: #8792A6; font-size: 11.5px;
-      text-transform: uppercase; letter-spacing: 1px;
-      margin-bottom: 10px; font-weight: 600; font-family: 'Inter', sans-serif;
-  }
-  .form-control {
-      width: 100%; background: #0A0E17; border: 1px solid #232D3E;
-      color: #EAEEF5; padding: 15px 18px; border-radius: 12px;
-      font-family: 'Inter', sans-serif; font-size: 14.5px; transition: 0.3s;
-  }
-  .form-control:focus {
-      border-color: #4E9BE0; box-shadow: 0 0 0 4px rgba(78, 155, 224, 0.15); outline: none;
-  }
-
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-  .mb-24 { margin-bottom: 24px; }
-
-  /* ERROR ALERT */
-  .error-list { background: rgba(255,59,48,0.08); border: 1px solid rgba(255,59,48,0.3); color: #ffb3ad; padding: 14px 18px; border-radius: 12px; font-size: 13px; margin-bottom: 24px; }
-  .error-list ul { margin: 0; padding-left: 18px; }
+  .card-content { padding: 0 24px 24px; flex: 1; display: flex; flex-direction: column; position: relative; z-index: 2; margin-top: -20px; }
+  .card-module { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #8792A6; letter-spacing: 1px; margin-bottom: 8px; }
+  .card-title { font-size: 18px; color: #fff; font-weight: 700; margin-bottom: 12px; font-family: 'Sora', sans-serif; line-height: 1.3; }
+  .card-desc { font-size: 13px; color: #8792A6; line-height: 1.6; margin-bottom: 18px; flex-grow: 1; }
+  .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #232D3E; padding-top: 16px; }
+  .card-cat { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #C9A24A; font-weight: 600; text-transform: uppercase; }
+  .card-detail { font-size: 11.5px; color: #8792A6; transition: 0.2s; text-decoration: none; }
   
-  /* TOMBOL BAWAH */
-  .btn-group { display: flex; gap: 15px; justify-content: flex-end; margin-top: 10px; border-top: 1px solid #232D3E; padding-top: 30px; }
-  .btn-primary { background: linear-gradient(90deg, #3763E0, #4E9BE0); color: #fff; padding: 14px 28px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Inter', sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px;}
-  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(78, 155, 224, 0.3); }
-  .btn-secondary { background: transparent; color: #8792A6; padding: 14px 28px; border-radius: 12px; border: 1px solid #232D3E; text-decoration: none; font-weight: 600; transition: 0.3s; font-family: 'Inter', sans-serif; font-size: 14px; display: inline-flex; align-items: center; }
-  .btn-secondary:hover { border-color: #EAEEF5; color: #EAEEF5; }
+  /* TOMBOL MENGAMBANG DI KARTU */
+  .action-buttons-float { position: absolute; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 10; opacity: 0; transition: 0.3s; transform: translateY(-10px); }
+  .card-item:hover .action-buttons-float { opacity: 1; transform: translateY(0); }
+  .btn-float { width: 36px; height: 36px; border-radius: 10px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; text-decoration: none; backdrop-filter: blur(6px); transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+  .btn-float-edit { background: rgba(78, 155, 224, 0.85); border: 1px solid rgba(78, 155, 224, 0.4); }
+  .btn-float-edit:hover { background: #4E9BE0; transform: scale(1.1); }
+  .btn-float-delete { background: rgba(224, 78, 92, 0.85); border: 1px solid rgba(224, 78, 92, 0.4); }
+  .btn-float-delete:hover { background: #E04E5C; transform: scale(1.1); }
+
+  /* 2 KOLOM UNTUK FORM TAMBAH ITEM (KIRI GAMBAR, KANAN FORM) */
+  .add-new-grid { display: grid; grid-template-columns: 320px 1fr; gap: 35px; align-items: start; }
+  @media (max-width: 768px) { .add-new-grid { grid-template-columns: 1fr; } }
+  
+  .upload-container-new {
+      width: 100%; border-radius: 16px; overflow: hidden; background: rgba(10, 14, 23, 0.5); 
+      border: 2px dashed rgba(78, 155, 224, 0.4); position: relative; cursor: pointer; transition: 0.3s;
+  }
+  .upload-container-new:hover { border-color: #4E9BE0; background: rgba(78, 155, 224, 0.08); }
+  
+  .preview-wrapper-new { width: 100%; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; flex-direction: column; position: relative; overflow: hidden; }
+  
+  .preview-wrapper-new img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; display: none; z-index: 1; border-radius: 14px; }
+  
+  .preview-placeholder { position: relative; z-index: 2; text-align: center; color: #8792A6; transition: 0.3s; pointer-events: none; padding: 20px; }
+  .upload-container-new:hover .preview-placeholder { color: #4E9BE0; transform: scale(1.05); }
+  .preview-placeholder i { font-size: 54px; margin-bottom: 12px; opacity: 0.8; }
+  .preview-placeholder p { font-size: 13.5px; font-weight: 700; margin: 0; font-family: 'Inter', sans-serif;}
 </style>
 
-<div class="edit-wrapper">
-  <div class="page-header">
-    <div class="page-title">Edit Detail Keahlian</div>
-    <div class="page-desc">Perbarui data teks dan gambar untuk kartu modul keahlianmu.</div>
+<div class="wrap-form">
+  <div class="header-flex">
+    <div>
+      <h1>Latar Belakang Skill</h1>
+      <p>Kelola gambar dan data modul keahlian yang akan tampil di halaman portofolio utama.</p>
+    </div>
+    <a href="{{ route('portofolio.index') }}#LatarBelakangSkill" target="_blank" class="btn-outline">
+      <i class='bx bx-link-external'></i> Lihat Website
+    </a>
   </div>
 
-  @if ($errors->any())
-    <div class="error-list">
-      <ul>
-        @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
+  @if (session('success_msg'))
+    <div class="alert-succ"><i class='bx bx-check-shield' style="font-size: 20px;"></i> <span>{{ session('success_msg') }}</span></div>
   @endif
 
-  <form action="{{ url('/admin/latar-belakang-skill/' . $item->id) }}" method="POST" enctype="multipart/form-data">
+  <!-- FORM 1: HEADER UTAMA -->
+  <form action="{{ route('admin.latar_belakang.header') }}" method="POST">
     @csrf
-    @method('PUT')
+    <div class="glass-card">
+      <div class="form-title">
+        <div class="icon-wrap"><i class='bx bx-edit-alt'></i></div>
+        Teks Header Utama
+      </div>
 
-    <div class="edit-grid">
+      <div class="grid2 form-group-new">
+        <div>
+          <label class="form-label-new">TAG KECIL (KIRI ATAS)</label>
+          <input type="text" name="skill_tag" value="{{ $profile->about_sub_3 ?? '02 / LATAR BELAKANG SKILL' }}" required class="form-control-new">
+        </div>
+        <div>
+          <label class="form-label-new">JUDUL UTAMA (KIRI BAWAH)</label>
+          <input type="text" name="skill_title" value="{{ $profile->about_sub_2 ?? 'LATAR BELAKANG SKILL' }}" required class="form-control-new">
+        </div>
+      </div>
+
+      <div class="form-group-new" style="margin-bottom: 0;">
+        <label class="form-label-new">DESKRIPSI UTAMA (SEBELAH KANAN)</label>
+        <textarea name="skill_desc" rows="3" required class="form-control-new" style="resize: vertical;">{{ $profile->about_2 ?? 'Dokumentasi kegiatan pemrograman web, desain UI/UX, dan organisasi sosial.' }}</textarea>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+        <button type="submit" class="submit-btn-glow"><i class='bx bx-save' style="font-size: 18px;"></i> Simpan Header Utama</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- DATA YANG SUDAH ADA -->
+  <div>
+    <h3 style="font-size: 18px; margin-bottom: 6px; color: #fff; font-family: 'Sora', sans-serif; font-weight:700; display: flex; align-items: center; gap: 8px;">
+        <i class='bx bx-grid-alt' style="color: #4E9BE0;"></i> Data Modul Tersimpan
+    </h3>
+    <p style="font-size: 13.5px; color: #8792A6;"> Arahkan kursor ke kartu untuk memunculkan tombol <strong>Edit</strong> atau <strong>Hapus</strong>.</p>
+
+    <!-- GRID BERSIH TANPA HARDCODE -->
+    <div class="skill-grid">
+        @if(isset($dataKeahlian))
+            @foreach($dataKeahlian as $item)
+            <div class="card-item">
+                <div class="action-buttons-float">
+                    <a href="{{ route('admin.latar_belakang.edit', $item->id) }}" class="btn-float btn-float-edit" title="Edit Kartu Ini">
+                        <i class='bx bx-edit'></i>
+                    </a>
+                    <form action="{{ route('admin.latar_belakang.delete', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus kartu ini permanen?');" style="margin: 0;">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn-float btn-float-delete" title="Hapus Kartu">
+                            <i class='bx bx-trash'></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card-image-wrap">
+                    <img src="{{ !empty($item->gambar) ? asset('uploads/' . $item->gambar) : '' }}" alt="Skill Image" style="{{ empty($item->gambar) ? 'display:none;' : '' }}">
+                </div>
+
+                <div class="card-content">
+                    <div class="card-module">{{ $item->modul }}</div>
+                    <div class="card-title">{{ $item->judul }}</div>
+                    <div class="card-desc">{{ \Illuminate\Support\Str::limit($item->deskripsi, 90, '...') }}</div>
+                    
+                    <div class="card-footer">
+                        <span class="card-cat">{{ $item->kategori }}</span>
+                        <a href="{{ route('admin.latar_belakang.edit', $item->id) }}" class="card-detail" onmouseover="this.style.color='#4E9BE0'" onmouseout="this.style.color='#8792A6'">Edit detail &rarr;</a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        @endif
+    </div>
+  </div>
+
+  <!-- FORM 2: TAMBAH ITEM BARU -->
+  <form action="{{ route('admin.latar_belakang.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="glass-card" style="margin-top: 30px;">
       
-      <!-- KOLOM KIRI: GAMBAR PRO (Ngisi Penuh Border) -->
-      <div class="glass-card image-card">
-        <div class="form-title"><i class='bx bx-image'></i> Gambar Ilustrasi</div>
-
-        <div class="upload-container">
-          <!-- Area Preview yang Pas 100% -->
-          <div class="preview-wrapper">
-            @if(!empty($item->gambar))
-              <img src="{{ asset('uploads/'.$item->gambar) }}" alt="Preview" id="image-preview">
-            @else
-              <i class='bx bx-image image-empty' id="image-empty-icon"></i>
-              <img src="" alt="Preview" id="image-preview" style="display:none;">
-            @endif
-          </div>
-
-          <!-- Area Input File -->
-          <div class="upload-actions">
-            <input type="file" name="gambar" accept="image/*" onchange="previewEditImage(event)">
-            <p style="color: #8792A6; font-size: 11px; margin-top: 12px; margin-bottom: 0;">*Biarkan kosong jika tidak diubah. Maks 2MB.</p>
-          </div>
-        </div>
+      <div class="form-title" style="margin-bottom: 35px;">
+          <div class="icon-wrap" style="color: #34C77B; background: rgba(52, 199, 123, 0.1);"><i class='bx bx-plus-circle'></i></div>
+          Tambah Modul Baru
       </div>
 
-      <!-- KOLOM KANAN: FORM TEKS -->
-      <div class="glass-card">
-        <div class="form-title"><i class='bx bx-edit-alt'></i> Detail Teks Modul</div>
-
-        <div class="grid-2">
-          <div>
-            <label class="form-label">Teks Modul</label>
-            <input type="text" name="modul" value="{{ old('modul', $item->modul) }}" required class="form-control" placeholder="MODULE / 01">
-          </div>
-          <div>
-            <label class="form-label">Kategori</label>
-            <input type="text" name="kategori" value="{{ old('kategori', $item->kategori) }}" required class="form-control" placeholder="DEVELOPMENT">
-          </div>
+      <div class="add-new-grid">
+        <!-- KIRI: AREA UPLOAD GAMBAR -->
+        <div>
+            <label class="form-label-new">Gambar Ilustrasi</label>
+            <div class="upload-container-new" onclick="document.getElementById('file-upload-add').click()">
+                <div class="preview-wrapper-new">
+                    <img id="preview-img-add" src="" alt="Preview">
+                    <div class="preview-placeholder" id="placeholder-add">
+                        <i class='bx bx-image-add'></i>
+                        <p>Klik untuk Pilih Foto</p>
+                        <span style="font-size: 11px; font-weight: normal; opacity: 0.6; margin-top: 6px; display: block;">Maksimal 2MB (JPG/PNG)</span>
+                    </div>
+                </div>
+            </div>
+            <input type="file" id="file-upload-add" name="gambar" accept="image/*" required style="display: none;" onchange="previewAddImage(event)">
         </div>
 
-        <div class="mb-24">
-          <label class="form-label">Judul Keahlian</label>
-          <input type="text" name="judul" value="{{ old('judul', $item->judul) }}" required class="form-control" style="font-weight: 600; font-size: 15px;">
-        </div>
+       
+        <div>
+            <div class="grid2">
+                <div class="form-group-new">
+                    <label class="form-label-new">Teks Modul Atas</label>
+                    <input type="text" name="modul" required class="form-control-new" placeholder="Contoh: MODULE / 01">
+                </div>
+                <div class="form-group-new">
+                    <label class="form-label-new">Kategori Bawah</label>
+                    <input type="text" name="kategori" required class="form-control-new" placeholder="Contoh: DEVELOPMENT">
+                </div>
+            </div>
 
-        <div style="margin-bottom: 0;">
-          <label class="form-label">Deskripsi Lengkap</label>
-          <textarea name="deskripsi" rows="6" required class="form-control" style="line-height: 1.6; resize: vertical;">{{ old('deskripsi', $item->deskripsi) }}</textarea>
-        </div>
+            <div class="form-group-new">
+                <label class="form-label-new">Judul Keahlian Utama</label>
+                <input type="text" name="judul" required class="form-control-new" placeholder="Contoh: Pemrograman Web & Laravel" style="font-weight: 600; color: #fff;">
+            </div>
 
-        <div class="btn-group">
-          <a href="{{ route('admin.latar_belakang') }}" class="btn-secondary">Batal</a>
-          <button type="submit" class="btn-primary">
-            <i class='bx bx-save'></i> Simpan Perubahan
-          </button>
+            <div class="form-group-new" style="margin-bottom: 0;">
+                <label class="form-label-new">Deskripsi Panjang (Muncul di Pop-up)</label>
+                <textarea name="deskripsi" rows="5" required class="form-control-new" placeholder="Tuliskan penjelasan detail tentang modul ini di sini..." style="resize: vertical; line-height: 1.6;"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 28px;">
+                <button type="submit" class="submit-btn-glow" style="background: linear-gradient(135deg, #34C77B, #229A5C); box-shadow: 0 8px 20px rgba(52, 199, 123, 0.3);">
+                    <i class='bx bx-check-shield' style="font-size: 19px;"></i> Simpan Data Baru
+                </button>
+            </div>
         </div>
       </div>
-
     </div>
   </form>
 </div>
 
-<!-- Script bawaan untuk preview gambar langsung saat dipilih -->
 <script>
-  function previewEditImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function () {
-      const img = document.getElementById('image-preview');
-      img.src = reader.result;
-      img.style.display = 'block';
-      const emptyIcon = document.getElementById('image-empty-icon');
-      if (emptyIcon) emptyIcon.style.display = 'none';
-    };
-    reader.readAsDataURL(file);
+  function previewAddImage(event) {
+      const file = event.target.files[0];
+      if(file){
+          const reader = new FileReader();
+          reader.onload = function(e){
+              document.getElementById('preview-img-add').src = e.target.result;
+              document.getElementById('preview-img-add').style.display = 'block';
+              document.getElementById('placeholder-add').style.display = 'none';
+              event.target.closest('.upload-container-new').style.borderStyle = 'solid';
+          }
+          reader.readAsDataURL(file);
+      }
   }
 </script>
 @endsection

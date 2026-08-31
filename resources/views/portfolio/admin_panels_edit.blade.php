@@ -9,7 +9,7 @@
   .wrap-form { max-width: 850px; margin: 0 auto; }
 
   /* BREADCRUMB & HEADER */
-  .edit-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
+  .edit-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
   .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dim); margin-bottom: 12px; font-weight: 500; }
   .breadcrumb a { color: var(--cyan); text-decoration: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px; }
   .breadcrumb a:hover { color: #fff; }
@@ -53,6 +53,11 @@
 
   .btn-save { padding: 14px 30px; border-radius: 12px; font-size: 14px; font-weight: 700; color: #000; background: #ffab00; border: none; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(255, 171, 0, 0.25); }
   .btn-save:hover { background: #ffc400; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 171, 0, 0.4); }
+
+  /* ALERT STYLES */
+  .alert-succ { background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 14px 18px; border-radius: 10px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(0, 255, 136, 0.3); font-size: 14px; font-weight: 500; }
+  .alert-err { background: rgba(255, 71, 87, 0.1); color: #ff4757; padding: 14px 18px; border-radius: 10px; margin-bottom: 24px; border: 1px solid rgba(255, 71, 87, 0.3); font-size: 14px; }
+  .alert-err ul { margin: 8px 0 0 24px; padding: 0; font-size: 13px; }
 </style>
 
 <div class="wrap-form">
@@ -73,6 +78,28 @@
       <i class='bx bx-pulse' style="animation: bx-flashing 2s infinite linear;"></i> Mode Edit Aktif
     </div>
   </div>
+
+  <!-- TEMPAT MUNCULNYA NOTIFIKASI SUKSES / ERROR -->
+  @if (session('success_msg'))
+    <div class="alert-succ">
+      <i class='bx bx-check-circle' style="font-size: 20px;"></i> 
+      <span>{{ session('success_msg') }}</span>
+    </div>
+  @endif
+
+  @if ($errors->any())
+    <div class="alert-err">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 600;">
+        <i class='bx bx-error-circle' style="font-size: 20px;"></i> 
+        <span>Gagal menyimpan! Periksa kesalahan berikut:</span>
+      </div>
+      <ul>
+        @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+  @endif
 
   <form action="{{ route('admin.panels.update', $panel->id) }}" method="POST">
     @csrf
@@ -109,7 +136,6 @@
         <div class="form-group" style="margin-bottom: 0;">
           <label><i class='bx bx-text'></i> Deskripsi Panjang (Kanan)</label>
           <div class="input-wrapper">
-            
              <textarea name="desc_1" rows="7" required style="line-height: 1.7;">{{ $panel->description }}</textarea>
           </div>
           <span class="help-text">Gunakan Enter untuk membuat paragraf baru.</span>

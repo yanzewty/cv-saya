@@ -25,17 +25,19 @@
       <div class="grid2 form-group">
         <div>
           <label>Tag Kecil (Kiri Atas)</label>
-          <input type="text" name="about_sub_1" value="{{ $about->tag ?? '01 / TENTANG SAYA' }}" required placeholder="01 / TENTANG SAYA">
+          <!-- Menggunakan ?: agar kebal dari database kosong -->
+          <input type="text" name="about_sub_1" value="{{ $about->tag ?: '01 / TENTANG SAYA' }}" required placeholder="01 / TENTANG SAYA">
         </div>
+
         <div>
           <label>Judul Utama (Kiri Bawah)</label>
-          <input type="text" name="about_title" value="{{ $about->title ?? '' }}" placeholder="Contoh: Membangun Solusi Digital..." required>
+          <input type="text" name="about_title" value="{{ $about->title ?: 'Membangun Solusi Digital dengan Logika & Kreativitas' }}" placeholder="Contoh: Membangun Solusi Digital..." required>
         </div>
       </div>
 
       <div class="form-group" style="margin-bottom: 0;">
         <label>Deskripsi Utama (Sebelah Kanan)</label>
-        <textarea name="about_1" rows="5" required placeholder="Tuliskan deskripsi lengkapmu di sini...">{{ $about->description ?? '' }}</textarea>
+        <textarea name="about_1" rows="5" required placeholder="Tuliskan deskripsi lengkapmu di sini...">{{ $about->description ?: 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.' }}</textarea>
       </div>
     </div>
 
@@ -67,8 +69,8 @@
 
       <div class="form-group" style="margin-bottom: 0;">
         <label>Deskripsi Panjang</label>
-       <textarea name="desc_1" rows="4" required></textarea>
-        </div>
+        <textarea name="desc_1" rows="4" placeholder="Contoh: Selama 3 tahun terakhir, saya aktif dalam berbagai kepanitiaan dan..." required></textarea>
+      </div>
     </div>
 
     <button type="submit" class="submit-btn accent-cyan">
@@ -102,10 +104,10 @@
                 <i class='bx bx-edit'></i> Edit
             </a>
 
-            <form action="{{ route('admin.panels.delete', $panel->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus section ini dari website?');">
+            <form id="delete-form-{{ $panel->id }}" action="{{ route('admin.panels.delete', $panel->id) }}" method="POST">
               @csrf
               @method('DELETE')
-              <button type="submit" class="btn-delete">
+              <button type="button" class="btn-delete" onclick="hapusPanel('delete-form-{{ $panel->id }}')">
                 <i class='bx bx-trash'></i> Hapus
               </button>
             </form>
@@ -115,4 +117,41 @@
     @endif
   </div>
 </div>
+
+<!-- SweetAlert2 Library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  function hapusPanel(formId) {
+    Swal.fire({
+      title: 'Hapus section ini?',
+      text: "Data akan dihapus permanen.",
+      icon: 'warning',
+      width: '340px',
+      padding: '1.5em',
+      showCancelButton: true,
+      reverseButtons: true,
+      confirmButtonColor: '#ff4757', 
+      cancelButtonColor: '#2b303b',  
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
+      background: '#1a1d27',         
+      color: '#ffffff',              
+      customClass: {
+        popup: 'swal-custom-border',
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById(formId).submit();
+      }
+    })
+  }
+</script>
+
+<style>
+  .swal-custom-border {
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+</style>
 @endsection

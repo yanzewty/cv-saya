@@ -38,9 +38,9 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
         $projects = Project::latest()->get(); 
-        $panels = ProfileAbout::where('is_main', false)->latest()->get(); 
         $dataKeahlian = Keahlian::oldest()->get(); 
 
+        // Mengambil Section Utama "Tentang Saya"
         $about = ProfileAbout::firstOrCreate(
             ['profile_id' => 1, 'is_main' => true],
             [
@@ -49,6 +49,9 @@ class PortfolioController extends Controller
                 'description' => 'Siswa kelas 12 IT Engineering dengan minat mendalam di bidang pengembangan web dan desain UI/UX. Aktif berorganisasi sebagai Sekretaris Umum OSIS dan Ketua Karang Taruna untuk mengasah kepemimpinan, manajemen tim, dan komunikasi.',
             ]
         );
+        
+        // Mengambil Panel Latar Belakang Tambahan
+        $panels = ProfileAbout::where('is_main', false)->latest()->get(); 
         
         return view('portfolio.portofolio', compact('profile', 'projects', 'panels', 'dataKeahlian', 'about'));
     }
@@ -64,6 +67,9 @@ class PortfolioController extends Controller
         return view('portfolio.admin_dashboard', compact('profile', 'totalMessages', 'totalKeahlian', 'totalProjects'));
     }
 
+    // ==========================================
+    // CMS 1: KELOLA HOME
+    // ==========================================
     public function editHome()
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
@@ -117,6 +123,7 @@ class PortfolioController extends Controller
     {
         $profile = Profile::firstOrCreate(['id' => 1], $this->getDefaultData());
 
+        // Mengambil data utama
         $about = ProfileAbout::firstOrCreate(
             ['profile_id' => 1, 'is_main' => true],
             [
@@ -126,18 +133,20 @@ class PortfolioController extends Controller
             ]
         );
 
+        // Mengambil data panel tambahan
         $panels = ProfileAbout::where('is_main', false)->latest()->get();
         return view('portfolio.admin_about', compact('profile', 'about', 'panels')); 
     }
 
     public function updateAbout(Request $request)
     {
+        // Cari laci khusus section utama (is_main = true)
         $about = ProfileAbout::firstOrCreate(
             ['profile_id' => 1, 'is_main' => true],
             ['tag' => '', 'title' => '', 'description' => '']
         );
 
-        // Menangkap 3 inputan dari form utama Kelola Tentang Saya
+        // Tangkap inputan dari form
         $about->tag         = $request->about_sub_1;
         $about->title       = $request->about_title;
         $about->description = $request->about_1;
@@ -154,12 +163,13 @@ class PortfolioController extends Controller
             'desc_1' => 'required',
         ]);
 
+        // Simpan sebagai panel tambahan (is_main = false)
         ProfileAbout::create([
-            'profile_id' => 1,
-            'is_main' => false,
-            'tag' => $request->tag,
-            'title' => $request->title,
-            'description' => $request->desc_1, // DIARAHKAN KE DESCRIPTION
+            'profile_id'  => 1,
+            'is_main'     => false,
+            'tag'         => $request->tag,
+            'title'       => $request->title,
+            'description' => $request->desc_1,
         ]);
 
         return redirect()->back()->with('success_msg', 'Berhasil Ditambahkan!');
@@ -176,9 +186,9 @@ class PortfolioController extends Controller
         $panel = ProfileAbout::findOrFail($id); 
         
         $panel->update([
-            'tag' => $request->tag,
-            'title' => $request->title,
-            'description' => $request->desc_1, // DIARAHKAN KE DESCRIPTION
+            'tag'         => $request->tag,
+            'title'       => $request->title,
+            'description' => $request->desc_1, 
         ]);
 
         return redirect()->route('admin.about')->with('success_msg', 'Berhasil diperbarui!');
@@ -336,6 +346,8 @@ class PortfolioController extends Controller
         return back()->with('success_msg', 'Proyek berhasil dihapus!');
     }
 
+    
+    // CMS 6: KELOLA LATAR BELAKANG SKILL
     
     public function keahlianAdmin()
     {

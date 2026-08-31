@@ -9,7 +9,6 @@ class Keahlian extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'gambar', 'modul', 'judul', 'kategori'
-    ];
+    protected $fillable = ['modul', 'kategori', 'judul', 'gambar', 'deskripsi'];
+    
 }
